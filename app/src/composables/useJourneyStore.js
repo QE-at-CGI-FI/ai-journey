@@ -235,13 +235,24 @@ export function useJourneyStore() {
   }
 
   function exportData() {
-    const payload = JSON.stringify(state, null, 2)
+    const payload = JSON.stringify(
+      { ...state, viewer: 'https://qe-at-cgi-fi.github.io/ai-journey/' },
+      null,
+      2,
+    )
     const blob = new Blob([payload], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     const stamp = new Date().toISOString().slice(0, 10)
+    const orgSlug = state.organization.name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
     a.href = url
-    a.download = `ai-journey-tracker-${stamp}.json`
+    a.download = orgSlug
+      ? `ai-journey-tracker-${orgSlug}-${stamp}.json`
+      : `ai-journey-tracker-${stamp}.json`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
