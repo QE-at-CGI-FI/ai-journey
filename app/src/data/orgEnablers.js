@@ -55,6 +55,7 @@ export const orgEnablerGroups = [
     items: [
       { id: 'starter-tokens', label: 'Starter tokens' },
       { id: 'sufficient-tokens', label: 'Sufficient tokens' },
+      { id: 'byok-setup', label: 'BYOK - Bring Your Own Key - setup' },
     ],
   },
   {
