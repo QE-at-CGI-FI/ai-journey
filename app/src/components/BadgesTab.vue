@@ -101,6 +101,7 @@ function membersFor(tierId) {
             </h4>
             <span class="tier__count">{{ membersFor(tier.id).length }}</span>
           </header>
+          <p v-if="tier.tagline" class="tier__tagline">{{ tier.tagline }}</p>
           <div class="tier__dropzone">
             <p v-if="!membersFor(tier.id).length" class="tier__hint">Drag a person here</p>
             <div v-for="ind in membersFor(tier.id)" :key="ind.id" class="badge-chip">
@@ -236,7 +237,15 @@ function membersFor(tierId) {
   align-items: baseline;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.tier__tagline {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--color-text-muted);
 }
 
 .tier__header h4 {
