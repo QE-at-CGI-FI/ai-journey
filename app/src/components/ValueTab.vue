@@ -6,21 +6,20 @@ const props = defineProps({
   store: { type: Object, required: true },
 })
 
-const { state, orgEnablerGroups, valueFor, toggleItem, setDetails, addCustomItem, removeCustomItem, customItemsFor, groupProgress, overallProgress } =
+const { state, valueItemGroups, valueFor, toggleItem, setDetails, addCustomItem, removeCustomItem, customItemsFor, groupProgress, overallProgress } =
   props.store
 
-const bucket = state.organization
-const overall = computed(() => overallProgress(bucket, orgEnablerGroups))
+const bucket = state.value
+const overall = computed(() => overallProgress(bucket, valueItemGroups))
 </script>
 
 <template>
   <div class="tab-panel">
     <div class="tab-intro">
-      <h2>Organizational foundational enablers</h2>
+      <h2>Value &amp; benefits tracking</h2>
       <p>
-        Track which foundational enablers are in place across the organization to support an
-        AI-native way of working. Toggle each item on once it is established, and document how
-        it's implemented, owned, and where to find more detail.
+        Track the benefits being realized from the AI-native way of working. Toggle each item on
+        once it's being measured or shown, and document the evidence, source, or owner.
       </p>
       <div class="overall-progress">
         <div class="overall-progress__bar">
@@ -29,12 +28,12 @@ const overall = computed(() => overallProgress(bucket, orgEnablerGroups))
             :style="{ width: (overall.total ? (overall.on / overall.total) * 100 : 0) + '%' }"
           />
         </div>
-        <span>{{ overall.on }} / {{ overall.total }} enablers in place</span>
+        <span>{{ overall.on }} / {{ overall.total }} benefits tracked</span>
       </div>
     </div>
 
     <EnablerGroup
-      v-for="group in orgEnablerGroups"
+      v-for="group in valueItemGroups"
       :key="group.id"
       :group="group"
       :custom-items="customItemsFor(bucket, group.id)"
@@ -86,7 +85,7 @@ const overall = computed(() => overallProgress(bucket, orgEnablerGroups))
 
 .overall-progress__fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--cgi-red), var(--cgi-purple));
+  background: linear-gradient(90deg, var(--cgi-purple), var(--cgi-red));
   transition: width 0.2s ease;
 }
 

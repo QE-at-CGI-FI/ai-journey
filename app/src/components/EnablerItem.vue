@@ -25,6 +25,10 @@ function onOverlayKeydown(event) {
   if (event.key === 'Escape') closeInfo()
 }
 
+function keycapEmoji(n) {
+  return `${n}️⃣`
+}
+
 watch(activeInfo, async (info) => {
   if (!info) return
   await nextTick()
@@ -50,7 +54,7 @@ watch(activeInfo, async (info) => {
       <span class="enabler-item__label">
         {{ item.label }}
         <button
-          v-for="info in item.info"
+          v-for="(info, idx) in item.info"
           :key="info.id"
           type="button"
           class="info-btn"
@@ -58,7 +62,7 @@ watch(activeInfo, async (info) => {
           :title="info.label"
           @click="openInfo(info)"
         >
-          i
+          {{ keycapEmoji(idx + 1) }}
         </button>
       </span>
 
@@ -235,24 +239,21 @@ watch(activeInfo, async (info) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  margin-left: 0.4rem;
-  border: 1px solid var(--cgi-purple);
-  border-radius: 50%;
+  margin-left: 0.35rem;
+  border: none;
+  border-radius: 6px;
   background: transparent;
-  color: var(--cgi-purple);
-  font-size: 0.72rem;
-  font-style: italic;
-  font-weight: 700;
+  font-size: 1rem;
   line-height: 1;
   vertical-align: middle;
   flex-shrink: 0;
+  padding: 0.1rem;
+  transition: transform 0.1s ease;
 }
 
 .info-btn:hover {
-  background: var(--cgi-purple);
-  color: var(--cgi-white);
+  background: var(--cgi-grey-100);
+  transform: scale(1.15);
 }
 
 .info-overlay:focus {
