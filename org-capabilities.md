@@ -18,6 +18,5 @@ Sandboxed YOLO-mode
   Data in engineering environments (confidential already on cloud)
   3rd party components with contractual limitations on AI
   Secrets and PII (highly confidential)
-- Approved extensions
-  Approved tools
+- Approved tools
   SAR defaults
