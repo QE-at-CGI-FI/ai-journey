@@ -8,7 +8,17 @@ const props = defineProps({
 
 const { state, awardBadge, revokeBadge } = props.store
 
+const baseUrl = import.meta.env.BASE_URL
 const dragOverTier = ref(null)
+const activeInfo = ref(null)
+
+function openInfo(tier) {
+  activeInfo.value = tier
+}
+
+function closeInfo() {
+  activeInfo.value = null
+}
 
 function onDragStart(event, individualId) {
   event.dataTransfer.setData('text/plain', individualId)
@@ -76,7 +86,19 @@ function membersFor(tierId) {
           @drop.prevent="onDrop($event, tier.id)"
         >
           <header class="tier__header">
-            <h4>{{ tier.label }}</h4>
+            <h4>
+              {{ tier.label }}
+              <button
+                v-if="tier.image"
+                type="button"
+                class="tier__info-btn"
+                :aria-label="`Show ${tier.label} details`"
+                :title="`Show ${tier.label} details`"
+                @click="openInfo(tier)"
+              >
+                ⓘ
+              </button>
+            </h4>
             <span class="tier__count">{{ membersFor(tier.id).length }}</span>
           </header>
           <div class="tier__dropzone">
@@ -97,6 +119,36 @@ function membersFor(tierId) {
         </section>
       </div>
     </template>
+
+    <Teleport to="body">
+      <div
+        v-if="activeInfo"
+        class="info-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="activeInfo.label"
+        tabindex="-1"
+        @click.self="closeInfo"
+        @keydown.esc="closeInfo"
+      >
+        <div class="info-overlay__panel">
+          <button
+            type="button"
+            class="info-overlay__close"
+            aria-label="Close"
+            title="Close"
+            @click="closeInfo"
+          >
+            ×
+          </button>
+          <img
+            class="info-overlay__image"
+            :src="baseUrl + activeInfo.image"
+            :alt="`${activeInfo.label} badge criteria`"
+          />
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -193,6 +245,27 @@ function membersFor(tierId) {
   color: var(--cgi-purple);
 }
 
+.tier__info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.3rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cgi-purple);
+  font-size: 0.85rem;
+  line-height: 1;
+  vertical-align: middle;
+  padding: 0.1rem;
+  transition: transform 0.1s ease;
+}
+
+.tier__info-btn:hover {
+  background: var(--cgi-grey-100);
+  transform: scale(1.15);
+}
+
 .tier__count {
   font-size: 0.75rem;
   font-weight: 700;
@@ -244,5 +317,56 @@ function membersFor(tierId) {
 .badge-chip__remove:hover {
   background: var(--cgi-grey-100);
   color: var(--cgi-red);
+}
+
+.info-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.info-overlay:focus {
+  outline: none;
+}
+
+.info-overlay__panel {
+  position: relative;
+  max-width: min(90vw, 960px);
+  max-height: 90vh;
+  background: var(--cgi-white);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  overflow: auto;
+}
+
+.info-overlay__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cgi-grey-100);
+  color: var(--color-text);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.info-overlay__close:hover {
+  background: var(--cgi-red);
+  color: var(--cgi-white);
+}
+
+.info-overlay__image {
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
 }
 </style>

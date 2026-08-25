@@ -4,7 +4,6 @@
 
 export const badgeTiers = [
   { id: 'ai-ready', label: 'AI-ready' },
-  { id: 'agent-enabled', label: 'Agent-enabled' },
+  { id: 'agent-enabled', label: 'Agent-enabled', image: 'agent-enabled.png' },
   { id: 'ai-native', label: 'AI-native' },
-  { id: 'ai-exemplar', label: 'AI Exemplar' },
 ]
