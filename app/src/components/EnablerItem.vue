@@ -2,7 +2,7 @@
 import { nextTick, ref, watch } from 'vue'
 
 const props = defineProps({
-  item: { type: Object, required: true }, // { id, label, info? }
+  item: { type: Object, required: true }, // { id, label, info?: Array<{ id, label, image, alt }> }
   value: { type: Object, required: true }, // { on, details }
   removable: { type: Boolean, default: false },
 })
@@ -10,23 +10,23 @@ const props = defineProps({
 const emit = defineEmits(['toggle', 'update:details', 'remove'])
 
 const baseUrl = import.meta.env.BASE_URL
-const showInfo = ref(false)
+const activeInfo = ref(null)
 const overlayEl = ref(null)
 
-function openInfo() {
-  showInfo.value = true
+function openInfo(info) {
+  activeInfo.value = info
 }
 
 function closeInfo() {
-  showInfo.value = false
+  activeInfo.value = null
 }
 
 function onOverlayKeydown(event) {
   if (event.key === 'Escape') closeInfo()
 }
 
-watch(showInfo, async (open) => {
-  if (!open) return
+watch(activeInfo, async (info) => {
+  if (!info) return
   await nextTick()
   overlayEl.value?.focus()
 })
@@ -50,12 +50,13 @@ watch(showInfo, async (open) => {
       <span class="enabler-item__label">
         {{ item.label }}
         <button
-          v-if="item.info"
+          v-for="info in item.info"
+          :key="info.id"
           type="button"
           class="info-btn"
-          :aria-label="`More info about ${item.label}`"
-          title="More info"
-          @click="openInfo"
+          :aria-label="`Show ${info.label}`"
+          :title="info.label"
+          @click="openInfo(info)"
         >
           i
         </button>
@@ -87,12 +88,12 @@ watch(showInfo, async (open) => {
 
     <Teleport to="body">
       <div
-        v-if="item.info && showInfo"
+        v-if="activeInfo"
         ref="overlayEl"
         class="info-overlay"
         role="dialog"
         aria-modal="true"
-        :aria-label="item.label"
+        :aria-label="activeInfo.label"
         tabindex="-1"
         @click.self="closeInfo"
         @keydown="onOverlayKeydown"
@@ -109,8 +110,8 @@ watch(showInfo, async (open) => {
           </button>
           <img
             class="info-overlay__image"
-            :src="baseUrl + item.info.image"
-            :alt="item.info.alt || item.label"
+            :src="baseUrl + activeInfo.image"
+            :alt="activeInfo.alt || activeInfo.label"
           />
         </div>
       </div>

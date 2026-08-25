@@ -31,10 +31,20 @@ export const orgEnablerGroups = [
       {
         id: 'licenses-contractual',
         label: 'Licenses with contractual limitations',
-        info: {
-          image: 'GHC-License-tradeoffs.svg',
-          alt: 'GHC license trade-offs diagram',
-        },
+        info: [
+          {
+            id: 'license-tradeoffs',
+            label: 'License ownership trade-offs',
+            image: 'GHC-License-tradeoffs.svg',
+            alt: 'GHC license trade-offs diagram',
+          },
+          {
+            id: 'tools-infographic',
+            label: 'Tool ecosystem across vendors',
+            image: 'tools-infographic.svg',
+            alt: 'Tool ecosystem across vendors infographic',
+          },
+        ],
       },
       { id: 'license-bound-governance', label: 'License-bound governance' },
     ],
