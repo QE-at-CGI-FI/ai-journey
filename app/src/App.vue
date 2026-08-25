@@ -9,10 +9,12 @@ import IndividualTab from './components/IndividualTab.vue'
 import BadgesTab from './components/BadgesTab.vue'
 import ValueTab from './components/ValueTab.vue'
 import ActionsTab from './components/ActionsTab.vue'
+import ReportView from './components/ReportView.vue'
 import { useJourneyStore } from './composables/useJourneyStore.js'
 
 const store = useJourneyStore()
 const activeTab = ref('journey')
+const showReport = ref(false)
 
 const tabs = [
   { id: 'journey', label: 'Journey' },
@@ -35,10 +37,15 @@ function handleImport(jsonText) {
 function handleReset() {
   store.resetAll()
 }
+
+function handlePrintReport() {
+  showReport.value = true
+}
 </script>
 
 <template>
   <div class="app-shell">
+  <div class="app-chrome" :class="{ 'is-report-open': showReport }">
     <header class="app-header">
       <div class="app-header__brand">
         <CgiLogo :size="44" />
@@ -47,7 +54,12 @@ function handleReset() {
           <p>From organizational foundational enablers to individual experience growth</p>
         </div>
       </div>
-      <DataControls @export="handleExport" @import="handleImport" @reset="handleReset" />
+      <DataControls
+        @export="handleExport"
+        @import="handleImport"
+        @reset="handleReset"
+        @print-report="handlePrintReport"
+      />
     </header>
 
     <div class="org-name-bar">
@@ -100,6 +112,9 @@ function handleReset() {
       <span>Saved automatically to this browser's local storage. Use Export to back up or share.</span>
     </footer>
   </div>
+
+  <ReportView v-if="showReport" :store="store" @close="showReport = false" />
+  </div>
 </template>
 
 <style scoped>
@@ -107,6 +122,18 @@ function handleReset() {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.app-chrome {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+@media print {
+  .app-chrome.is-report-open {
+    display: none !important;
+  }
 }
 
 .app-header {

@@ -17,6 +17,7 @@ const {
   customItemsFor,
   groupProgress,
   overallProgress,
+  groupsForIndividual,
   addIndividual,
   removeIndividual,
 } = props.store
@@ -35,26 +36,13 @@ watch(
 
 const selected = computed(() => state.individuals.find((i) => i.id === selectedId.value) || null)
 
-// Which growth-area groups apply to a person: whatever role(s) they're
-// ticked as. Nobody ticked yet -> track everything, so a fresh person still
-// shows a full checklist instead of a 0/0 target.
-function groupsFor(individual) {
-  const flags = individual?.roleFlags || {}
-  if (!flags.knowledgeWorker && !flags.developer) return individualAreaGroups
-  return individualAreaGroups.filter(
-    (g) =>
-      (g.id === 'knowledge-worker' && flags.knowledgeWorker) ||
-      (g.id === 'developer' && flags.developer),
-  )
-}
-
-const selectedGroups = computed(() => (selected.value ? groupsFor(selected.value) : []))
+const selectedGroups = computed(() => (selected.value ? groupsForIndividual(selected.value) : []))
 const selectedProgress = computed(() =>
   selected.value ? overallProgress(selected.value, selectedGroups.value) : { on: 0, total: 0 },
 )
 
 function coverageFor(individual) {
-  return overallProgress(individual, groupsFor(individual))
+  return overallProgress(individual, groupsForIndividual(individual))
 }
 
 function toggleRole(individual, key) {
@@ -76,10 +64,10 @@ function pctOf(progress) {
 }
 
 // Only people tracked against a group (ticked for its role, or untargeted —
-// see groupsFor above) count toward that group's coverage denominator, so an
-// e.g. developer-only roster doesn't dilute the knowledge-worker numbers.
+// see groupsForIndividual) count toward that group's coverage denominator,
+// so an e.g. developer-only roster doesn't dilute the knowledge-worker numbers.
 function individualsForGroup(groupId) {
-  return state.individuals.filter((ind) => groupsFor(ind).some((g) => g.id === groupId))
+  return state.individuals.filter((ind) => groupsForIndividual(ind).some((g) => g.id === groupId))
 }
 
 function coverageAmong(itemId, people) {

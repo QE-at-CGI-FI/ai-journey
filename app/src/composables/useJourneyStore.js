@@ -3,6 +3,7 @@ import { orgEnablerGroups } from '../data/orgEnablers.js'
 import { learningCultureItemGroups } from '../data/learningCultureItems.js'
 import { individualAreaGroups } from '../data/individualAreas.js'
 import { valueItemGroups } from '../data/valueItems.js'
+import { badgeTiers } from '../data/badgeTiers.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
 const STORAGE_VERSION = 5
@@ -191,6 +192,24 @@ export function useJourneyStore() {
     return { on, total }
   }
 
+  // Which growth-area groups apply to a person: whatever role(s) they're
+  // ticked as. Nobody ticked yet -> track everything, so a fresh person
+  // still gets a full checklist instead of a 0/0 target.
+  function groupsForIndividual(individual) {
+    const flags = individual?.roleFlags || {}
+    if (!flags.knowledgeWorker && !flags.developer) return individualAreaGroups
+    return individualAreaGroups.filter(
+      (g) =>
+        (g.id === 'knowledge-worker' && flags.knowledgeWorker) ||
+        (g.id === 'developer' && flags.developer),
+    )
+  }
+
+  function individualExperiencePct(individual) {
+    const progress = overallProgress(individual, groupsForIndividual(individual))
+    return progress.total ? Math.round((progress.on / progress.total) * 100) : 0
+  }
+
   function addIndividual(name) {
     const trimmed = name.trim()
     if (!trimmed) return null
@@ -247,6 +266,30 @@ export function useJourneyStore() {
     const total = state.individuals.length
     const on = state.individuals.filter((ind) => ind.values[itemId]?.on).length
     return { on, total }
+  }
+
+  // "Someone" percentage: share of tracked items that are true for at least
+  // one person/place in the org — an org-wide bucket (organization, learning
+  // culture, value) counts an item once it's switched on; the individuals
+  // roster counts an item once any one person has it.
+  function someonePctBucket(bucket, groups) {
+    const items = groups.flatMap((g) => [...g.items, ...customItemsFor(bucket, g.id)])
+    if (!items.length) return 0
+    const on = items.filter((i) => bucket.values[i.id]?.on).length
+    return Math.round((on / items.length) * 100)
+  }
+
+  function someonePctIndividuals() {
+    const items = individualAreaGroups.flatMap((g) => g.items)
+    if (!items.length) return 0
+    const on = items.filter((i) => itemCoverage(i.id).on > 0).length
+    return Math.round((on / items.length) * 100)
+  }
+
+  function someonePctBadges() {
+    if (!badgeTiers.length) return 0
+    const on = badgeTiers.filter((t) => state.individuals.some((ind) => ind.badges.includes(t.id))).length
+    return Math.round((on / badgeTiers.length) * 100)
   }
 
   function exportData() {
@@ -318,6 +361,11 @@ export function useJourneyStore() {
     customItemsFor,
     groupProgress,
     overallProgress,
+    groupsForIndividual,
+    individualExperiencePct,
+    someonePctBucket,
+    someonePctIndividuals,
+    someonePctBadges,
     addIndividual,
     removeIndividual,
     awardBadge,
