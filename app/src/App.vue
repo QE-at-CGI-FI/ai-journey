@@ -4,6 +4,7 @@ import CgiLogo from './components/CgiLogo.vue'
 import DataControls from './components/DataControls.vue'
 import OrganizationTab from './components/OrganizationTab.vue'
 import IndividualTab from './components/IndividualTab.vue'
+import ValueTab from './components/ValueTab.vue'
 import { useJourneyStore } from './composables/useJourneyStore.js'
 
 const store = useJourneyStore()
@@ -12,6 +13,7 @@ const activeTab = ref('organization')
 const tabs = [
   { id: 'organization', label: 'Organization' },
   { id: 'individual', label: 'Individual' },
+  { id: 'value', label: 'Value' },
 ]
 
 function handleExport() {
@@ -78,7 +80,8 @@ function handleReset() {
 
     <main class="app-main">
       <OrganizationTab v-if="activeTab === 'organization'" :store="store" />
-      <IndividualTab v-else :store="store" />
+      <IndividualTab v-else-if="activeTab === 'individual'" :store="store" />
+      <ValueTab v-else :store="store" />
     </main>
 
     <footer class="app-footer">

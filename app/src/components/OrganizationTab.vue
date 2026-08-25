@@ -9,7 +9,8 @@ const props = defineProps({
 const { state, orgEnablerGroups, valueFor, toggleItem, setDetails, addCustomItem, removeCustomItem, customItemsFor, groupProgress, overallProgress } =
   props.store
 
-const overall = computed(() => overallProgress('organization', orgEnablerGroups))
+const bucket = state.organization
+const overall = computed(() => overallProgress(bucket, orgEnablerGroups))
 </script>
 
 <template>
@@ -36,13 +37,13 @@ const overall = computed(() => overallProgress('organization', orgEnablerGroups)
       v-for="group in orgEnablerGroups"
       :key="group.id"
       :group="group"
-      :custom-items="customItemsFor('organization', group.id)"
-      :value-for="(id) => valueFor('organization', id)"
-      :progress="groupProgress('organization', group)"
-      @toggle="(id) => toggleItem('organization', id)"
-      @update:details="(id, text) => setDetails('organization', id, text)"
-      @add-custom="(label) => addCustomItem('organization', group.id, label)"
-      @remove-custom="(id) => removeCustomItem('organization', group.id, id)"
+      :custom-items="customItemsFor(bucket, group.id)"
+      :value-for="(id) => valueFor(bucket, id)"
+      :progress="groupProgress(bucket, group)"
+      @toggle="(id) => toggleItem(bucket, id)"
+      @update:details="(id, text) => setDetails(bucket, id, text)"
+      @add-custom="(label) => addCustomItem(bucket, group.id, label)"
+      @remove-custom="(id) => removeCustomItem(bucket, group.id, id)"
     />
   </div>
 </template>

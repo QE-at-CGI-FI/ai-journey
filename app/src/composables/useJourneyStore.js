@@ -1,29 +1,37 @@
 import { reactive, watch } from 'vue'
 import { orgEnablerGroups } from '../data/orgEnablers.js'
 import { individualAreaGroups } from '../data/individualAreas.js'
+import { valueItemGroups } from '../data/valueItems.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
-const STORAGE_VERSION = 1
+const STORAGE_VERSION = 2
 
 function blankValue() {
   return { on: false, details: '' }
 }
 
+function emptyBucket() {
+  return {
+    values: {}, // itemId -> { on, details }
+    customItems: {}, // groupId -> [{ id, label }]
+  }
+}
+
+function emptyIndividual() {
+  return { id: '', name: '', role: '', team: '', ...emptyBucket() }
+}
+
 function emptyState() {
   return {
     version: STORAGE_VERSION,
-    organization: {
-      name: '',
-      useCase: '',
-      values: {}, // itemId -> { on, details }
-      customItems: {}, // groupId -> [{ id, label }]
-    },
-    individual: {
-      profile: { name: '', role: '', team: '' },
-      values: {},
-      customItems: {},
-    },
+    organization: { name: '', useCase: '', ...emptyBucket() },
+    value: { ...emptyBucket() },
+    individuals: [],
   }
+}
+
+function makeId(prefix) {
+  return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`
 }
 
 function load() {
@@ -39,21 +47,47 @@ function load() {
   }
 }
 
+function mergeBucket(base, incoming) {
+  if (!incoming) return base
+  base.values = { ...base.values, ...(incoming.values || {}) }
+  base.customItems = incoming.customItems || {}
+  return base
+}
+
 // Merge a (possibly partial / older-version) saved payload into a fresh
 // default state, so new default enablers introduced later still show up.
 function mergeIntoState(base, incoming) {
   if (!incoming || typeof incoming !== 'object') return base
+
   if (incoming.organization) {
     base.organization.name = incoming.organization.name || ''
     base.organization.useCase = incoming.organization.useCase || ''
-    base.organization.values = { ...base.organization.values, ...(incoming.organization.values || {}) }
-    base.organization.customItems = incoming.organization.customItems || {}
+    mergeBucket(base.organization, incoming.organization)
   }
-  if (incoming.individual) {
-    base.individual.profile = { ...base.individual.profile, ...(incoming.individual.profile || {}) }
-    base.individual.values = { ...base.individual.values, ...(incoming.individual.values || {}) }
-    base.individual.customItems = incoming.individual.customItems || {}
+
+  mergeBucket(base.value, incoming.value)
+
+  if (Array.isArray(incoming.individuals)) {
+    base.individuals = incoming.individuals.map((ind) => {
+      const fresh = emptyIndividual()
+      fresh.id = ind.id || makeId('ind')
+      fresh.name = ind.name || ''
+      fresh.role = ind.role || ''
+      fresh.team = ind.team || ''
+      mergeBucket(fresh, ind)
+      return fresh
+    })
+  } else if (incoming.individual && (incoming.individual.profile?.name || Object.keys(incoming.individual.values || {}).length)) {
+    // Migrate the old single-individual (v1) shape into the roster.
+    const fresh = emptyIndividual()
+    fresh.id = makeId('ind')
+    fresh.name = incoming.individual.profile?.name || ''
+    fresh.role = incoming.individual.profile?.role || ''
+    fresh.team = incoming.individual.profile?.team || ''
+    mergeBucket(fresh, incoming.individual)
+    base.individuals = [fresh]
   }
+
   return base
 }
 
@@ -72,59 +106,81 @@ export function useJourneyStore() {
     { deep: true },
   )
 
-  function valueFor(section, itemId) {
-    if (!state[section].values[itemId]) {
-      state[section].values[itemId] = blankValue()
+  function valueFor(bucket, itemId) {
+    if (!bucket.values[itemId]) {
+      bucket.values[itemId] = blankValue()
     }
-    return state[section].values[itemId]
+    return bucket.values[itemId]
   }
 
-  function toggleItem(section, itemId) {
-    const v = valueFor(section, itemId)
+  function toggleItem(bucket, itemId) {
+    const v = valueFor(bucket, itemId)
     v.on = !v.on
   }
 
-  function setDetails(section, itemId, text) {
-    valueFor(section, itemId).details = text
+  function setDetails(bucket, itemId, text) {
+    valueFor(bucket, itemId).details = text
   }
 
-  function addCustomItem(section, groupId, label) {
+  function addCustomItem(bucket, groupId, label) {
     const trimmed = label.trim()
     if (!trimmed) return
-    if (!state[section].customItems[groupId]) {
-      state[section].customItems[groupId] = []
+    if (!bucket.customItems[groupId]) {
+      bucket.customItems[groupId] = []
     }
-    const id = `custom-${groupId}-${Date.now()}-${Math.floor(Math.random() * 1000)}`
-    state[section].customItems[groupId].push({ id, label: trimmed })
+    const id = makeId(`custom-${groupId}`)
+    bucket.customItems[groupId].push({ id, label: trimmed })
   }
 
-  function removeCustomItem(section, groupId, itemId) {
-    const list = state[section].customItems[groupId]
+  function removeCustomItem(bucket, groupId, itemId) {
+    const list = bucket.customItems[groupId]
     if (!list) return
     const idx = list.findIndex((i) => i.id === itemId)
     if (idx !== -1) list.splice(idx, 1)
-    delete state[section].values[itemId]
+    delete bucket.values[itemId]
   }
 
-  function customItemsFor(section, groupId) {
-    return state[section].customItems[groupId] || []
+  function customItemsFor(bucket, groupId) {
+    return bucket.customItems[groupId] || []
   }
 
-  function groupProgress(section, group) {
-    const items = [...group.items, ...customItemsFor(section, group.id)]
+  function groupProgress(bucket, group) {
+    const items = [...group.items, ...customItemsFor(bucket, group.id)]
     if (items.length === 0) return { on: 0, total: 0 }
-    const on = items.filter((i) => state[section].values[i.id]?.on).length
+    const on = items.filter((i) => bucket.values[i.id]?.on).length
     return { on, total: items.length }
   }
 
-  function overallProgress(section, groups) {
+  function overallProgress(bucket, groups) {
     let on = 0
     let total = 0
     for (const group of groups) {
-      const p = groupProgress(section, group)
+      const p = groupProgress(bucket, group)
       on += p.on
       total += p.total
     }
+    return { on, total }
+  }
+
+  function addIndividual(name) {
+    const trimmed = name.trim()
+    if (!trimmed) return null
+    const individual = emptyIndividual()
+    individual.id = makeId('ind')
+    individual.name = trimmed
+    state.individuals.push(individual)
+    return individual.id
+  }
+
+  function removeIndividual(id) {
+    const idx = state.individuals.findIndex((i) => i.id === id)
+    if (idx !== -1) state.individuals.splice(idx, 1)
+  }
+
+  // How many of the tracked individuals have a given experience switched on.
+  function itemCoverage(itemId) {
+    const total = state.individuals.length
+    const on = state.individuals.filter((ind) => ind.values[itemId]?.on).length
     return { on, total }
   }
 
@@ -149,9 +205,9 @@ export function useJourneyStore() {
     state.organization.useCase = fresh.organization.useCase
     state.organization.values = fresh.organization.values
     state.organization.customItems = fresh.organization.customItems
-    state.individual.profile = fresh.individual.profile
-    state.individual.values = fresh.individual.values
-    state.individual.customItems = fresh.individual.customItems
+    state.value.values = fresh.value.values
+    state.value.customItems = fresh.value.customItems
+    state.individuals = fresh.individuals
   }
 
   function resetAll() {
@@ -161,15 +217,16 @@ export function useJourneyStore() {
     state.organization.useCase = fresh.organization.useCase
     state.organization.values = fresh.organization.values
     state.organization.customItems = fresh.organization.customItems
-    state.individual.profile = fresh.individual.profile
-    state.individual.values = fresh.individual.values
-    state.individual.customItems = fresh.individual.customItems
+    state.value.values = fresh.value.values
+    state.value.customItems = fresh.value.customItems
+    state.individuals = fresh.individuals
   }
 
   return {
     state,
     orgEnablerGroups,
     individualAreaGroups,
+    valueItemGroups,
     valueFor,
     toggleItem,
     setDetails,
@@ -178,6 +235,9 @@ export function useJourneyStore() {
     customItemsFor,
     groupProgress,
     overallProgress,
+    addIndividual,
+    removeIndividual,
+    itemCoverage,
     exportData,
     importData,
     resetAll,
