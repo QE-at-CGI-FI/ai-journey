@@ -513,7 +513,9 @@ const allCoverage = computed(() => {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.2rem;
+  min-width: 3.1rem;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
   color: var(--color-text-muted);
@@ -536,6 +538,8 @@ const allCoverage = computed(() => {
 
 .roster__badge {
   flex-shrink: 0;
+  min-width: 3.6rem;
+  text-align: center;
   font-size: 0.78rem;
   font-weight: 600;
   padding: 0.2rem 0.55rem;
