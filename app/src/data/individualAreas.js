@@ -42,7 +42,7 @@ export const individualAreaGroups = [
       { id: 'team-product-context', label: 'Team/Product context (e.g. .md files)' },
       {
         id: 'team-product-context-basic',
-        label: 'Team/Product context basic (e.g. MCPs, memory, skills, orchestration)',
+        label: 'Team/Product context advanced (e.g. MCPs, memory, skills, orchestration)',
       },
       { id: 'building-own-mcps', label: 'Building own MCPs' },
       {
