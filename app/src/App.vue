@@ -2,18 +2,26 @@
 import { ref } from 'vue'
 import CgiLogo from './components/CgiLogo.vue'
 import DataControls from './components/DataControls.vue'
+import JourneyTab from './components/JourneyTab.vue'
 import OrganizationTab from './components/OrganizationTab.vue'
+import LearningCultureTab from './components/LearningCultureTab.vue'
 import IndividualTab from './components/IndividualTab.vue'
+import BadgesTab from './components/BadgesTab.vue'
 import ValueTab from './components/ValueTab.vue'
+import ActionsTab from './components/ActionsTab.vue'
 import { useJourneyStore } from './composables/useJourneyStore.js'
 
 const store = useJourneyStore()
-const activeTab = ref('organization')
+const activeTab = ref('journey')
 
 const tabs = [
+  { id: 'journey', label: 'Journey' },
   { id: 'organization', label: 'Organization' },
+  { id: 'learning-culture', label: 'Learning culture' },
   { id: 'individual', label: 'Individual' },
+  { id: 'badges', label: 'Badges' },
   { id: 'value', label: 'Value' },
+  { id: 'actions', label: 'Actions' },
 ]
 
 function handleExport() {
@@ -79,9 +87,13 @@ function handleReset() {
     </nav>
 
     <main class="app-main">
-      <OrganizationTab v-if="activeTab === 'organization'" :store="store" />
+      <JourneyTab v-if="activeTab === 'journey'" :store="store" @navigate="activeTab = $event" />
+      <OrganizationTab v-else-if="activeTab === 'organization'" :store="store" />
+      <LearningCultureTab v-else-if="activeTab === 'learning-culture'" :store="store" />
       <IndividualTab v-else-if="activeTab === 'individual'" :store="store" />
-      <ValueTab v-else :store="store" />
+      <BadgesTab v-else-if="activeTab === 'badges'" :store="store" />
+      <ValueTab v-else-if="activeTab === 'value'" :store="store" />
+      <ActionsTab v-else :store="store" />
     </main>
 
     <footer class="app-footer">
