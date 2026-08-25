@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import EnablerGroup from './EnablerGroup.vue'
+import { toolGroups } from '../data/toolGroups.js'
 
 const props = defineProps({
   store: { type: Object, required: true },
@@ -20,7 +21,36 @@ const {
   groupsForIndividual,
   addIndividual,
   removeIndividual,
+  displayIndividualName,
+  hasTool,
+  toggleTool,
+  addCustomTool,
 } = props.store
+
+const knownTools = toolGroups.flatMap((g) => g.tools)
+const toolsOverlayFor = ref(null)
+const customToolInput = ref('')
+const toolsOverlayIndividual = computed(
+  () => state.individuals.find((i) => i.id === toolsOverlayFor.value) || null,
+)
+const customTools = computed(() =>
+  toolsOverlayIndividual.value ? toolsOverlayIndividual.value.tools.filter((t) => !knownTools.includes(t)) : [],
+)
+
+function openToolsOverlay(individual) {
+  toolsOverlayFor.value = individual.id
+  customToolInput.value = ''
+}
+
+function closeToolsOverlay() {
+  toolsOverlayFor.value = null
+}
+
+function submitCustomTool() {
+  if (!toolsOverlayIndividual.value) return
+  addCustomTool(toolsOverlayIndividual.value, customToolInput.value)
+  customToolInput.value = ''
+}
 
 const newName = ref('')
 const selectedId = ref(state.individuals[0]?.id ?? null)
@@ -191,7 +221,7 @@ const allCoverage = computed(() => {
           :class="{ 'roster__item--active': ind.id === selectedId }"
         >
           <button type="button" class="roster__select" @click="selectedId = ind.id">
-            <span class="roster__name">{{ ind.name || 'Unnamed' }}</span>
+            <span class="roster__name">{{ displayIndividualName(ind) }}</span>
             <span class="roster__meta">{{ [ind.role, ind.team].filter(Boolean).join(' · ') }}</span>
           </button>
           <div class="role-chips">
@@ -214,6 +244,15 @@ const allCoverage = computed(() => {
               Dev
             </button>
           </div>
+          <button
+            type="button"
+            class="tools-star"
+            :class="{ 'tools-star--active': ind.tools.length > 0 }"
+            :title="ind.tools.length ? `${ind.tools.length} tool(s) in use` : 'Choose tools in use'"
+            @click="openToolsOverlay(ind)"
+          >
+            ★<span v-if="ind.tools.length">{{ ind.tools.length }}</span>
+          </button>
           <span class="roster__badge">{{ coverageFor(ind).on }} / {{ coverageFor(ind).total }}</span>
           <button
             type="button"
@@ -234,7 +273,7 @@ const allCoverage = computed(() => {
         <div class="overall-progress__bar">
           <div class="overall-progress__fill" :style="{ width: pctOf(selectedProgress) + '%' }" />
         </div>
-        <span>{{ selectedProgress.on }} / {{ selectedProgress.total }} areas growing for {{ selected.name || 'this person' }}</span>
+        <span>{{ selectedProgress.on }} / {{ selectedProgress.total }} areas growing for {{ displayIndividualName(selected) }}</span>
       </div>
 
       <p v-if="!selected.roleFlags.knowledgeWorker && !selected.roleFlags.developer" class="role-hint">
@@ -255,6 +294,57 @@ const allCoverage = computed(() => {
         @remove-custom="(id) => removeCustomItem(selected, group.id, id)"
       />
     </section>
+
+    <Teleport to="body">
+      <div
+        v-if="toolsOverlayIndividual"
+        class="tools-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="`Tools — ${displayIndividualName(toolsOverlayIndividual)}`"
+        tabindex="-1"
+        @click.self="closeToolsOverlay"
+        @keydown.esc="closeToolsOverlay"
+      >
+        <div class="tools-overlay__panel">
+          <div class="tools-overlay__header">
+            <span>Tools — {{ displayIndividualName(toolsOverlayIndividual) }}</span>
+            <button type="button" class="tools-overlay__close" aria-label="Close" title="Close" @click="closeToolsOverlay">
+              ×
+            </button>
+          </div>
+
+          <div v-for="group in toolGroups" :key="group.label" class="tools-overlay__group">
+            <div class="tools-overlay__group-label">{{ group.label }}</div>
+            <label v-for="tool in group.tools" :key="tool" class="tools-overlay__item">
+              <input
+                type="checkbox"
+                :checked="hasTool(toolsOverlayIndividual, tool)"
+                @change="toggleTool(toolsOverlayIndividual, tool)"
+              />
+              {{ tool }}
+            </label>
+          </div>
+
+          <div v-if="customTools.length" class="tools-overlay__group">
+            <div class="tools-overlay__group-label">Other</div>
+            <label v-for="tool in customTools" :key="tool" class="tools-overlay__item">
+              <input
+                type="checkbox"
+                checked
+                @change="toggleTool(toolsOverlayIndividual, tool)"
+              />
+              {{ tool }}
+            </label>
+          </div>
+
+          <form class="tools-overlay__add" @submit.prevent="submitCustomTool">
+            <input v-model="customToolInput" type="text" placeholder="Add another tool…" />
+            <button type="submit" class="btn-outline">+ Add</button>
+          </form>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -419,6 +509,31 @@ const allCoverage = computed(() => {
   color: var(--cgi-white);
 }
 
+.tools-star {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.tools-star--active {
+  border-color: #f59e0b;
+  background: color-mix(in srgb, #f59e0b 12%, var(--color-surface));
+  color: #b45309;
+}
+
+.tools-star span {
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
 .roster__badge {
   flex-shrink: 0;
   font-size: 0.78rem;
@@ -539,5 +654,101 @@ const allCoverage = computed(() => {
 .btn-outline:hover {
   background: var(--cgi-purple);
   color: var(--cgi-white);
+}
+
+.tools-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.tools-overlay:focus {
+  outline: none;
+}
+
+.tools-overlay__panel {
+  background: var(--cgi-white);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  width: 320px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.tools-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cgi-grey-900);
+}
+
+.tools-overlay__close {
+  border: none;
+  background: var(--cgi-grey-100);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.tools-overlay__close:hover {
+  background: var(--cgi-red);
+  color: var(--cgi-white);
+}
+
+.tools-overlay__group {
+  margin-bottom: 0.9rem;
+}
+
+.tools-overlay__group-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.tools-overlay__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.88rem;
+  color: var(--color-text);
+}
+
+.tools-overlay__item input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--cgi-purple);
+}
+
+.tools-overlay__add {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--cgi-grey-300);
+}
+
+.tools-overlay__add input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: var(--color-surface);
 }
 </style>

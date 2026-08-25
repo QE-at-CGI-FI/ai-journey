@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 
-const emit = defineEmits(['export', 'import', 'reset', 'print-report'])
+defineProps({
+  anonymized: { type: Boolean, default: true },
+})
+const emit = defineEmits(['export', 'import', 'reset', 'print-report', 'toggle-anonymize'])
 const fileInput = ref(null)
 const errorMsg = ref('')
 
@@ -32,6 +35,15 @@ function onFileChosen(event) {
 
 <template>
   <div class="data-controls">
+    <button
+      type="button"
+      class="btn-secondary"
+      :class="{ 'btn-secondary--active': anonymized }"
+      :title="anonymized ? 'Names are hidden — click to show real names' : 'Click to hide organization and people names'"
+      @click="emit('toggle-anonymize')"
+    >
+      {{ anonymized ? '🙈 Anonymized' : '👁 Show names' }}
+    </button>
     <button type="button" class="btn-secondary" @click="emit('print-report')">🖨 Print report</button>
     <button type="button" class="btn-primary" @click="emit('export')">↓ Export</button>
     <button type="button" class="btn-secondary" @click="triggerImport">↑ Import</button>
@@ -79,6 +91,11 @@ button {
 }
 
 .btn-secondary:hover {
+  background: var(--cgi-purple);
+  color: var(--cgi-white);
+}
+
+.btn-secondary--active {
   background: var(--cgi-purple);
   color: var(--cgi-white);
 }

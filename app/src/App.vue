@@ -55,10 +55,12 @@ function handlePrintReport() {
         </div>
       </div>
       <DataControls
+        :anonymized="store.ui.anonymized"
         @export="handleExport"
         @import="handleImport"
         @reset="handleReset"
         @print-report="handlePrintReport"
+        @toggle-anonymize="store.ui.anonymized = !store.ui.anonymized"
       />
     </header>
 
@@ -67,7 +69,10 @@ function handlePrintReport() {
         <label for="org-name">Organization</label>
         <input
           id="org-name"
-          v-model="store.state.organization.name"
+          :value="store.ui.anonymized ? 'Client Organization' : store.state.organization.name"
+          :disabled="store.ui.anonymized"
+          :title="store.ui.anonymized ? 'Turn off Anonymized to edit the organization name' : ''"
+          @input="store.state.organization.name = $event.target.value"
           type="text"
           placeholder="e.g. CGI"
         />

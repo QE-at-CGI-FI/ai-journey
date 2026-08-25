@@ -30,6 +30,9 @@ function emptyIndividual() {
     // person — drives which items they're tracked against and the coverage
     // denominator used for their progress.
     roleFlags: { knowledgeWorker: false, developer: false },
+    // Free-form list of AI tool names this person actively uses — a mix of
+    // ticks from data/toolGroups.js and any custom names typed in.
+    tools: [],
     ...emptyBucket(),
   }
 }
@@ -95,6 +98,7 @@ function mergeIntoState(base, incoming) {
         knowledgeWorker: !!ind.roleFlags?.knowledgeWorker,
         developer: !!ind.roleFlags?.developer,
       }
+      fresh.tools = Array.isArray(ind.tools) ? [...ind.tools] : []
       mergeBucket(fresh, ind)
       return fresh
     })
@@ -123,6 +127,16 @@ function mergeIntoState(base, incoming) {
 
 export function useJourneyStore() {
   const state = reactive(load())
+
+  // Display-only UI state — never persisted, never affects saved data or the
+  // printed report. Defaults to anonymized so a fresh load is safe to share.
+  const ui = reactive({ anonymized: true })
+
+  function displayIndividualName(individual) {
+    if (!ui.anonymized) return individual.name || 'Unnamed'
+    const idx = state.individuals.findIndex((i) => i.id === individual.id)
+    return `Person ${idx + 1}`
+  }
 
   watch(
     state,
@@ -238,6 +252,22 @@ export function useJourneyStore() {
     if (idx !== -1) individual.badges.splice(idx, 1)
   }
 
+  function hasTool(individual, tool) {
+    return individual.tools.includes(tool)
+  }
+
+  function toggleTool(individual, tool) {
+    const idx = individual.tools.indexOf(tool)
+    if (idx === -1) individual.tools.push(tool)
+    else individual.tools.splice(idx, 1)
+  }
+
+  function addCustomTool(individual, name) {
+    const trimmed = name.trim()
+    if (!trimmed) return
+    if (!individual.tools.includes(trimmed)) individual.tools.push(trimmed)
+  }
+
   function addAction(title, description, timeline) {
     const trimmedTitle = title.trim()
     if (!trimmedTitle) return
@@ -349,6 +379,8 @@ export function useJourneyStore() {
 
   return {
     state,
+    ui,
+    displayIndividualName,
     orgEnablerGroups,
     learningCultureItemGroups,
     individualAreaGroups,
@@ -370,6 +402,9 @@ export function useJourneyStore() {
     removeIndividual,
     awardBadge,
     revokeBadge,
+    hasTool,
+    toggleTool,
+    addCustomTool,
     addAction,
     removeAction,
     reorderAction,
