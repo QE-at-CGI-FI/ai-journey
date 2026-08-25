@@ -251,7 +251,7 @@ const allCoverage = computed(() => {
             :title="ind.tools.length ? `${ind.tools.length} tool(s) in use` : 'Choose tools in use'"
             @click="openToolsOverlay(ind)"
           >
-            ★<span v-if="ind.tools.length">{{ ind.tools.length }}</span>
+            ⚙️<span v-if="ind.tools.length">{{ ind.tools.length }}</span>
           </button>
           <span class="roster__badge">{{ coverageFor(ind).on }} / {{ coverageFor(ind).total }}</span>
           <button
