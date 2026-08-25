@@ -1,10 +1,11 @@
 import { reactive, watch } from 'vue'
 import { orgEnablerGroups } from '../data/orgEnablers.js'
+import { learningCultureItemGroups } from '../data/learningCultureItems.js'
 import { individualAreaGroups } from '../data/individualAreas.js'
 import { valueItemGroups } from '../data/valueItems.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
-const STORAGE_VERSION = 2
+const STORAGE_VERSION = 5
 
 function blankValue() {
   return { on: false, details: '' }
@@ -18,15 +19,17 @@ function emptyBucket() {
 }
 
 function emptyIndividual() {
-  return { id: '', name: '', role: '', team: '', ...emptyBucket() }
+  return { id: '', name: '', role: '', team: '', badges: [], ...emptyBucket() }
 }
 
 function emptyState() {
   return {
     version: STORAGE_VERSION,
     organization: { name: '', useCase: '', ...emptyBucket() },
+    learningCulture: { ...emptyBucket() },
     value: { ...emptyBucket() },
     individuals: [],
+    actions: [],
   }
 }
 
@@ -65,6 +68,7 @@ function mergeIntoState(base, incoming) {
     mergeBucket(base.organization, incoming.organization)
   }
 
+  mergeBucket(base.learningCulture, incoming.learningCulture)
   mergeBucket(base.value, incoming.value)
 
   if (Array.isArray(incoming.individuals)) {
@@ -74,6 +78,7 @@ function mergeIntoState(base, incoming) {
       fresh.name = ind.name || ''
       fresh.role = ind.role || ''
       fresh.team = ind.team || ''
+      fresh.badges = Array.isArray(ind.badges) ? [...ind.badges] : []
       mergeBucket(fresh, ind)
       return fresh
     })
@@ -86,6 +91,15 @@ function mergeIntoState(base, incoming) {
     fresh.team = incoming.individual.profile?.team || ''
     mergeBucket(fresh, incoming.individual)
     base.individuals = [fresh]
+  }
+
+  if (Array.isArray(incoming.actions)) {
+    base.actions = incoming.actions.map((a) => ({
+      id: a.id || makeId('action'),
+      title: a.title || '',
+      description: a.description || '',
+      timeline: a.timeline || '',
+    }))
   }
 
   return base
@@ -177,6 +191,42 @@ export function useJourneyStore() {
     if (idx !== -1) state.individuals.splice(idx, 1)
   }
 
+  function awardBadge(individualId, badgeId) {
+    const individual = state.individuals.find((i) => i.id === individualId)
+    if (!individual) return
+    if (!individual.badges.includes(badgeId)) individual.badges.push(badgeId)
+  }
+
+  function revokeBadge(individualId, badgeId) {
+    const individual = state.individuals.find((i) => i.id === individualId)
+    if (!individual) return
+    const idx = individual.badges.indexOf(badgeId)
+    if (idx !== -1) individual.badges.splice(idx, 1)
+  }
+
+  function addAction(title, description, timeline) {
+    const trimmedTitle = title.trim()
+    if (!trimmedTitle) return
+    state.actions.push({
+      id: makeId('action'),
+      title: trimmedTitle,
+      description: description.trim(),
+      timeline: timeline.trim(),
+    })
+  }
+
+  function removeAction(id) {
+    const idx = state.actions.findIndex((a) => a.id === id)
+    if (idx !== -1) state.actions.splice(idx, 1)
+  }
+
+  function reorderAction(fromIndex, toIndex) {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return
+    if (fromIndex >= state.actions.length || toIndex >= state.actions.length) return
+    const [moved] = state.actions.splice(fromIndex, 1)
+    state.actions.splice(toIndex, 0, moved)
+  }
+
   // How many of the tracked individuals have a given experience switched on.
   function itemCoverage(itemId) {
     const total = state.individuals.length
@@ -205,9 +255,12 @@ export function useJourneyStore() {
     state.organization.useCase = fresh.organization.useCase
     state.organization.values = fresh.organization.values
     state.organization.customItems = fresh.organization.customItems
+    state.learningCulture.values = fresh.learningCulture.values
+    state.learningCulture.customItems = fresh.learningCulture.customItems
     state.value.values = fresh.value.values
     state.value.customItems = fresh.value.customItems
     state.individuals = fresh.individuals
+    state.actions = fresh.actions
   }
 
   function resetAll() {
@@ -217,14 +270,18 @@ export function useJourneyStore() {
     state.organization.useCase = fresh.organization.useCase
     state.organization.values = fresh.organization.values
     state.organization.customItems = fresh.organization.customItems
+    state.learningCulture.values = fresh.learningCulture.values
+    state.learningCulture.customItems = fresh.learningCulture.customItems
     state.value.values = fresh.value.values
     state.value.customItems = fresh.value.customItems
     state.individuals = fresh.individuals
+    state.actions = fresh.actions
   }
 
   return {
     state,
     orgEnablerGroups,
+    learningCultureItemGroups,
     individualAreaGroups,
     valueItemGroups,
     valueFor,
@@ -237,6 +294,11 @@ export function useJourneyStore() {
     overallProgress,
     addIndividual,
     removeIndividual,
+    awardBadge,
+    revokeBadge,
+    addAction,
+    removeAction,
+    reorderAction,
     itemCoverage,
     exportData,
     importData,

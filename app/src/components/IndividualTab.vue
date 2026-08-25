@@ -57,23 +57,31 @@ function pctOf(progress) {
   return progress.total ? (progress.on / progress.total) * 100 : 0
 }
 
+function coveragePct(items) {
+  const total = items.length
+  let someoneCount = 0
+  let everyoneSum = 0
+  for (const item of items) {
+    const cov = itemCoverage(item.id)
+    if (cov.on > 0) someoneCount += 1
+    if (cov.total > 0) everyoneSum += cov.on / cov.total
+  }
+  return {
+    someone: total ? (someoneCount / total) * 100 : 0,
+    everyone: total ? (everyoneSum / total) * 100 : 0,
+  }
+}
+
 const groupCoverages = computed(() =>
-  individualAreaGroups.map((group) => {
-    const total = group.items.length
-    let someoneCount = 0
-    let everyoneSum = 0
-    for (const item of group.items) {
-      const cov = itemCoverage(item.id)
-      if (cov.on > 0) someoneCount += 1
-      if (cov.total > 0) everyoneSum += cov.on / cov.total
-    }
-    return {
-      id: group.id,
-      title: group.title,
-      someone: total ? (someoneCount / total) * 100 : 0,
-      everyone: total ? (everyoneSum / total) * 100 : 0,
-    }
-  }),
+  individualAreaGroups.map((group) => ({
+    id: group.id,
+    title: group.title,
+    ...coveragePct(group.items),
+  })),
+)
+
+const allCoverage = computed(() =>
+  coveragePct(individualAreaGroups.flatMap((group) => group.items)),
 )
 </script>
 
@@ -90,22 +98,44 @@ const groupCoverages = computed(() =>
       </div>
 
       <div v-if="state.individuals.length" class="coverage-summary">
-        <div v-for="group in groupCoverages" :key="group.id" class="coverage-summary__group">
-          <span class="coverage-summary__title">{{ group.title }}</span>
+        <div class="coverage-summary__group">
+          <span class="coverage-summary__title">All</span>
           <div class="coverage__tiles">
             <div class="coverage-tile">
-              <span class="coverage-tile__pct">{{ Math.round(group.someone) }}%</span>
+              <span class="coverage-tile__pct">{{ Math.round(allCoverage.someone) }}%</span>
               <div class="coverage-tile__bar">
-                <div class="coverage-tile__fill" :style="{ width: group.someone + '%' }" />
+                <div class="coverage-tile__fill" :style="{ width: allCoverage.someone + '%' }" />
               </div>
               <span class="coverage-tile__label">Someone</span>
             </div>
             <div class="coverage-tile">
-              <span class="coverage-tile__pct">{{ Math.round(group.everyone) }}%</span>
+              <span class="coverage-tile__pct">{{ Math.round(allCoverage.everyone) }}%</span>
               <div class="coverage-tile__bar">
-                <div class="coverage-tile__fill" :style="{ width: group.everyone + '%' }" />
+                <div class="coverage-tile__fill" :style="{ width: allCoverage.everyone + '%' }" />
               </div>
               <span class="coverage-tile__label">Everyone</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="coverage-summary__roles">
+          <div v-for="group in groupCoverages" :key="group.id" class="coverage-summary__group">
+            <span class="coverage-summary__title">{{ group.title }}</span>
+            <div class="coverage__tiles">
+              <div class="coverage-tile">
+                <span class="coverage-tile__pct">{{ Math.round(group.someone) }}%</span>
+                <div class="coverage-tile__bar">
+                  <div class="coverage-tile__fill" :style="{ width: group.someone + '%' }" />
+                </div>
+                <span class="coverage-tile__label">Someone</span>
+              </div>
+              <div class="coverage-tile">
+                <span class="coverage-tile__pct">{{ Math.round(group.everyone) }}%</span>
+                <div class="coverage-tile__bar">
+                  <div class="coverage-tile__fill" :style="{ width: group.everyone + '%' }" />
+                </div>
+                <span class="coverage-tile__label">Everyone</span>
+              </div>
             </div>
           </div>
         </div>
@@ -202,7 +232,15 @@ const groupCoverages = computed(() =>
 .coverage-summary {
   flex-shrink: 0;
   display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.coverage-summary__roles {
+  display: flex;
   gap: 1.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--cgi-grey-300);
 }
 
 .coverage-summary__group {
