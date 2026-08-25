@@ -1,0 +1,56 @@
+:root {
+  --cgi-red: #e4002b;
+  --cgi-red-dark: #b3001f;
+  --cgi-purple: #5c2d91;
+  --cgi-purple-dark: #431f68;
+  --cgi-grey-900: #1a1a1a;
+  --cgi-grey-700: #4a4a4a;
+  --cgi-grey-500: #767676;
+  --cgi-grey-300: #d4d4d4;
+  --cgi-grey-100: #f2f2f2;
+  --cgi-black: #000000;
+  --cgi-white: #ffffff;
+
+  --color-bg: var(--cgi-grey-100);
+  --color-surface: var(--cgi-white);
+  --color-text: var(--cgi-grey-900);
+  --color-text-muted: var(--cgi-grey-700);
+  --color-border: var(--cgi-grey-300);
+  --color-accent: var(--cgi-red);
+  --color-accent-2: var(--cgi-purple);
+
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+#app {
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--cgi-purple);
+  color: var(--cgi-white);
+}
