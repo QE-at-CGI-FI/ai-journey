@@ -1,11 +1,35 @@
 <script setup>
+import { nextTick, ref, watch } from 'vue'
+
 const props = defineProps({
-  item: { type: Object, required: true }, // { id, label }
+  item: { type: Object, required: true }, // { id, label, info? }
   value: { type: Object, required: true }, // { on, details }
   removable: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['toggle', 'update:details', 'remove'])
+
+const baseUrl = import.meta.env.BASE_URL
+const showInfo = ref(false)
+const overlayEl = ref(null)
+
+function openInfo() {
+  showInfo.value = true
+}
+
+function closeInfo() {
+  showInfo.value = false
+}
+
+function onOverlayKeydown(event) {
+  if (event.key === 'Escape') closeInfo()
+}
+
+watch(showInfo, async (open) => {
+  if (!open) return
+  await nextTick()
+  overlayEl.value?.focus()
+})
 </script>
 
 <template>
@@ -23,7 +47,19 @@ const emit = defineEmits(['toggle', 'update:details', 'remove'])
         <span class="toggle__knob" />
       </button>
 
-      <span class="enabler-item__label">{{ item.label }}</span>
+      <span class="enabler-item__label">
+        {{ item.label }}
+        <button
+          v-if="item.info"
+          type="button"
+          class="info-btn"
+          :aria-label="`More info about ${item.label}`"
+          title="More info"
+          @click="openInfo"
+        >
+          i
+        </button>
+      </span>
 
       <span class="status-pill" :class="value.on ? 'status-pill--on' : 'status-pill--off'">
         {{ value.on ? 'Enabled' : 'Not yet' }}
@@ -48,6 +84,37 @@ const emit = defineEmits(['toggle', 'update:details', 'remove'])
       rows="2"
       @input="emit('update:details', $event.target.value)"
     />
+
+    <Teleport to="body">
+      <div
+        v-if="item.info && showInfo"
+        ref="overlayEl"
+        class="info-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="item.label"
+        tabindex="-1"
+        @click.self="closeInfo"
+        @keydown="onOverlayKeydown"
+      >
+        <div class="info-overlay__panel">
+          <button
+            type="button"
+            class="info-overlay__close"
+            aria-label="Close"
+            title="Close"
+            @click="closeInfo"
+          >
+            ×
+          </button>
+          <img
+            class="info-overlay__image"
+            :src="baseUrl + item.info.image"
+            :alt="item.info.alt || item.label"
+          />
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -161,5 +228,80 @@ const emit = defineEmits(['toggle', 'update:details', 'remove'])
   outline: 2px solid var(--cgi-purple);
   outline-offset: 1px;
   background: var(--cgi-white);
+}
+
+.info-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 0.4rem;
+  border: 1px solid var(--cgi-purple);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cgi-purple);
+  font-size: 0.72rem;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.info-btn:hover {
+  background: var(--cgi-purple);
+  color: var(--cgi-white);
+}
+
+.info-overlay:focus {
+  outline: none;
+}
+
+.info-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.info-overlay__panel {
+  position: relative;
+  max-width: min(90vw, 960px);
+  max-height: 90vh;
+  background: var(--cgi-white);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  overflow: auto;
+}
+
+.info-overlay__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cgi-grey-100);
+  color: var(--color-text);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.info-overlay__close:hover {
+  background: var(--cgi-red);
+  color: var(--cgi-white);
+}
+
+.info-overlay__image {
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
 }
 </style>

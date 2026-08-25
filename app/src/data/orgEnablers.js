@@ -28,7 +28,14 @@ export const orgEnablerGroups = [
     id: 'licensing-governance',
     title: 'Licensing & governance',
     items: [
-      { id: 'licenses-contractual', label: 'Licenses with contractual limitations' },
+      {
+        id: 'licenses-contractual',
+        label: 'Licenses with contractual limitations',
+        info: {
+          image: 'GHC-License-tradeoffs.svg',
+          alt: 'GHC license trade-offs diagram',
+        },
+      },
       { id: 'license-bound-governance', label: 'License-bound governance' },
     ],
   },
