@@ -7,7 +7,7 @@ export const badgeTiers = [
   {
     id: 'agent-enabled',
     label: 'Agent-enabled',
-    tagline: 'Hire me — I come with agents that make me better.',
+    tagline: 'Joins with agents that make me better.',
     image: 'agent-enabled.png',
   },
   {

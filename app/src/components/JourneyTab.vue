@@ -1,6 +1,5 @@
 <script setup>
 import { computed } from 'vue'
-import { badgeTiers } from '../data/badgeTiers.js'
 
 const props = defineProps({
   store: { type: Object, required: true },
@@ -11,40 +10,11 @@ const {
   state,
   orgEnablerGroups,
   learningCultureItemGroups,
-  individualAreaGroups,
   valueItemGroups,
-  customItemsFor,
-  itemCoverage,
+  someonePctBucket,
+  someonePctIndividuals,
+  someonePctBadges,
 } = props.store
-
-// "Someone" percentage: share of tracked items that are true for at least
-// one person/place in the org — an org-wide bucket counts an item once it's
-// switched on; the individuals bucket counts an item once any one person has it.
-function bucketItems(bucket, groups) {
-  const items = []
-  groups.forEach((g) => items.push(...g.items, ...customItemsFor(bucket, g.id)))
-  return items
-}
-
-function someonePctBucket(bucket, groups) {
-  const items = bucketItems(bucket, groups)
-  if (!items.length) return 0
-  const on = items.filter((i) => bucket.values[i.id]?.on).length
-  return Math.round((on / items.length) * 100)
-}
-
-const someonePctIndividuals = computed(() => {
-  const items = individualAreaGroups.flatMap((g) => g.items)
-  if (!items.length) return 0
-  const on = items.filter((i) => itemCoverage(i.id).on > 0).length
-  return Math.round((on / items.length) * 100)
-})
-
-const someonePctBadges = computed(() => {
-  if (!badgeTiers.length) return 0
-  const on = badgeTiers.filter((t) => state.individuals.some((ind) => ind.badges.includes(t.id))).length
-  return Math.round((on / badgeTiers.length) * 100)
-})
 
 const svgW = 1500
 const svgH = 560
@@ -120,9 +90,9 @@ const stops = computed(() => {
   const pctByTab = {
     organization: someonePctBucket(state.organization, orgEnablerGroups),
     'learning-culture': someonePctBucket(state.learningCulture, learningCultureItemGroups),
-    individual: someonePctIndividuals.value,
+    individual: someonePctIndividuals(),
     value: someonePctBucket(state.value, valueItemGroups),
-    badges: someonePctBadges.value,
+    badges: someonePctBadges(),
   }
   return stopDefs.map((def, i) => {
     const { x, y } = pointAtFraction(i / (stopDefs.length - 1))

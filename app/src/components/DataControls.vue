@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const emit = defineEmits(['export', 'import', 'reset'])
+const emit = defineEmits(['export', 'import', 'reset', 'print-report'])
 const fileInput = ref(null)
 const errorMsg = ref('')
 
@@ -32,6 +32,7 @@ function onFileChosen(event) {
 
 <template>
   <div class="data-controls">
+    <button type="button" class="btn-secondary" @click="emit('print-report')">🖨 Print report</button>
     <button type="button" class="btn-primary" @click="emit('export')">↓ Export</button>
     <button type="button" class="btn-secondary" @click="triggerImport">↑ Import</button>
     <input

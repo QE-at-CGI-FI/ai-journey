@@ -6,7 +6,7 @@ const props = defineProps({
   store: { type: Object, required: true },
 })
 
-const { state, awardBadge, revokeBadge } = props.store
+const { state, awardBadge, revokeBadge, individualExperiencePct } = props.store
 
 const baseUrl = import.meta.env.BASE_URL
 const dragOverTier = ref(null)
@@ -69,7 +69,7 @@ function membersFor(tierId) {
             draggable="true"
             @dragstart="onDragStart($event, ind.id)"
           >
-            {{ ind.name || 'Unnamed' }}
+            {{ ind.name || 'Unnamed' }} {{ individualExperiencePct(ind) }}%
           </div>
         </div>
       </section>
@@ -105,7 +105,7 @@ function membersFor(tierId) {
           <div class="tier__dropzone">
             <p v-if="!membersFor(tier.id).length" class="tier__hint">Drag a person here</p>
             <div v-for="ind in membersFor(tier.id)" :key="ind.id" class="badge-chip">
-              <span>{{ ind.name || 'Unnamed' }}</span>
+              <span>{{ ind.name || 'Unnamed' }} {{ individualExperiencePct(ind) }}%</span>
               <button
                 type="button"
                 class="badge-chip__remove"
