@@ -32,8 +32,8 @@ function onFileChosen(event) {
 
 <template>
   <div class="data-controls">
-    <button type="button" class="btn-primary" @click="emit('export')">⭳ Export</button>
-    <button type="button" class="btn-secondary" @click="triggerImport">⭱ Import</button>
+    <button type="button" class="btn-primary" @click="emit('export')">↓ Export</button>
+    <button type="button" class="btn-secondary" @click="triggerImport">↑ Import</button>
     <input
       ref="fileInput"
       type="file"

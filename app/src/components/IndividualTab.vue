@@ -56,17 +56,60 @@ function handleRemove(id) {
 function pctOf(progress) {
   return progress.total ? (progress.on / progress.total) * 100 : 0
 }
+
+const groupCoverages = computed(() =>
+  individualAreaGroups.map((group) => {
+    const total = group.items.length
+    let someoneCount = 0
+    let everyoneSum = 0
+    for (const item of group.items) {
+      const cov = itemCoverage(item.id)
+      if (cov.on > 0) someoneCount += 1
+      if (cov.total > 0) everyoneSum += cov.on / cov.total
+    }
+    return {
+      id: group.id,
+      title: group.title,
+      someone: total ? (someoneCount / total) * 100 : 0,
+      everyone: total ? (everyoneSum / total) * 100 : 0,
+    }
+  }),
+)
 </script>
 
 <template>
   <div class="tab-panel">
-    <div class="tab-intro">
-      <h2>Individual growth journey</h2>
-      <p>
-        Track the people in the organization growing into AI-native ways of working — built on
-        top of the enablers the organization provides. Add each person, toggle their experiences
-        on as they become true, and see coverage across the whole roster.
-      </p>
+    <div class="tab-header">
+      <div class="tab-intro">
+        <h2>Individual growth journey</h2>
+        <p>
+          Track the people in the organization growing into AI-native ways of working — built on
+          top of the enablers the organization provides. Add each person, toggle their experiences
+          on as they become true, and see coverage across the whole roster.
+        </p>
+      </div>
+
+      <div v-if="state.individuals.length" class="coverage-summary">
+        <div v-for="group in groupCoverages" :key="group.id" class="coverage-summary__group">
+          <span class="coverage-summary__title">{{ group.title }}</span>
+          <div class="coverage__tiles">
+            <div class="coverage-tile">
+              <span class="coverage-tile__pct">{{ Math.round(group.someone) }}%</span>
+              <div class="coverage-tile__bar">
+                <div class="coverage-tile__fill" :style="{ width: group.someone + '%' }" />
+              </div>
+              <span class="coverage-tile__label">Someone</span>
+            </div>
+            <div class="coverage-tile">
+              <span class="coverage-tile__pct">{{ Math.round(group.everyone) }}%</span>
+              <div class="coverage-tile__bar">
+                <div class="coverage-tile__fill" :style="{ width: group.everyone + '%' }" />
+              </div>
+              <span class="coverage-tile__label">Everyone</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <section class="roster">
@@ -102,47 +145,7 @@ function pctOf(progress) {
       <p v-else class="roster__empty">No one tracked yet — add a name above to get started.</p>
     </section>
 
-    <section v-if="state.individuals.length" class="coverage">
-      <h3>Coverage across experiences</h3>
-      <p class="coverage__hint">
-        Share of the {{ state.individuals.length }}
-        {{ state.individuals.length === 1 ? 'person' : 'people' }} tracked who have grown into
-        each experience.
-      </p>
-
-      <div v-for="group in individualAreaGroups" :key="group.id" class="coverage__group">
-        <h4>{{ group.title }}</h4>
-        <ul class="coverage__items">
-          <li v-for="item in group.items" :key="item.id" class="coverage__row">
-            <span class="coverage__label">{{ item.label }}</span>
-            <div class="coverage__bar">
-              <div
-                class="coverage__fill"
-                :style="{ width: pctOf(itemCoverage(item.id)) + '%' }"
-              />
-            </div>
-            <span class="coverage__count">{{ itemCoverage(item.id).on }} / {{ state.individuals.length }}</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
     <section v-if="selected" class="individual-detail">
-      <div class="profile-fields">
-        <label>
-          Name
-          <input v-model="selected.name" type="text" placeholder="Jane Doe" />
-        </label>
-        <label>
-          Role
-          <input v-model="selected.role" type="text" placeholder="e.g. Consultant" />
-        </label>
-        <label>
-          Team
-          <input v-model="selected.team" type="text" placeholder="e.g. Delivery" />
-        </label>
-      </div>
-
       <div class="overall-progress">
         <div class="overall-progress__bar">
           <div class="overall-progress__fill" :style="{ width: pctOf(selectedProgress) + '%' }" />
@@ -171,8 +174,17 @@ function pctOf(progress) {
   max-width: 860px;
 }
 
-.tab-intro {
+.tab-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.75rem;
   margin-bottom: 1.5rem;
+}
+
+.tab-intro {
+  flex: 1;
+  min-width: 260px;
 }
 
 .tab-intro h2 {
@@ -181,20 +193,39 @@ function pctOf(progress) {
 }
 
 .tab-intro p {
-  margin: 0 0 1rem;
+  margin: 0;
   color: var(--color-text-muted);
   font-size: 0.92rem;
   max-width: 68ch;
 }
 
+.coverage-summary {
+  flex-shrink: 0;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.coverage-summary__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.coverage-summary__title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--cgi-purple);
+  white-space: nowrap;
+}
+
 .roster,
-.coverage,
 .individual-detail {
   margin-bottom: 1.75rem;
 }
 
-.roster h3,
-.coverage h3 {
+.roster h3 {
   margin: 0 0 0.6rem;
   font-size: 1.02rem;
   color: var(--cgi-purple);
@@ -293,102 +324,48 @@ function pctOf(progress) {
   color: var(--cgi-red);
 }
 
-.coverage__hint {
-  margin: 0 0 0.75rem;
-  font-size: 0.82rem;
-  color: var(--color-text-muted);
-}
-
-.coverage__group {
-  margin-bottom: 1rem;
-}
-
-.coverage__group h4 {
-  margin: 0 0 0.4rem;
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.coverage__items {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.coverage__tiles {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
-.coverage__row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.coverage-tile {
+  flex: 0 0 auto;
+  min-width: 76px;
+  padding: 0.4rem 0.6rem;
+  background: var(--cgi-grey-100);
+  border-radius: 8px;
+  text-align: center;
 }
 
-.coverage__label {
-  flex: 1;
-  font-size: 0.85rem;
+.coverage-tile__pct {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--color-text);
 }
 
-.coverage__bar {
-  flex: 0 0 140px;
-  height: 6px;
+.coverage-tile__bar {
+  height: 4px;
   border-radius: 999px;
   background: var(--cgi-grey-300);
   overflow: hidden;
+  margin: 0.35rem 0 0.3rem;
 }
 
-.coverage__fill {
+.coverage-tile__fill {
   height: 100%;
   background: linear-gradient(90deg, var(--cgi-purple), var(--cgi-red));
   transition: width 0.2s ease;
 }
 
-.coverage__count {
-  flex-shrink: 0;
-  width: 3.2rem;
-  text-align: right;
-  font-size: 0.78rem;
+.coverage-tile__label {
+  display: block;
+  font-size: 0.65rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--color-text-muted);
-}
-
-.profile-fields {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  padding: 0.9rem 1rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-}
-
-.profile-fields label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  flex: 1;
-  min-width: 160px;
-}
-
-.profile-fields input {
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  font-size: 0.88rem;
-  font-weight: 400;
-  color: var(--color-text);
-}
-
-.profile-fields input:focus {
-  outline: 2px solid var(--cgi-purple);
-  outline-offset: 1px;
 }
 
 .overall-progress {
