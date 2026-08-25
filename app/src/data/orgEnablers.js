@@ -84,7 +84,6 @@ export const orgEnablerGroups = [
     id: 'approved-ecosystem',
     title: 'Approved ecosystem',
     items: [
-      { id: 'approved-extensions', label: 'Approved extensions' },
       { id: 'approved-tools', label: 'Approved tools' },
       { id: 'sar-defaults', label: 'SAR defaults' },
     ],
