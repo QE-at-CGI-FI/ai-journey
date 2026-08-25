@@ -19,7 +19,18 @@ function emptyBucket() {
 }
 
 function emptyIndividual() {
-  return { id: '', name: '', role: '', team: '', badges: [], ...emptyBucket() }
+  return {
+    id: '',
+    name: '',
+    role: '',
+    team: '',
+    badges: [],
+    // Which growth-area groups (data/individualAreas.js) apply to this
+    // person — drives which items they're tracked against and the coverage
+    // denominator used for their progress.
+    roleFlags: { knowledgeWorker: false, developer: false },
+    ...emptyBucket(),
+  }
 }
 
 function emptyState() {
@@ -79,6 +90,10 @@ function mergeIntoState(base, incoming) {
       fresh.role = ind.role || ''
       fresh.team = ind.team || ''
       fresh.badges = Array.isArray(ind.badges) ? [...ind.badges] : []
+      fresh.roleFlags = {
+        knowledgeWorker: !!ind.roleFlags?.knowledgeWorker,
+        developer: !!ind.roleFlags?.developer,
+      }
       mergeBucket(fresh, ind)
       return fresh
     })

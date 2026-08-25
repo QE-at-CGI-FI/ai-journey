@@ -19,7 +19,6 @@ const {
   overallProgress,
   addIndividual,
   removeIndividual,
-  itemCoverage,
 } = props.store
 
 const newName = ref('')
@@ -35,12 +34,31 @@ watch(
 )
 
 const selected = computed(() => state.individuals.find((i) => i.id === selectedId.value) || null)
+
+// Which growth-area groups apply to a person: whatever role(s) they're
+// ticked as. Nobody ticked yet -> track everything, so a fresh person still
+// shows a full checklist instead of a 0/0 target.
+function groupsFor(individual) {
+  const flags = individual?.roleFlags || {}
+  if (!flags.knowledgeWorker && !flags.developer) return individualAreaGroups
+  return individualAreaGroups.filter(
+    (g) =>
+      (g.id === 'knowledge-worker' && flags.knowledgeWorker) ||
+      (g.id === 'developer' && flags.developer),
+  )
+}
+
+const selectedGroups = computed(() => (selected.value ? groupsFor(selected.value) : []))
 const selectedProgress = computed(() =>
-  selected.value ? overallProgress(selected.value, individualAreaGroups) : { on: 0, total: 0 },
+  selected.value ? overallProgress(selected.value, selectedGroups.value) : { on: 0, total: 0 },
 )
 
 function coverageFor(individual) {
-  return overallProgress(individual, individualAreaGroups)
+  return overallProgress(individual, groupsFor(individual))
+}
+
+function toggleRole(individual, key) {
+  individual.roleFlags[key] = !individual.roleFlags[key]
 }
 
 function handleAdd() {
@@ -57,12 +75,25 @@ function pctOf(progress) {
   return progress.total ? (progress.on / progress.total) * 100 : 0
 }
 
-function coveragePct(items) {
+// Only people tracked against a group (ticked for its role, or untargeted —
+// see groupsFor above) count toward that group's coverage denominator, so an
+// e.g. developer-only roster doesn't dilute the knowledge-worker numbers.
+function individualsForGroup(groupId) {
+  return state.individuals.filter((ind) => groupsFor(ind).some((g) => g.id === groupId))
+}
+
+function coverageAmong(itemId, people) {
+  const total = people.length
+  const on = people.filter((p) => p.values[itemId]?.on).length
+  return { on, total }
+}
+
+function coveragePct(items, people) {
   const total = items.length
   let someoneCount = 0
   let everyoneSum = 0
   for (const item of items) {
-    const cov = itemCoverage(item.id)
+    const cov = coverageAmong(item.id, people)
     if (cov.on > 0) someoneCount += 1
     if (cov.total > 0) everyoneSum += cov.on / cov.total
   }
@@ -76,13 +107,28 @@ const groupCoverages = computed(() =>
   individualAreaGroups.map((group) => ({
     id: group.id,
     title: group.title,
-    ...coveragePct(group.items),
+    ...coveragePct(group.items, individualsForGroup(group.id)),
   })),
 )
 
-const allCoverage = computed(() =>
-  coveragePct(individualAreaGroups.flatMap((group) => group.items)),
-)
+const allCoverage = computed(() => {
+  let totalItems = 0
+  let someoneCount = 0
+  let everyoneSum = 0
+  individualAreaGroups.forEach((group) => {
+    const people = individualsForGroup(group.id)
+    group.items.forEach((item) => {
+      totalItems += 1
+      const cov = coverageAmong(item.id, people)
+      if (cov.on > 0) someoneCount += 1
+      if (cov.total > 0) everyoneSum += cov.on / cov.total
+    })
+  })
+  return {
+    someone: totalItems ? (someoneCount / totalItems) * 100 : 0,
+    everyone: totalItems ? (everyoneSum / totalItems) * 100 : 0,
+  }
+})
 </script>
 
 <template>
@@ -159,8 +205,28 @@ const allCoverage = computed(() =>
           <button type="button" class="roster__select" @click="selectedId = ind.id">
             <span class="roster__name">{{ ind.name || 'Unnamed' }}</span>
             <span class="roster__meta">{{ [ind.role, ind.team].filter(Boolean).join(' · ') }}</span>
-            <span class="roster__badge">{{ coverageFor(ind).on }} / {{ coverageFor(ind).total }}</span>
           </button>
+          <div class="role-chips">
+            <button
+              type="button"
+              class="role-chip"
+              :class="{ 'role-chip--active': ind.roleFlags.knowledgeWorker }"
+              title="Track knowledge-worker growth areas"
+              @click="toggleRole(ind, 'knowledgeWorker')"
+            >
+              KW
+            </button>
+            <button
+              type="button"
+              class="role-chip"
+              :class="{ 'role-chip--active': ind.roleFlags.developer }"
+              title="Track developer growth areas"
+              @click="toggleRole(ind, 'developer')"
+            >
+              Dev
+            </button>
+          </div>
+          <span class="roster__badge">{{ coverageFor(ind).on }} / {{ coverageFor(ind).total }}</span>
           <button
             type="button"
             class="roster__remove"
@@ -183,8 +249,13 @@ const allCoverage = computed(() =>
         <span>{{ selectedProgress.on }} / {{ selectedProgress.total }} areas growing for {{ selected.name || 'this person' }}</span>
       </div>
 
+      <p v-if="!selected.roleFlags.knowledgeWorker && !selected.roleFlags.developer" class="role-hint">
+        No role ticked yet — showing every growth area. Tick Knowledge worker and/or Developer in
+        the list above to narrow the checklist and target to their role(s).
+      </p>
+
       <EnablerGroup
-        v-for="group in individualAreaGroups"
+        v-for="group in selectedGroups"
         :key="group.id"
         :group="group"
         :custom-items="customItemsFor(selected, group.id)"
@@ -336,6 +407,30 @@ const allCoverage = computed(() =>
   color: var(--color-text-muted);
 }
 
+.role-chips {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.role-chip {
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.role-chip--active {
+  border-color: var(--cgi-purple);
+  background: var(--cgi-purple);
+  color: var(--cgi-white);
+}
+
 .roster__badge {
   flex-shrink: 0;
   font-size: 0.78rem;
@@ -432,6 +527,14 @@ const allCoverage = computed(() =>
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--color-text-muted);
+}
+
+.role-hint {
+  margin: -0.5rem 0 1.25rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  max-width: 60ch;
 }
 
 .btn-outline {
