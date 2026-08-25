@@ -9,6 +9,8 @@ const emit = defineEmits(['close'])
 
 const {
   state,
+  ui,
+  displayIndividualName,
   orgEnablerGroups,
   learningCultureItemGroups,
   valueItemGroups,
@@ -18,6 +20,10 @@ const {
   groupsForIndividual,
   individualExperiencePct,
 } = props.store
+
+const orgDisplayName = computed(() =>
+  ui.anonymized ? 'Client Organization' : state.organization.name || 'AI-Native Journey',
+)
 
 const generatedOn = new Date().toLocaleDateString(undefined, {
   year: 'numeric',
@@ -55,7 +61,7 @@ function badgeLabels(ind) {
 
 const people = computed(() =>
   state.individuals.map((ind) => ({
-    name: ind.name || 'Unnamed',
+    name: displayIndividualName(ind),
     role: roleLabel(ind),
     pct: individualExperiencePct(ind),
     badges: badgeLabels(ind) || '—',
@@ -95,7 +101,7 @@ function handlePrint() {
 
     <div class="report__page">
       <header class="report__header">
-        <h1>{{ state.organization.name || 'AI-Native Journey' }} — Journey report</h1>
+        <h1>{{ orgDisplayName }} — Journey report</h1>
         <p v-if="state.organization.useCase" class="report__usecase">{{ state.organization.useCase }}</p>
         <p class="report__meta">Generated {{ generatedOn }}</p>
       </header>
