@@ -33,6 +33,8 @@ function emptyIndividual() {
     // Free-form list of AI tool names this person actively uses — a mix of
     // ticks from data/toolGroups.js and any custom names typed in.
     tools: [],
+    // Free-form write-up of the best AI work this person has been doing.
+    highlightStory: '',
     ...emptyBucket(),
   }
 }
@@ -99,6 +101,7 @@ function mergeIntoState(base, incoming) {
         developer: !!ind.roleFlags?.developer,
       }
       fresh.tools = Array.isArray(ind.tools) ? [...ind.tools] : []
+      fresh.highlightStory = ind.highlightStory || ''
       mergeBucket(fresh, ind)
       return fresh
     })
@@ -268,6 +271,10 @@ export function useJourneyStore() {
     if (!individual.tools.includes(trimmed)) individual.tools.push(trimmed)
   }
 
+  function setHighlightStory(individual, text) {
+    individual.highlightStory = text
+  }
+
   function addAction(title, description, timeline) {
     const trimmedTitle = title.trim()
     if (!trimmedTitle) return
@@ -405,6 +412,7 @@ export function useJourneyStore() {
     hasTool,
     toggleTool,
     addCustomTool,
+    setHighlightStory,
     addAction,
     removeAction,
     reorderAction,
