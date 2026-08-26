@@ -45,6 +45,7 @@ export const individualAreaGroups = [
         label: 'Team/Product context advanced (e.g. MCPs, memory, skills, orchestration)',
       },
       { id: 'building-own-mcps', label: 'Building own MCPs' },
+      { id: 'delivering-ai-native-project', label: 'Delivering AI native project' },
       {
         id: 'product-ai-feature-poc',
         label: 'Product AI feature delivery for proof of concept',
