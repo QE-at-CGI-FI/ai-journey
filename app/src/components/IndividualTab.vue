@@ -25,6 +25,7 @@ const {
   hasTool,
   toggleTool,
   addCustomTool,
+  setHighlightStory,
 } = props.store
 
 const knownTools = toolGroups.flatMap((g) => g.tools)
@@ -50,6 +51,27 @@ function submitCustomTool() {
   if (!toolsOverlayIndividual.value) return
   addCustomTool(toolsOverlayIndividual.value, customToolInput.value)
   customToolInput.value = ''
+}
+
+const highlightOverlayFor = ref(null)
+const highlightDraft = ref('')
+const highlightOverlayIndividual = computed(
+  () => state.individuals.find((i) => i.id === highlightOverlayFor.value) || null,
+)
+
+function openHighlightOverlay(individual) {
+  highlightOverlayFor.value = individual.id
+  highlightDraft.value = individual.highlightStory || ''
+}
+
+function closeHighlightOverlay() {
+  highlightOverlayFor.value = null
+}
+
+function saveHighlightStory() {
+  if (!highlightOverlayIndividual.value) return
+  setHighlightStory(highlightOverlayIndividual.value, highlightDraft.value.trim())
+  closeHighlightOverlay()
 }
 
 const newName = ref('')
@@ -253,6 +275,16 @@ const allCoverage = computed(() => {
           >
             ⚙️<span v-if="ind.tools.length">{{ ind.tools.length }}</span>
           </button>
+          <button
+            type="button"
+            class="highlight-star"
+            :class="{ 'highlight-star--active': !!ind.highlightStory }"
+            :title="ind.highlightStory ? 'Edit highlight story' : 'Add a highlight story'"
+            :aria-label="ind.highlightStory ? 'Edit highlight story' : 'Add a highlight story'"
+            @click="openHighlightOverlay(ind)"
+          >
+            📖
+          </button>
           <span class="roster__badge">{{ coverageFor(ind).on }} / {{ coverageFor(ind).total }}</span>
           <button
             type="button"
@@ -342,6 +374,36 @@ const allCoverage = computed(() => {
             <input v-model="customToolInput" type="text" placeholder="Add another tool…" />
             <button type="submit" class="btn-outline">+ Add</button>
           </form>
+        </div>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div
+        v-if="highlightOverlayIndividual"
+        class="highlight-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="`Highlight Story — ${displayIndividualName(highlightOverlayIndividual)}`"
+        tabindex="-1"
+        @click.self="closeHighlightOverlay"
+        @keydown.esc="closeHighlightOverlay"
+      >
+        <div class="highlight-overlay__panel">
+          <h3 class="highlight-overlay__title">
+            Highlight Story: {{ displayIndividualName(highlightOverlayIndividual) }}
+          </h3>
+          <p class="highlight-overlay__subtitle">Best of AI work this person has been doing</p>
+          <textarea
+            v-model="highlightDraft"
+            class="highlight-overlay__textarea"
+            placeholder="Describe the highlight story of best AI work…"
+            rows="6"
+          />
+          <div class="highlight-overlay__actions">
+            <button type="button" class="btn-outline" @click="closeHighlightOverlay">Cancel</button>
+            <button type="button" class="btn-primary" @click="saveHighlightStory">Save</button>
+          </div>
         </div>
       </div>
     </Teleport>
@@ -534,6 +596,27 @@ const allCoverage = computed(() => {
 .tools-star span {
   font-size: 0.7rem;
   font-weight: 700;
+}
+
+.highlight-star {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.highlight-star--active {
+  border-color: var(--cgi-red);
+  background: color-mix(in srgb, var(--cgi-red) 12%, var(--color-surface));
+  color: var(--cgi-red);
 }
 
 .roster__badge {
@@ -754,5 +837,82 @@ const allCoverage = computed(() => {
   border-radius: 6px;
   font-size: 0.85rem;
   background: var(--color-surface);
+}
+
+.btn-primary {
+  border: 1px solid var(--cgi-red);
+  background: var(--cgi-red);
+  color: var(--cgi-white);
+  border-radius: 6px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: var(--cgi-red-dark);
+}
+
+.highlight-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.highlight-overlay:focus {
+  outline: none;
+}
+
+.highlight-overlay__panel {
+  background: var(--cgi-white);
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  width: 420px;
+  max-width: 100%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.highlight-overlay__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: var(--cgi-grey-900);
+}
+
+.highlight-overlay__subtitle {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.highlight-overlay__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 140px;
+  padding: 0.65rem 0.8rem;
+  border: 1.5px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.highlight-overlay__textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #f59e0b 20%, transparent);
+}
+
+.highlight-overlay__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1rem;
 }
 </style>
