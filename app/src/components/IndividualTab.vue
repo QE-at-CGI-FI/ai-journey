@@ -26,6 +26,12 @@ const {
   toggleTool,
   addCustomTool,
   setHighlightStory,
+  addClient,
+  removeClient,
+  attentionItems,
+  hasAttentionFlag,
+  toggleAttentionFlag,
+  attentionCount,
 } = props.store
 
 const knownTools = toolGroups.flatMap((g) => g.tools)
@@ -72,6 +78,40 @@ function saveHighlightStory() {
   if (!highlightOverlayIndividual.value) return
   setHighlightStory(highlightOverlayIndividual.value, highlightDraft.value.trim())
   closeHighlightOverlay()
+}
+
+const clientsOverlayFor = ref(null)
+const clientInput = ref('')
+const clientsOverlayIndividual = computed(
+  () => state.individuals.find((i) => i.id === clientsOverlayFor.value) || null,
+)
+
+function openClientsOverlay(individual) {
+  clientsOverlayFor.value = individual.id
+  clientInput.value = ''
+}
+
+function closeClientsOverlay() {
+  clientsOverlayFor.value = null
+}
+
+function submitClient() {
+  if (!clientsOverlayIndividual.value) return
+  addClient(clientsOverlayIndividual.value, clientInput.value)
+  clientInput.value = ''
+}
+
+const attentionOverlayFor = ref(null)
+const attentionOverlayIndividual = computed(
+  () => state.individuals.find((i) => i.id === attentionOverlayFor.value) || null,
+)
+
+function openAttentionOverlay(individual) {
+  attentionOverlayFor.value = individual.id
+}
+
+function closeAttentionOverlay() {
+  attentionOverlayFor.value = null
 }
 
 const newName = ref('')
@@ -285,6 +325,26 @@ const allCoverage = computed(() => {
           >
             📖
           </button>
+          <button
+            type="button"
+            class="clients-star"
+            :class="{ 'clients-star--active': ind.clients.length > 0 }"
+            :title="ind.clients.length ? `${ind.clients.length} client(s) linked` : 'Link clients'"
+            :aria-label="ind.clients.length ? `${ind.clients.length} client(s) linked` : 'Link clients'"
+            @click="openClientsOverlay(ind)"
+          >
+            🏠<span v-if="ind.clients.length">{{ ind.clients.length }}</span>
+          </button>
+          <button
+            type="button"
+            class="attention-star"
+            :class="{ 'attention-star--active': attentionCount(ind) > 0 }"
+            :title="attentionCount(ind) ? `${attentionCount(ind)} item(s) need action` : 'No items need action'"
+            :aria-label="attentionCount(ind) ? `${attentionCount(ind)} item(s) need action` : 'No items need action'"
+            @click="openAttentionOverlay(ind)"
+          >
+            ❗<span v-if="attentionCount(ind)">{{ attentionCount(ind) }}</span>
+          </button>
           <span class="roster__badge">{{ coverageFor(ind).on }} / {{ coverageFor(ind).total }}</span>
           <button
             type="button"
@@ -403,6 +463,82 @@ const allCoverage = computed(() => {
           <div class="highlight-overlay__actions">
             <button type="button" class="btn-outline" @click="closeHighlightOverlay">Cancel</button>
             <button type="button" class="btn-primary" @click="saveHighlightStory">Save</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div
+        v-if="clientsOverlayIndividual"
+        class="clients-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="`Clients — ${displayIndividualName(clientsOverlayIndividual)}`"
+        tabindex="-1"
+        @click.self="closeClientsOverlay"
+        @keydown.esc="closeClientsOverlay"
+      >
+        <div class="clients-overlay__panel">
+          <h3 class="clients-overlay__title">
+            Clients: {{ displayIndividualName(clientsOverlayIndividual) }}
+          </h3>
+          <p v-if="!clientsOverlayIndividual.clients.length" class="clients-overlay__subtitle">
+            No clients linked yet.
+          </p>
+          <ul v-else class="clients-overlay__list">
+            <li v-for="client in clientsOverlayIndividual.clients" :key="client" class="clients-overlay__item">
+              <span>{{ client }}</span>
+              <button
+                type="button"
+                class="clients-overlay__remove"
+                title="Remove client"
+                aria-label="Remove client"
+                @click="removeClient(clientsOverlayIndividual, client)"
+              >
+                ×
+              </button>
+            </li>
+          </ul>
+          <form class="clients-overlay__add" @submit.prevent="submitClient">
+            <input v-model="clientInput" type="text" placeholder="Client name…" />
+            <button type="submit" class="btn-primary">Add</button>
+          </form>
+          <div class="clients-overlay__actions">
+            <button type="button" class="btn-outline" @click="closeClientsOverlay">Close</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div
+        v-if="attentionOverlayIndividual"
+        class="attention-overlay"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="`Attention — ${displayIndividualName(attentionOverlayIndividual)}`"
+        tabindex="-1"
+        @click.self="closeAttentionOverlay"
+        @keydown.esc="closeAttentionOverlay"
+      >
+        <div class="attention-overlay__panel">
+          <h3 class="attention-overlay__title">
+            Attention: {{ displayIndividualName(attentionOverlayIndividual) }}
+          </h3>
+          <p class="attention-overlay__subtitle">Items that need action</p>
+
+          <label v-for="item in attentionItems" :key="item.id" class="attention-overlay__item">
+            <input
+              type="checkbox"
+              :checked="hasAttentionFlag(attentionOverlayIndividual, item.id)"
+              @change="toggleAttentionFlag(attentionOverlayIndividual, item.id)"
+            />
+            {{ item.label }}
+          </label>
+
+          <div class="attention-overlay__actions">
+            <button type="button" class="btn-outline" @click="closeAttentionOverlay">Close</button>
           </div>
         </div>
       </div>
@@ -571,38 +707,15 @@ const allCoverage = computed(() => {
   color: var(--cgi-white);
 }
 
-.tools-star {
+.tools-star,
+.highlight-star,
+.clients-star,
+.attention-star {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-  min-width: 3.1rem;
-  border: 1.5px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
-  border-radius: 6px;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.85rem;
-  line-height: 1;
-}
-
-.tools-star--active {
-  border-color: #f59e0b;
-  background: color-mix(in srgb, #f59e0b 12%, var(--color-surface));
-  color: #b45309;
-}
-
-.tools-star span {
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
-.highlight-star {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   min-width: 2.2rem;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
@@ -611,9 +724,51 @@ const allCoverage = computed(() => {
   padding: 0.2rem 0.5rem;
   font-size: 0.85rem;
   line-height: 1;
+  /* Emoji glyphs ignore `color` — dim them to grey until something is
+     actually linked, so an unused icon doesn't read as already-set. */
+  filter: grayscale(1);
+  opacity: 0.65;
+}
+
+.tools-star {
+  min-width: 3.1rem;
+}
+
+.tools-star--active,
+.highlight-star--active,
+.clients-star--active,
+.attention-star--active {
+  filter: none;
+  opacity: 1;
+}
+
+.tools-star--active {
+  border-color: #f59e0b;
+  background: color-mix(in srgb, #f59e0b 12%, var(--color-surface));
+  color: #b45309;
+}
+
+.tools-star span,
+.highlight-star span,
+.clients-star span,
+.attention-star span {
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
 .highlight-star--active {
+  border-color: var(--cgi-red);
+  background: color-mix(in srgb, var(--cgi-red) 12%, var(--color-surface));
+  color: var(--cgi-red);
+}
+
+.clients-star--active {
+  border-color: var(--cgi-purple);
+  background: color-mix(in srgb, var(--cgi-purple) 12%, var(--color-surface));
+  color: var(--cgi-purple);
+}
+
+.attention-star--active {
   border-color: var(--cgi-red);
   background: color-mix(in srgb, var(--cgi-red) 12%, var(--color-surface));
   color: var(--cgi-red);
@@ -914,5 +1069,120 @@ const allCoverage = computed(() => {
   justify-content: flex-end;
   gap: 0.6rem;
   margin-top: 1rem;
+}
+
+.clients-overlay,
+.attention-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.clients-overlay:focus,
+.attention-overlay:focus {
+  outline: none;
+}
+
+.clients-overlay__panel,
+.attention-overlay__panel {
+  background: var(--cgi-white);
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  width: 380px;
+  max-width: 100%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.clients-overlay__title,
+.attention-overlay__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: var(--cgi-grey-900);
+}
+
+.clients-overlay__subtitle,
+.attention-overlay__subtitle {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.clients-overlay__list {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.clients-overlay__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  background: var(--cgi-grey-100);
+  font-size: 0.88rem;
+  color: var(--color-text);
+}
+
+.clients-overlay__remove {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+}
+
+.clients-overlay__remove:hover {
+  background: var(--cgi-grey-300);
+  color: var(--cgi-red);
+}
+
+.clients-overlay__add {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.clients-overlay__add input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: var(--color-surface);
+}
+
+.clients-overlay__actions,
+.attention-overlay__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.attention-overlay__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.attention-overlay__item input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--cgi-red);
 }
 </style>
