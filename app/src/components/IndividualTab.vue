@@ -148,6 +148,9 @@ function handleAdd() {
 }
 
 function handleRemove(id) {
+  const individual = state.individuals.find((i) => i.id === id)
+  if (!individual) return
+  if (!confirm(`Remove ${displayIndividualName(individual)}? This cannot be undone.`)) return
   removeIndividual(id)
 }
 
