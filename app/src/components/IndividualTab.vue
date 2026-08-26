@@ -716,7 +716,10 @@ const allCoverage = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-  min-width: 2.2rem;
+  /* Fixed (not min-) width so the box doesn't grow when a count badge
+     appears — otherwise rows with linked data misalign against rows
+     without it. */
+  width: 3.1rem;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
   color: var(--color-text-muted);
@@ -728,10 +731,6 @@ const allCoverage = computed(() => {
      actually linked, so an unused icon doesn't read as already-set. */
   filter: grayscale(1);
   opacity: 0.65;
-}
-
-.tools-star {
-  min-width: 3.1rem;
 }
 
 .tools-star--active,
