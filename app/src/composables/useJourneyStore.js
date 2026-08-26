@@ -4,6 +4,7 @@ import { learningCultureItemGroups } from '../data/learningCultureItems.js'
 import { individualAreaGroups } from '../data/individualAreas.js'
 import { valueItemGroups } from '../data/valueItems.js'
 import { badgeTiers } from '../data/badgeTiers.js'
+import { attentionItems } from '../data/attentionItems.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
 const STORAGE_VERSION = 5
@@ -35,6 +36,10 @@ function emptyIndividual() {
     tools: [],
     // Free-form write-up of the best AI work this person has been doing.
     highlightStory: '',
+    // Free-form list of client names this person has done AI work for/with.
+    clients: [],
+    // itemId (data/attentionItems.js) -> boolean — "needs action" flags.
+    attention: {},
     ...emptyBucket(),
   }
 }
@@ -102,6 +107,8 @@ function mergeIntoState(base, incoming) {
       }
       fresh.tools = Array.isArray(ind.tools) ? [...ind.tools] : []
       fresh.highlightStory = ind.highlightStory || ''
+      fresh.clients = Array.isArray(ind.clients) ? [...ind.clients] : []
+      fresh.attention = ind.attention && typeof ind.attention === 'object' ? { ...ind.attention } : {}
       mergeBucket(fresh, ind)
       return fresh
     })
@@ -275,6 +282,29 @@ export function useJourneyStore() {
     individual.highlightStory = text
   }
 
+  function addClient(individual, name) {
+    const trimmed = name.trim()
+    if (!trimmed) return
+    if (!individual.clients.includes(trimmed)) individual.clients.push(trimmed)
+  }
+
+  function removeClient(individual, name) {
+    const idx = individual.clients.indexOf(name)
+    if (idx !== -1) individual.clients.splice(idx, 1)
+  }
+
+  function hasAttentionFlag(individual, itemId) {
+    return !!individual.attention[itemId]
+  }
+
+  function toggleAttentionFlag(individual, itemId) {
+    individual.attention[itemId] = !individual.attention[itemId]
+  }
+
+  function attentionCount(individual) {
+    return attentionItems.filter((item) => individual.attention[item.id]).length
+  }
+
   function addAction(title, description, timeline) {
     const trimmedTitle = title.trim()
     if (!trimmedTitle) return
@@ -413,6 +443,12 @@ export function useJourneyStore() {
     toggleTool,
     addCustomTool,
     setHighlightStory,
+    addClient,
+    removeClient,
+    attentionItems,
+    hasAttentionFlag,
+    toggleAttentionFlag,
+    attentionCount,
     addAction,
     removeAction,
     reorderAction,
