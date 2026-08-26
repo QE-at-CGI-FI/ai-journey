@@ -22,6 +22,7 @@ export const individualAreaGroups = [
       { id: 'token-awareness', label: 'Token awareness' },
       { id: 'generating-artifacts', label: 'Generating artifacts' },
       { id: 'pitch-to-project', label: 'Pitch to project for AI usecase' },
+      { id: 'mentioned-in-cv', label: 'Mentioned in CV' },
     ],
   },
   {
