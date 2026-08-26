@@ -249,6 +249,13 @@ export function useJourneyStore() {
     if (idx !== -1) state.individuals.splice(idx, 1)
   }
 
+  function reorderIndividual(fromIndex, toIndex) {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return
+    if (fromIndex >= state.individuals.length || toIndex >= state.individuals.length) return
+    const [moved] = state.individuals.splice(fromIndex, 1)
+    state.individuals.splice(toIndex, 0, moved)
+  }
+
   function awardBadge(individualId, badgeId) {
     const individual = state.individuals.find((i) => i.id === individualId)
     if (!individual) return
@@ -437,6 +444,7 @@ export function useJourneyStore() {
     someonePctBadges,
     addIndividual,
     removeIndividual,
+    reorderIndividual,
     awardBadge,
     revokeBadge,
     hasTool,
