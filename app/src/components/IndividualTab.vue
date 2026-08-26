@@ -21,6 +21,7 @@ const {
   groupsForIndividual,
   addIndividual,
   removeIndividual,
+  reorderIndividual,
   displayIndividualName,
   hasTool,
   toggleTool,
@@ -154,6 +155,30 @@ function handleRemove(id) {
   removeIndividual(id)
 }
 
+const draggedIndex = ref(null)
+const dragOverIndex = ref(null)
+
+function onDragStart(index) {
+  draggedIndex.value = index
+}
+
+function onDragEnter(index) {
+  dragOverIndex.value = index
+}
+
+function onDrop(index) {
+  if (draggedIndex.value !== null && draggedIndex.value !== index) {
+    reorderIndividual(draggedIndex.value, index)
+  }
+  draggedIndex.value = null
+  dragOverIndex.value = null
+}
+
+function onDragEnd() {
+  draggedIndex.value = null
+  dragOverIndex.value = null
+}
+
 function pctOf(progress) {
   return progress.total ? (progress.on / progress.total) * 100 : 0
 }
@@ -280,11 +305,21 @@ const allCoverage = computed(() => {
 
       <ul v-if="state.individuals.length" class="roster__list">
         <li
-          v-for="ind in state.individuals"
+          v-for="(ind, index) in state.individuals"
           :key="ind.id"
           class="roster__item"
-          :class="{ 'roster__item--active': ind.id === selectedId }"
+          :class="{
+            'roster__item--active': ind.id === selectedId,
+            'roster__item--over': dragOverIndex === index && draggedIndex !== index,
+          }"
+          draggable="true"
+          @dragstart="onDragStart(index)"
+          @dragover.prevent
+          @dragenter.prevent="onDragEnter(index)"
+          @drop.prevent="onDrop(index)"
+          @dragend="onDragEnd"
         >
+          <span class="roster__handle" title="Drag to reorder">≡</span>
           <button type="button" class="roster__select" @click="selectedId = ind.id">
             <span class="roster__name">{{ displayIndividualName(ind) }}</span>
             <span class="roster__meta">{{ [ind.role, ind.team].filter(Boolean).join(' · ') }}</span>
@@ -655,6 +690,28 @@ const allCoverage = computed(() => {
   display: flex;
   align-items: stretch;
   gap: 0.4rem;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.roster__item--over {
+  background: color-mix(in srgb, var(--cgi-purple) 8%, transparent);
+}
+
+.roster__handle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.2rem;
+  user-select: none;
+}
+
+.roster__handle:active {
+  cursor: grabbing;
 }
 
 .roster__select {
