@@ -34,6 +34,8 @@ const {
   hasAttentionFlag,
   toggleAttentionFlag,
   attentionCount,
+  subgroups,
+  setSubgroup,
 } = props.store
 
 const knownTools = toolGroups.flatMap((g) => g.tools)
@@ -121,6 +123,13 @@ const showProfileReport = ref(false)
 const newName = ref('')
 const selectedId = ref(state.individuals[0]?.id ?? null)
 
+const rosterFilter = ref('all')
+const filteredIndividuals = computed(() => {
+  if (rosterFilter.value === 'all') return state.individuals
+  if (rosterFilter.value === 'unclassified') return state.individuals.filter((i) => !i.subgroup)
+  return state.individuals.filter((i) => i.subgroup === rosterFilter.value)
+})
+
 // Keep the selection valid as individuals are added/removed.
 watch(
   () => state.individuals.map((i) => i.id),
@@ -158,28 +167,32 @@ function handleRemove(id) {
   removeIndividual(id)
 }
 
-const draggedIndex = ref(null)
-const dragOverIndex = ref(null)
+// Tracked by individual id (not roster position) so reordering stays
+// correct while the roster filter is narrowing which rows are shown.
+const draggedId = ref(null)
+const dragOverId = ref(null)
 
-function onDragStart(index) {
-  draggedIndex.value = index
+function onDragStart(id) {
+  draggedId.value = id
 }
 
-function onDragEnter(index) {
-  dragOverIndex.value = index
+function onDragEnter(id) {
+  dragOverId.value = id
 }
 
-function onDrop(index) {
-  if (draggedIndex.value !== null && draggedIndex.value !== index) {
-    reorderIndividual(draggedIndex.value, index)
+function onDrop(id) {
+  if (draggedId.value !== null && draggedId.value !== id) {
+    const fromIndex = state.individuals.findIndex((i) => i.id === draggedId.value)
+    const toIndex = state.individuals.findIndex((i) => i.id === id)
+    if (fromIndex !== -1 && toIndex !== -1) reorderIndividual(fromIndex, toIndex)
   }
-  draggedIndex.value = null
-  dragOverIndex.value = null
+  draggedId.value = null
+  dragOverId.value = null
 }
 
 function onDragEnd() {
-  draggedIndex.value = null
-  dragOverIndex.value = null
+  draggedId.value = null
+  dragOverId.value = null
 }
 
 function pctOf(progress) {
@@ -219,6 +232,36 @@ const groupCoverages = computed(() =>
     id: group.id,
     title: group.title,
     ...coveragePct(group.items, individualsForGroup(group.id)),
+  })),
+)
+
+// Same someone/everyone calculation as allCoverage, but scoped to the
+// people in one subgroup (test/dev/other) — an orthogonal classification
+// to the knowledge-worker/developer role flags used above.
+function subgroupCoveragePct(subgroupId) {
+  let totalItems = 0
+  let someoneCount = 0
+  let everyoneSum = 0
+  individualAreaGroups.forEach((group) => {
+    const people = individualsForGroup(group.id).filter((ind) => ind.subgroup === subgroupId)
+    group.items.forEach((item) => {
+      totalItems += 1
+      const cov = coverageAmong(item.id, people)
+      if (cov.on > 0) someoneCount += 1
+      if (cov.total > 0) everyoneSum += cov.on / cov.total
+    })
+  })
+  return {
+    someone: totalItems ? (someoneCount / totalItems) * 100 : 0,
+    everyone: totalItems ? (everyoneSum / totalItems) * 100 : 0,
+  }
+}
+
+const subgroupCoverages = computed(() =>
+  subgroups.map((sg) => ({
+    id: sg.id,
+    title: sg.label,
+    ...subgroupCoveragePct(sg.id),
   })),
 )
 
@@ -296,6 +339,28 @@ const allCoverage = computed(() => {
             </div>
           </div>
         </div>
+
+        <div class="coverage-summary__roles">
+          <div v-for="sg in subgroupCoverages" :key="sg.id" class="coverage-summary__group">
+            <span class="coverage-summary__title">{{ sg.title }}</span>
+            <div class="coverage__tiles">
+              <div class="coverage-tile">
+                <span class="coverage-tile__pct">{{ Math.round(sg.someone) }}%</span>
+                <div class="coverage-tile__bar">
+                  <div class="coverage-tile__fill" :style="{ width: sg.someone + '%' }" />
+                </div>
+                <span class="coverage-tile__label">Someone</span>
+              </div>
+              <div class="coverage-tile">
+                <span class="coverage-tile__pct">{{ Math.round(sg.everyone) }}%</span>
+                <div class="coverage-tile__bar">
+                  <div class="coverage-tile__fill" :style="{ width: sg.everyone + '%' }" />
+                </div>
+                <span class="coverage-tile__label">Everyone</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -306,20 +371,50 @@ const allCoverage = computed(() => {
         <button type="submit" class="btn-outline">+ Add</button>
       </form>
 
-      <ul v-if="state.individuals.length" class="roster__list">
+      <div v-if="state.individuals.length" class="roster__filter">
+        <span class="roster__filter-label">Subgroup</span>
+        <button
+          type="button"
+          class="roster__filter-chip"
+          :class="{ 'roster__filter-chip--active': rosterFilter === 'all' }"
+          @click="rosterFilter = 'all'"
+        >
+          All
+        </button>
+        <button
+          v-for="sg in subgroups"
+          :key="sg.id"
+          type="button"
+          class="roster__filter-chip"
+          :class="{ 'roster__filter-chip--active': rosterFilter === sg.id }"
+          @click="rosterFilter = sg.id"
+        >
+          {{ sg.label }}
+        </button>
+        <button
+          type="button"
+          class="roster__filter-chip"
+          :class="{ 'roster__filter-chip--active': rosterFilter === 'unclassified' }"
+          @click="rosterFilter = 'unclassified'"
+        >
+          Unclassified
+        </button>
+      </div>
+
+      <ul v-if="filteredIndividuals.length" class="roster__list">
         <li
-          v-for="(ind, index) in state.individuals"
+          v-for="ind in filteredIndividuals"
           :key="ind.id"
           class="roster__item"
           :class="{
             'roster__item--active': ind.id === selectedId,
-            'roster__item--over': dragOverIndex === index && draggedIndex !== index,
+            'roster__item--over': dragOverId === ind.id && draggedId !== ind.id,
           }"
           draggable="true"
-          @dragstart="onDragStart(index)"
+          @dragstart="onDragStart(ind.id)"
           @dragover.prevent
-          @dragenter.prevent="onDragEnter(index)"
-          @drop.prevent="onDrop(index)"
+          @dragenter.prevent="onDragEnter(ind.id)"
+          @drop.prevent="onDrop(ind.id)"
           @dragend="onDragEnd"
         >
           <span class="roster__handle" title="Drag to reorder">≡</span>
@@ -345,6 +440,19 @@ const allCoverage = computed(() => {
               @click="toggleRole(ind, 'developer')"
             >
               Dev
+            </button>
+          </div>
+          <div class="subgroup-chips">
+            <button
+              v-for="sg in subgroups"
+              :key="sg.id"
+              type="button"
+              class="subgroup-chip"
+              :class="{ 'subgroup-chip--active': ind.subgroup === sg.id }"
+              :title="`Classify as ${sg.label}`"
+              @click="setSubgroup(ind, sg.id)"
+            >
+              {{ sg.label }}
             </button>
           </div>
           <button
@@ -398,6 +506,7 @@ const allCoverage = computed(() => {
           </button>
         </li>
       </ul>
+      <p v-else-if="state.individuals.length" class="roster__empty">No one in this subgroup.</p>
       <p v-else class="roster__empty">No one tracked yet — add a name above to get started.</p>
     </section>
 
@@ -690,6 +799,39 @@ const allCoverage = computed(() => {
   color: var(--color-text-muted);
 }
 
+.roster__filter {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.roster__filter-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  margin-right: 0.2rem;
+}
+
+.roster__filter-chip {
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.roster__filter-chip--active {
+  border-color: var(--cgi-purple);
+  background: var(--cgi-purple);
+  color: var(--cgi-white);
+}
+
 .roster__list {
   list-style: none;
   margin: 0;
@@ -777,6 +919,30 @@ const allCoverage = computed(() => {
 .role-chip--active {
   border-color: var(--cgi-purple);
   background: var(--cgi-purple);
+  color: var(--cgi-white);
+}
+
+.subgroup-chips {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.subgroup-chip {
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.subgroup-chip--active {
+  border-color: var(--cgi-red);
+  background: var(--cgi-red);
   color: var(--cgi-white);
 }
 

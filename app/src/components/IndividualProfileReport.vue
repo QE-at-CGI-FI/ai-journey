@@ -18,6 +18,7 @@ const {
   valueFor,
   customItemsFor,
   individualExperiencePct,
+  subgroupLabel,
 } = props.store
 
 const generatedOn = new Date().toLocaleDateString(undefined, {
@@ -60,7 +61,7 @@ function handlePrint() {
     <div class="profile-report__page">
       <header class="profile-report__header">
         <h1>{{ displayIndividualName(individual) }}</h1>
-        <p class="profile-report__subtitle">{{ roleLabel }}</p>
+        <p class="profile-report__subtitle">{{ roleLabel }} · {{ subgroupLabel(individual) }}</p>
         <p class="profile-report__meta">Generated {{ generatedOn }}</p>
       </header>
 
