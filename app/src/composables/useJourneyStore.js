@@ -274,9 +274,8 @@ export function useJourneyStore() {
     if (idx !== -1) individual.badges.splice(idx, 1)
   }
 
-  // Clicking the already-active subgroup chip clears it back to unclassified.
   function setSubgroup(individual, subgroupId) {
-    individual.subgroup = individual.subgroup === subgroupId ? null : subgroupId
+    individual.subgroup = subgroupId || null
   }
 
   function subgroupLabel(individual) {

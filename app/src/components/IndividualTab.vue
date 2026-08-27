@@ -442,19 +442,15 @@ const allCoverage = computed(() => {
               Dev
             </button>
           </div>
-          <div class="subgroup-chips">
-            <button
-              v-for="sg in subgroups"
-              :key="sg.id"
-              type="button"
-              class="subgroup-chip"
-              :class="{ 'subgroup-chip--active': ind.subgroup === sg.id }"
-              :title="`Classify as ${sg.label}`"
-              @click="setSubgroup(ind, sg.id)"
-            >
-              {{ sg.label }}
-            </button>
-          </div>
+          <select
+            class="subgroup-select"
+            title="Subgroup"
+            :value="ind.subgroup || ''"
+            @change="setSubgroup(ind, $event.target.value)"
+          >
+            <option value="">Unclassified</option>
+            <option v-for="sg in subgroups" :key="sg.id" :value="sg.id">{{ sg.label }}</option>
+          </select>
           <button
             type="button"
             class="tools-star"
@@ -922,28 +918,15 @@ const allCoverage = computed(() => {
   color: var(--cgi-white);
 }
 
-.subgroup-chips {
+.subgroup-select {
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.subgroup-chip {
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
-  color: var(--color-text-muted);
+  color: var(--color-text);
   border-radius: 6px;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.subgroup-chip--active {
-  border-color: var(--cgi-red);
-  background: var(--cgi-red);
-  color: var(--cgi-white);
+  padding: 0.2rem 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 600;
 }
 
 .tools-star,
