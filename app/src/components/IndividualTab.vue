@@ -126,7 +126,6 @@ const selectedId = ref(state.individuals[0]?.id ?? null)
 const rosterFilter = ref('all')
 const filteredIndividuals = computed(() => {
   if (rosterFilter.value === 'all') return state.individuals
-  if (rosterFilter.value === 'unclassified') return state.individuals.filter((i) => !i.subgroup)
   return state.individuals.filter((i) => i.subgroup === rosterFilter.value)
 })
 
@@ -391,14 +390,6 @@ const allCoverage = computed(() => {
         >
           {{ sg.label }}
         </button>
-        <button
-          type="button"
-          class="roster__filter-chip"
-          :class="{ 'roster__filter-chip--active': rosterFilter === 'unclassified' }"
-          @click="rosterFilter = 'unclassified'"
-        >
-          Unclassified
-        </button>
       </div>
 
       <ul v-if="filteredIndividuals.length" class="roster__list">
@@ -445,10 +436,9 @@ const allCoverage = computed(() => {
           <select
             class="subgroup-select"
             title="Subgroup"
-            :value="ind.subgroup || ''"
+            :value="ind.subgroup"
             @change="setSubgroup(ind, $event.target.value)"
           >
-            <option value="">Unclassified</option>
             <option v-for="sg in subgroups" :key="sg.id" :value="sg.id">{{ sg.label }}</option>
           </select>
           <button

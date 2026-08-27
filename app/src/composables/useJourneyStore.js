@@ -32,9 +32,9 @@ function emptyIndividual() {
     // person — drives which items they're tracked against and the coverage
     // denominator used for their progress.
     roleFlags: { knowledgeWorker: false, developer: false },
-    // Discipline classification — one of data/subgroups.js's ids, or null
-    // when unclassified.
-    subgroup: null,
+    // Discipline classification — one of data/subgroups.js's ids. Defaults
+    // to 'other' so everyone starts in a subgroup rather than unclassified.
+    subgroup: 'other',
     // Free-form list of AI tool names this person actively uses — a mix of
     // ticks from data/toolGroups.js and any custom names typed in.
     tools: [],
@@ -109,7 +109,7 @@ function mergeIntoState(base, incoming) {
         knowledgeWorker: !!ind.roleFlags?.knowledgeWorker,
         developer: !!ind.roleFlags?.developer,
       }
-      fresh.subgroup = subgroups.some((sg) => sg.id === ind.subgroup) ? ind.subgroup : null
+      fresh.subgroup = subgroups.some((sg) => sg.id === ind.subgroup) ? ind.subgroup : 'other'
       fresh.tools = Array.isArray(ind.tools) ? [...ind.tools] : []
       fresh.highlightStory = ind.highlightStory || ''
       fresh.clients = Array.isArray(ind.clients) ? [...ind.clients] : []
@@ -275,11 +275,11 @@ export function useJourneyStore() {
   }
 
   function setSubgroup(individual, subgroupId) {
-    individual.subgroup = subgroupId || null
+    individual.subgroup = subgroupId || 'other'
   }
 
   function subgroupLabel(individual) {
-    return subgroups.find((sg) => sg.id === individual.subgroup)?.label || 'Unclassified'
+    return subgroups.find((sg) => sg.id === individual.subgroup)?.label || 'Other'
   }
 
   function hasTool(individual, tool) {
