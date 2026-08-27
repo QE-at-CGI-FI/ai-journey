@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import EnablerGroup from './EnablerGroup.vue'
+import IndividualProfileReport from './IndividualProfileReport.vue'
 import { toolGroups } from '../data/toolGroups.js'
 
 const props = defineProps({
@@ -114,6 +115,8 @@ function openAttentionOverlay(individual) {
 function closeAttentionOverlay() {
   attentionOverlayFor.value = null
 }
+
+const showProfileReport = ref(false)
 
 const newName = ref('')
 const selectedId = ref(state.individuals[0]?.id ?? null)
@@ -404,6 +407,9 @@ const allCoverage = computed(() => {
           <div class="overall-progress__fill" :style="{ width: pctOf(selectedProgress) + '%' }" />
         </div>
         <span>{{ selectedProgress.on }} / {{ selectedProgress.total }} areas growing for {{ displayIndividualName(selected) }}</span>
+        <button type="button" class="btn-outline profile-print-btn" @click="showProfileReport = true">
+          🖨 Print profile
+        </button>
       </div>
 
       <p v-if="!selected.roleFlags.knowledgeWorker && !selected.roleFlags.developer" class="role-hint">
@@ -581,6 +587,13 @@ const allCoverage = computed(() => {
         </div>
       </div>
     </Teleport>
+
+    <IndividualProfileReport
+      v-if="showProfileReport && selected"
+      :store="store"
+      :individual="selected"
+      @close="showProfileReport = false"
+    />
   </div>
 </template>
 
@@ -931,6 +944,11 @@ const allCoverage = computed(() => {
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--color-text-muted);
+  flex: 1;
+}
+
+.profile-print-btn {
+  flex-shrink: 0;
 }
 
 .role-hint {

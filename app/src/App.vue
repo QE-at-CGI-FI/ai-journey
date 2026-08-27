@@ -139,6 +139,13 @@ function handlePrintReport() {
   .app-chrome.is-report-open {
     display: none !important;
   }
+
+  /* IndividualProfileReport marks <body> (it's nested inside app-chrome, so
+     it can't toggle is-report-open like ReportView does) — hide the chrome
+     the same way while it's open and printing. */
+  :global(body.profile-report-open) .app-chrome {
+    display: none !important;
+  }
 }
 
 .app-header {
