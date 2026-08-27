@@ -11,7 +11,8 @@ export const valueItemGroups = [
       { id: 'external-feedback', label: 'External feedback' },
       { id: 'task-throughput', label: 'Task throughput' },
       { id: 'project-throughput', label: 'Project throughput' },
-      { id: 'metrics-of-changed-work', label: 'Metrics of changed work' },
+      { id: 'metrics-of-changed-work-point', label: 'Metrics of changed work (point solutions)' },
+      { id: 'metrics-of-changed-work-systemic', label: 'Metrics of changed work (systemic solutions)' },
     ],
   },
 ]
