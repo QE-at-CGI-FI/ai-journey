@@ -44,6 +44,12 @@ export const orgEnablerGroups = [
             image: 'tools-infographic.svg',
             alt: 'Tool ecosystem across vendors infographic',
           },
+          {
+            id: 'costs-infographic',
+            label: 'Where AI coding cost comes from',
+            image: 'costs-infographic.svg',
+            alt: 'Framework, harness and LLM cost stack, and Claude Code vs GitHub Copilot cost/access comparison infographic',
+          },
         ],
       },
       { id: 'license-bound-governance', label: 'License-bound governance' },

@@ -6,6 +6,7 @@ import { valueItemGroups } from '../data/valueItems.js'
 import { badgeTiers } from '../data/badgeTiers.js'
 import { attentionItems } from '../data/attentionItems.js'
 import { subgroups } from '../data/subgroups.js'
+import { demoOrganization } from '../data/demoOrganization.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
 const STORAGE_VERSION = 5
@@ -67,7 +68,10 @@ function load() {
   const state = emptyState()
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return state
+    // Nothing saved yet (first-ever load from the URL) — show the demo
+    // organization instead of a blank tracker, so a first-time viewer sees
+    // what a filled-in journey looks like.
+    if (!raw) return mergeIntoState(state, demoOrganization)
     const parsed = JSON.parse(raw)
     return mergeIntoState(state, parsed)
   } catch (err) {
