@@ -19,6 +19,7 @@ const {
   someonePctBadges,
   groupsForIndividual,
   individualExperiencePct,
+  subgroupLabel,
 } = props.store
 
 const orgDisplayName = computed(() =>
@@ -63,6 +64,7 @@ const people = computed(() =>
   state.individuals.map((ind) => ({
     name: displayIndividualName(ind),
     role: roleLabel(ind),
+    subgroup: subgroupLabel(ind),
     pct: individualExperiencePct(ind),
     badges: badgeLabels(ind) || '—',
   })),
@@ -131,6 +133,7 @@ function handlePrint() {
             <tr>
               <th>Name</th>
               <th>Role</th>
+              <th>Subgroup</th>
               <th>Experience</th>
               <th>Badges</th>
             </tr>
@@ -139,6 +142,7 @@ function handlePrint() {
             <tr v-for="p in people" :key="p.name">
               <td>{{ p.name }}</td>
               <td>{{ p.role }}</td>
+              <td>{{ p.subgroup }}</td>
               <td>{{ p.pct }}%</td>
               <td>{{ p.badges }}</td>
             </tr>

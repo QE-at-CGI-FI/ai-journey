@@ -5,6 +5,7 @@ import { individualAreaGroups } from '../data/individualAreas.js'
 import { valueItemGroups } from '../data/valueItems.js'
 import { badgeTiers } from '../data/badgeTiers.js'
 import { attentionItems } from '../data/attentionItems.js'
+import { subgroups } from '../data/subgroups.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
 const STORAGE_VERSION = 5
@@ -31,6 +32,9 @@ function emptyIndividual() {
     // person — drives which items they're tracked against and the coverage
     // denominator used for their progress.
     roleFlags: { knowledgeWorker: false, developer: false },
+    // Discipline classification — one of data/subgroups.js's ids, or null
+    // when unclassified.
+    subgroup: null,
     // Free-form list of AI tool names this person actively uses — a mix of
     // ticks from data/toolGroups.js and any custom names typed in.
     tools: [],
@@ -105,6 +109,7 @@ function mergeIntoState(base, incoming) {
         knowledgeWorker: !!ind.roleFlags?.knowledgeWorker,
         developer: !!ind.roleFlags?.developer,
       }
+      fresh.subgroup = subgroups.some((sg) => sg.id === ind.subgroup) ? ind.subgroup : null
       fresh.tools = Array.isArray(ind.tools) ? [...ind.tools] : []
       fresh.highlightStory = ind.highlightStory || ''
       fresh.clients = Array.isArray(ind.clients) ? [...ind.clients] : []
@@ -267,6 +272,15 @@ export function useJourneyStore() {
     if (!individual) return
     const idx = individual.badges.indexOf(badgeId)
     if (idx !== -1) individual.badges.splice(idx, 1)
+  }
+
+  // Clicking the already-active subgroup chip clears it back to unclassified.
+  function setSubgroup(individual, subgroupId) {
+    individual.subgroup = individual.subgroup === subgroupId ? null : subgroupId
+  }
+
+  function subgroupLabel(individual) {
+    return subgroups.find((sg) => sg.id === individual.subgroup)?.label || 'Unclassified'
   }
 
   function hasTool(individual, tool) {
@@ -447,6 +461,9 @@ export function useJourneyStore() {
     reorderIndividual,
     awardBadge,
     revokeBadge,
+    subgroups,
+    setSubgroup,
+    subgroupLabel,
     hasTool,
     toggleTool,
     addCustomTool,
