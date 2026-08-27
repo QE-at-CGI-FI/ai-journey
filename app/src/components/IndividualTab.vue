@@ -10,6 +10,7 @@ const props = defineProps({
 
 const {
   state,
+  ui,
   individualAreaGroups,
   valueFor,
   toggleItem,
@@ -409,10 +410,19 @@ const allCoverage = computed(() => {
           @dragend="onDragEnd"
         >
           <span class="roster__handle" title="Drag to reorder">≡</span>
-          <button type="button" class="roster__select" @click="selectedId = ind.id">
-            <span class="roster__name">{{ displayIndividualName(ind) }}</span>
+          <div class="roster__select" @click="selectedId = ind.id">
+            <input
+              v-if="!ui.anonymized"
+              type="text"
+              class="roster__name-input"
+              :value="ind.name"
+              placeholder="Unnamed"
+              title="Edit name"
+              @input="ind.name = $event.target.value"
+            />
+            <span v-else class="roster__name">{{ displayIndividualName(ind) }}</span>
             <span class="roster__meta">{{ [ind.role, ind.team].filter(Boolean).join(' · ') }}</span>
-          </button>
+          </div>
           <div class="role-chips">
             <button
               type="button"
@@ -861,6 +871,7 @@ const allCoverage = computed(() => {
   align-items: center;
   gap: 0.75rem;
   text-align: left;
+  cursor: pointer;
   border: 1px solid var(--color-border);
   border-left: 4px solid var(--color-border);
   border-radius: 8px;
@@ -876,6 +887,31 @@ const allCoverage = computed(() => {
 .roster__name {
   font-weight: 600;
   color: var(--color-text);
+}
+
+/* Blends in as plain text until hovered/focused, so an editable name
+   doesn't visually compete with the rest of the roster row. */
+.roster__name-input {
+  flex-shrink: 0;
+  max-width: 12rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0.05rem 0.3rem;
+  margin: -0.05rem -0.3rem;
+}
+
+.roster__name-input:hover {
+  border-color: var(--color-border);
+}
+
+.roster__name-input:focus {
+  outline: none;
+  border-color: var(--cgi-purple);
+  background: var(--color-surface);
 }
 
 .roster__meta {
