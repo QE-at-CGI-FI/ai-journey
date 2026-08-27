@@ -1,0 +1,92 @@
+<svg width="644" height="630" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
+<style>
+  text { font-family: 'Segoe UI', Segoe UI, sans-serif; fill: #141413; }
+  .subtitle, .body { fill: #3D3D3A; }
+  .num { font-family: 'Cambria Math', serif; fill: #3D3D3A; font-size: 12px; }
+  .section-label { fill: #3D3D3A; font-size: 12px; }
+  .card-title { font-size: 14px; fill: #141413; }
+  .card-body { font-size: 11.5px; fill: #3D3D3A; }
+  .check { font-family: 'Segoe UI Symbol', 'Segoe UI Symbol', sans-serif; font-size: 12px; fill: #3D3D3A; }
+  .item { font-size: 12px; fill: #3D3D3A; }
+  .caption { font-size: 11px; fill: #3D3D3A; }
+</style>
+
+<text x="322" y="26" text-anchor="middle" font-size="16">Where AI coding cost actually comes from</text>
+<text class="subtitle" x="322" y="44" text-anchor="middle" font-size="12">Framework, harness, and LLM each add a cost lever — and today's harness choice changes both menu and price</text>
+
+<text class="num" x="37" y="68">&#9312;</text>
+<text class="section-label" x="51" y="68">Three layers, three levers</text>
+<line x1="37" y1="76" x2="599" y2="76" stroke="#D9D9D9" stroke-width="1"/>
+
+<!-- Framework card -->
+<rect x="37" y="90" width="178" height="110" rx="10" stroke="#AAAAAA" stroke-width="1" fill="#F5F5F5"/>
+<text class="card-title" x="126" y="114" text-anchor="middle">Framework</text>
+<text class="card-body" x="126" y="134" text-anchor="middle">Installed locally in</text>
+<text class="card-body" x="126" y="148" text-anchor="middle">your AI use environment</text>
+<text class="card-body" x="126" y="162" text-anchor="middle">Bounds what reaches the LLM</text>
+
+<text x="222" y="150" text-anchor="middle" font-size="18" fill="#AAAAAA">&#8594;</text>
+
+<!-- Harness card -->
+<rect x="229" y="90" width="178" height="110" rx="10" stroke="#5C2D91" stroke-width="1" fill="#EDE8F5"/>
+<text class="card-title" x="318" y="114" text-anchor="middle">Harness</text>
+<text class="card-body" x="318" y="134" text-anchor="middle">Ships a token budget</text>
+<text class="card-body" x="318" y="148" text-anchor="middle">Matches the action to intent</text>
+<text class="card-body" x="318" y="162" text-anchor="middle">Reuses a local answer first</text>
+
+<text x="414" y="150" text-anchor="middle" font-size="18" fill="#5C2D91">&#8594;</text>
+
+<!-- LLM card -->
+<rect x="421" y="90" width="178" height="110" rx="10" stroke="#DA1A32" stroke-width="1" fill="#FCEAEC"/>
+<text class="card-title" x="510" y="114" text-anchor="middle">LLM</text>
+<text class="card-body" x="510" y="134" text-anchor="middle">Tied to harness &amp; plan</text>
+<text class="card-body" x="510" y="148" text-anchor="middle">Variety differs vendor to vendor</text>
+<text class="card-body" x="510" y="162" text-anchor="middle">Often subsidized — for now</text>
+
+<rect x="37" y="214" width="562" height="24" rx="6" fill="#F0EBF8"/>
+<text x="47" y="230" font-size="11" fill="#5C2D91">&#8594; Framework bounds the ask, harness decides how, LLM decides how much it costs</text>
+
+<text class="num" x="37" y="272">&#9313;</text>
+<text class="section-label" x="51" y="272">Same Claude model, two different menus</text>
+<line x1="37" y1="280" x2="599" y2="280" stroke="#D9D9D9" stroke-width="1"/>
+
+<rect x="37" y="294" width="274" height="44" rx="8" stroke="#5C2D91" stroke-width="1" fill="#EDE8F5"/>
+<text x="174" y="312" text-anchor="middle" font-size="14">Claude Code</text>
+<text class="body" x="174" y="328" text-anchor="middle" font-size="11.5">Anthropic's own harness</text>
+
+<rect x="325" y="294" width="274" height="44" rx="8" stroke="#DA1A32" stroke-width="1" fill="#FCEAEC"/>
+<text x="462" y="312" text-anchor="middle" font-size="14">GitHub Copilot</text>
+<text class="body" x="462" y="328" text-anchor="middle" font-size="11.5">Multi-vendor harness, admin-gated</text>
+
+<text class="check" x="37" y="378">&#10003;</text>
+<text class="item" x="49" y="378">Claude models</text>
+<text class="check" x="37" y="395">&#10007;</text>
+<text class="item" x="49" y="395">No OpenAI (GPT) models</text>
+<text class="check" x="37" y="412">&#10007;</text>
+<text class="item" x="49" y="412">No Grok or Chinese models</text>
+<text class="caption" x="37" y="429">Direct Anthropic pricing for Claude usage</text>
+
+<text class="check" x="325" y="378">&#10003;</text>
+<text class="item" x="337" y="378">Claude models</text>
+<text class="check" x="325" y="395">&#10003;</text>
+<text class="item" x="337" y="395">OpenAI (GPT) models</text>
+<text class="check" x="325" y="412">&#10003;</text>
+<text class="item" x="337" y="412">Grok &amp; Chinese models offered</text>
+<text class="caption" x="325" y="429">Admin/governance picks which are enabled</text>
+
+<text class="num" x="37" y="469">&#9314;</text>
+<text class="section-label" x="51" y="469">Claude usage: rough price today</text>
+<line x1="37" y1="477" x2="599" y2="477" stroke="#D9D9D9" stroke-width="1"/>
+
+<text x="175" y="507" text-anchor="end" font-size="12" fill="#141413">Claude Code</text>
+<rect x="185" y="491" width="140" height="22" rx="4" fill="#5C2D91"/>
+<text x="333" y="507" font-size="11.5" fill="#5C2D91">lower — direct Anthropic pricing</text>
+
+<text x="175" y="541" text-anchor="end" font-size="12" fill="#141413">GitHub Copilot</text>
+<rect x="185" y="525" width="320" height="22" rx="4" fill="#DA1A32"/>
+<text x="513" y="541" font-size="11.5" fill="#DA1A32">higher</text>
+
+<rect x="37" y="565" width="562" height="40" rx="6" fill="#F0EBF8"/>
+<text x="47" y="580" font-size="11" fill="#5C2D91">&#8594; Copilot's premium-request multiplier makes the same Claude model cost more there</text>
+<text x="47" y="596" font-size="11" fill="#5C2D91">&#8594; right now. Pricing moves fast — treat this as a snapshot, not a fixed ratio.</text>
+</svg>
