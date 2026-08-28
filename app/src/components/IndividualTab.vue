@@ -244,6 +244,7 @@ function subgroupCoveragePct(subgroupId) {
   let everyoneSum = 0
   individualAreaGroups.forEach((group) => {
     const people = individualsForGroup(group.id).filter((ind) => ind.subgroup === subgroupId)
+    if (!people.length) return
     group.items.forEach((item) => {
       totalItems += 1
       const cov = coverageAmong(item.id, people)
@@ -271,6 +272,7 @@ const allCoverage = computed(() => {
   let everyoneSum = 0
   individualAreaGroups.forEach((group) => {
     const people = individualsForGroup(group.id)
+    if (!people.length) return
     group.items.forEach((item) => {
       totalItems += 1
       const cov = coverageAmong(item.id, people)
