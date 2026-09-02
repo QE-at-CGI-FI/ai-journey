@@ -24,6 +24,7 @@ If you work in developer role, have you been doing:
 ☐ Team/Product context basic (e.g. MCPs, memory, skills, orchestration)
 ☐ Building own MCPs
 ☐ Product AI feature delivery for proof of concept
+☐ Added business value in domain AI proof of concept
 ☐ Product AI feature delivery to run in production
 ☐ Product feature AI feedback
 
