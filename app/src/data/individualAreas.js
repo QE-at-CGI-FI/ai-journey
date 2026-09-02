@@ -52,6 +52,10 @@ export const individualAreaGroups = [
         label: 'Product AI feature delivery for proof of concept',
       },
       {
+        id: 'business-value-domain-ai-poc',
+        label: 'Added business value in domain AI proof of concept',
+      },
+      {
         id: 'product-ai-feature-production',
         label: 'Product AI feature delivery to run in production',
       },
