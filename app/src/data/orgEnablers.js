@@ -22,6 +22,10 @@ export const orgEnablerGroups = [
       { id: 'sandbox-trust-skill', label: 'Sandbox trust through skill' },
       { id: 'sandbox-trust-control', label: 'Sandbox trust through control' },
       { id: 'sandbox-yolo', label: 'Sandboxed YOLO-mode' },
+      {
+        id: 'sandbox-split-knowledge-developers',
+        label: 'Sandboxing that splits knowledge workers and developers',
+      },
     ],
   },
   {
