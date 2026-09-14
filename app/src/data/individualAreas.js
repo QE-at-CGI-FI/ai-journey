@@ -37,6 +37,7 @@ export const individualAreaGroups = [
         label: 'Integrating 3rd party AI system components (memory, context compression)',
       },
       { id: 'skills-git-first-templates', label: 'Skills and AI-friendly git-first templates' },
+      { id: 'using-local-models', label: 'Using local models' },
       { id: 'proactive-agentic', label: 'Proactive agentic (it starts automatically)' },
       { id: 'dark-factory', label: 'Dark factory (unattended)' },
       { id: 'spec-driven-development', label: 'Spec-driven development' },

@@ -17,6 +17,7 @@ If you work in developer role, have you been doing:
 ☐ Selecting and configuring 3rd party MCPs
 ☐ Integrating 3rd party AI system components (memory, context compression)
 ☐ Skills and AI-friendly git-first templates
+☐ Using local models
 ☐ Proactive agentic (it starts automatically)
 ☐ Dark factory (unattended)
 ☐ Spec-driven development
