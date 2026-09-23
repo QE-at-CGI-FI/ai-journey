@@ -4,7 +4,7 @@ import { ref } from 'vue'
 defineProps({
   anonymized: { type: Boolean, default: true },
 })
-const emit = defineEmits(['export', 'import', 'reset', 'print-report', 'toggle-anonymize'])
+const emit = defineEmits(['export', 'import', 'reset', 'print-report', 'print-summary', 'toggle-anonymize'])
 const fileInput = ref(null)
 const errorMsg = ref('')
 
@@ -45,6 +45,7 @@ function onFileChosen(event) {
       {{ anonymized ? '🙈 Anonymized' : '👁 Show names' }}
     </button>
     <button type="button" class="btn-secondary" @click="emit('print-report')">🖨 Print report</button>
+    <button type="button" class="btn-secondary" @click="emit('print-summary')">🖨 Print summary</button>
     <button type="button" class="btn-primary" @click="emit('export')">↓ Export</button>
     <button type="button" class="btn-secondary" @click="triggerImport">↑ Import</button>
     <input

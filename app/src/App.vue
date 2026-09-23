@@ -10,11 +10,13 @@ import BadgesTab from './components/BadgesTab.vue'
 import ValueTab from './components/ValueTab.vue'
 import ActionsTab from './components/ActionsTab.vue'
 import ReportView from './components/ReportView.vue'
+import SummaryReportView from './components/SummaryReportView.vue'
 import { useJourneyStore } from './composables/useJourneyStore.js'
 
 const store = useJourneyStore()
 const activeTab = ref('journey')
 const showReport = ref(false)
+const showSummary = ref(false)
 
 const tabs = [
   { id: 'journey', label: 'Journey' },
@@ -41,11 +43,15 @@ function handleReset() {
 function handlePrintReport() {
   showReport.value = true
 }
+
+function handlePrintSummary() {
+  showSummary.value = true
+}
 </script>
 
 <template>
   <div class="app-shell">
-  <div class="app-chrome" :class="{ 'is-report-open': showReport }">
+  <div class="app-chrome" :class="{ 'is-report-open': showReport || showSummary }">
     <header class="app-header">
       <div class="app-header__brand">
         <CgiLogo :size="44" />
@@ -60,6 +66,7 @@ function handlePrintReport() {
         @import="handleImport"
         @reset="handleReset"
         @print-report="handlePrintReport"
+        @print-summary="handlePrintSummary"
         @toggle-anonymize="store.ui.anonymized = !store.ui.anonymized"
       />
     </header>
@@ -119,6 +126,7 @@ function handlePrintReport() {
   </div>
 
   <ReportView v-if="showReport" :store="store" @close="showReport = false" />
+  <SummaryReportView v-if="showSummary" :store="store" @close="showSummary = false" />
   </div>
 </template>
 
