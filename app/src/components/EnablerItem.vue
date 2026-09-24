@@ -2,7 +2,7 @@
 import { nextTick, ref, watch } from 'vue'
 
 const props = defineProps({
-  item: { type: Object, required: true }, // { id, label, info?: Array<{ id, label, image, alt }> }
+  item: { type: Object, required: true }, // { id, label, explanation?, info?: Array<{ id, label, image, alt }> }
   value: { type: Object, required: true }, // { on, details }
   removable: { type: Boolean, default: false },
 })
@@ -85,7 +85,7 @@ watch(activeInfo, async (info) => {
     <textarea
       class="enabler-item__details"
       :value="value.details"
-      placeholder="Document details, context, owner, links…"
+      :placeholder="item.explanation || 'Document details, context, owner, links…'"
       rows="2"
       @input="emit('update:details', $event.target.value)"
     />
