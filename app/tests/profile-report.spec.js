@@ -10,6 +10,7 @@ test.describe('Print individual profile', () => {
 
   test('prints the selected individual\'s acquired/not-yet-acquired checklist', async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: /Anonymized|Show names/ }).click();
     await addPerson(page, 'Ada Lovelace');
 
     // Newly added person is auto-selected; toggle one item on before printing.
@@ -24,6 +25,7 @@ test.describe('Print individual profile', () => {
 
   test('switching the roster selection changes who gets printed', async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: /Anonymized|Show names/ }).click();
     await addPerson(page, 'Ada Lovelace');
     await addPerson(page, 'Grace Hopper');
 
@@ -32,9 +34,23 @@ test.describe('Print individual profile', () => {
     await expect(page.getByRole('heading', { name: 'Grace Hopper' })).toBeVisible();
     await page.getByRole('button', { name: '← Back to app' }).click();
 
-    await page.locator('.roster__item', { hasText: 'Ada Lovelace' }).click();
+    // The demo organization seeds its own roster rows ahead of ours, so
+    // pick Ada's row by her name rather than assuming she's first.
+    await page.locator('.roster__select:has(input[value="Ada Lovelace"])').click();
     await page.getByRole('button', { name: '🖨 Print profile' }).click();
     await expect(page.getByRole('heading', { name: 'Ada Lovelace' })).toBeVisible();
+  });
+
+  test('anonymizes the person\'s name while Anonymized is on', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: /Anonymized|Show names/ }).click();
+    await addPerson(page, 'Ada Lovelace');
+    await page.getByRole('button', { name: /Anonymized|Show names/ }).click();
+
+    await page.getByRole('button', { name: '🖨 Print profile' }).click();
+
+    await expect(page.getByRole('heading', { name: 'Person 1' })).toBeVisible();
+    await expect(page.locator('.profile-report__page')).not.toContainText('Ada Lovelace');
   });
 
   test('back to app closes the profile report', async ({ page }) => {
