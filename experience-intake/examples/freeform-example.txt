@@ -1,0 +1,8 @@
+John is a backend developer on the Matkahuolto team. He's been using GitHub
+Copilot's inline suggestions for months now and doesn't turn it off anymore.
+When he's stuck on an approach he asks Claude to talk through a few options
+before he commits to one. He recently started using Junie for some
+day-to-day coding too. He mentions his AI use in his CV now, describing it
+as "actively leveraging AI tools in daily development work." He hasn't set
+up any MCPs, doesn't have agents running unattended, and hasn't tried spec
+driven development yet.

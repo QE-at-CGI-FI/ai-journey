@@ -1,0 +1,141 @@
+{
+  "id": "ind-1790279647610-546",
+  "name": "John",
+  "role": "",
+  "team": "",
+  "badges": [],
+  "roleFlags": {
+    "knowledgeWorker": true,
+    "developer": true
+  },
+  "subgroup": "dev",
+  "tools": [
+    "GitHub Copilot",
+    "Claude",
+    "Junie"
+  ],
+  "highlightStory": "",
+  "clients": [
+    "Matkahuolto"
+  ],
+  "attention": {},
+  "values": {
+    "external-imagination": {
+      "on": false,
+      "details": ""
+    },
+    "local-summarizing": {
+      "on": false,
+      "details": ""
+    },
+    "online-summarizing": {
+      "on": false,
+      "details": ""
+    },
+    "integrated-ai-domain-tools": {
+      "on": false,
+      "details": ""
+    },
+    "ai-enabled-practices": {
+      "on": false,
+      "details": ""
+    },
+    "task-expansion": {
+      "on": false,
+      "details": ""
+    },
+    "personal-applications": {
+      "on": false,
+      "details": ""
+    },
+    "2nd-brain": {
+      "on": false,
+      "details": ""
+    },
+    "token-awareness": {
+      "on": false,
+      "details": ""
+    },
+    "generating-artifacts": {
+      "on": false,
+      "details": ""
+    },
+    "pitch-to-project": {
+      "on": false,
+      "details": ""
+    },
+    "mentioned-in-cv": {
+      "on": true,
+      "details": "Describes his AI use in his CV as \"actively leveraging AI tools in daily development work\"."
+    },
+    "code-autocomplete": {
+      "on": true,
+      "details": "Uses Copilot's inline suggestions day to day and hasn't turned them off."
+    },
+    "reactive-agentic": {
+      "on": true,
+      "details": "Asks Claude to talk through a few approaches before committing to one."
+    },
+    "selecting-3rd-party-mcps": {
+      "on": false,
+      "details": ""
+    },
+    "integrating-3rd-party-components": {
+      "on": false,
+      "details": ""
+    },
+    "skills-git-first-templates": {
+      "on": false,
+      "details": ""
+    },
+    "using-local-models": {
+      "on": false,
+      "details": ""
+    },
+    "proactive-agentic": {
+      "on": false,
+      "details": ""
+    },
+    "dark-factory": {
+      "on": false,
+      "details": ""
+    },
+    "spec-driven-development": {
+      "on": false,
+      "details": ""
+    },
+    "team-product-context": {
+      "on": false,
+      "details": ""
+    },
+    "team-product-context-basic": {
+      "on": false,
+      "details": ""
+    },
+    "building-own-mcps": {
+      "on": false,
+      "details": ""
+    },
+    "delivering-ai-native-project": {
+      "on": false,
+      "details": ""
+    },
+    "product-ai-feature-poc": {
+      "on": false,
+      "details": ""
+    },
+    "business-value-domain-ai-poc": {
+      "on": false,
+      "details": ""
+    },
+    "product-ai-feature-production": {
+      "on": false,
+      "details": ""
+    },
+    "product-feature-ai-feedback": {
+      "on": false,
+      "details": ""
+    }
+  },
+  "customItems": {}
+}
