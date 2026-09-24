@@ -1,0 +1,43 @@
+{
+  "name": "John",
+  "role": "",
+  "team": "",
+  "subgroup": "dev",
+  "roleFlags": { "knowledgeWorker": true, "developer": true },
+  "tools": ["GitHub Copilot", "Claude", "Junie"],
+  "clients": ["Matkahuolto"],
+  "highlightStory": "",
+  "items": [
+    {
+      "id": "code-autocomplete",
+      "on": true,
+      "details": "Uses Copilot's inline suggestions day to day and hasn't turned them off."
+    },
+    {
+      "id": "reactive-agentic",
+      "on": true,
+      "details": "Asks Claude to talk through a few approaches before committing to one."
+    },
+    {
+      "id": "mentioned-in-cv",
+      "on": true,
+      "details": "Describes his AI use in his CV as \"actively leveraging AI tools in daily development work\"."
+    },
+    {
+      "id": "selecting-3rd-party-mcps",
+      "on": false,
+      "details": ""
+    },
+    {
+      "id": "dark-factory",
+      "on": false,
+      "details": ""
+    },
+    {
+      "id": "spec-driven-development",
+      "on": false,
+      "details": ""
+    }
+  ],
+  "customItems": []
+}

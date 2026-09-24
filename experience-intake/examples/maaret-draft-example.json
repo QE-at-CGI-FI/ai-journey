@@ -1,0 +1,173 @@
+{
+  "name": "Maaret Pyhäjärvi",
+  "role": "",
+  "team": "",
+  "subgroup": "test",
+  "roleFlags": {
+    "knowledgeWorker": true,
+    "developer": true
+  },
+  "tools": [
+    "Edge Copilot",
+    "Claude Code",
+    "GitHub Copilot",
+    "Rovo",
+    "UiPath"
+  ],
+  "clients": [
+    "Fennia",
+    "Aktia",
+    "Matkahuolto",
+    "Ortodoksikirkko",
+    "Fingrid"
+  ],
+  "highlightStory": "",
+  "items": [
+    {
+      "id": "external-imagination",
+      "on": true,
+      "details": "Example: generating ideas on what to test."
+    },
+    {
+      "id": "local-summarizing",
+      "on": true,
+      "details": "Example: public bid summarizing."
+    },
+    {
+      "id": "online-summarizing",
+      "on": true,
+      "details": "Example: CGI AI Exchange metrics. Analyzing open source projects for testing purposes."
+    },
+    {
+      "id": "integrated-ai-domain-tools",
+      "on": true,
+      "details": "Example: Creating Rovo agents. Creating UI Path agents."
+    },
+    {
+      "id": "ai-enabled-practices",
+      "on": true,
+      "details": "Experimenting with AI note taking. Difficulties in multiple channels of communication AI can't see, and routine with tooling."
+    },
+    {
+      "id": "task-expansion",
+      "on": true,
+      "details": "Example: Fixing bugs."
+    },
+    {
+      "id": "personal-applications",
+      "on": true,
+      "details": "Example: CV experience visualizer."
+    },
+    {
+      "id": "2nd-brain",
+      "on": true,
+      "details": "20 years of public authoring as a source for own 2nd brain."
+    },
+    {
+      "id": "token-awareness",
+      "on": true,
+      "details": "Examples: Codeburn, token reporting on Pull requests, local use, organizational use."
+    },
+    {
+      "id": "generating-artifacts",
+      "on": true,
+      "details": "Example: Bid responses."
+    },
+    {
+      "id": "pitch-to-project",
+      "on": true,
+      "details": "Example: MH Java Upgrade."
+    },
+    {
+      "id": "code-autocomplete",
+      "on": true,
+      "details": "Example: Github Copilot 2021=>"
+    },
+    {
+      "id": "reactive-agentic",
+      "on": true,
+      "details": "Example: summaries, personal applications, teaching testing"
+    },
+    {
+      "id": "selecting-3rd-party-mcps",
+      "on": true,
+      "details": "Example: Figma - Storybook - Playwright combo."
+    },
+    {
+      "id": "integrating-3rd-party-components",
+      "on": true,
+      "details": ""
+    },
+    {
+      "id": "skills-git-first-templates",
+      "on": true,
+      "details": "Example: Accessibility feedback slice. TIM."
+    },
+    {
+      "id": "proactive-agentic",
+      "on": true,
+      "details": "Watching over others using this."
+    },
+    {
+      "id": "dark-factory",
+      "on": true,
+      "details": "Watching over others using this."
+    },
+    {
+      "id": "spec-driven-development",
+      "on": true,
+      "details": "Example: OpenSpec, BMAD, Speckit, self-chosen templates."
+    },
+    {
+      "id": "team-product-context",
+      "on": true,
+      "details": "Example: ORT, MH."
+    },
+    {
+      "id": "team-product-context-basic",
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    {
+      "id": "building-own-mcps",
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    {
+      "id": "product-ai-feature-poc",
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    {
+      "id": "product-ai-feature-production",
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    {
+      "id": "product-feature-ai-feedback",
+      "on": true,
+      "details": "Example: ORT 2x25k bugs. Omni Raha agentic slices."
+    },
+    {
+      "id": "delivering-ai-native-project",
+      "on": true,
+      "details": "ORT greenfield and MH brownfield."
+    },
+    {
+      "id": "mentioned-in-cv",
+      "on": true,
+      "details": ""
+    },
+    {
+      "id": "business-value-domain-ai-poc",
+      "on": false,
+      "details": ""
+    },
+    {
+      "id": "using-local-models",
+      "on": true,
+      "details": "Using Gwen-coder and devstral in Github Copilot and Claude Code."
+    }
+  ],
+  "customItems": []
+}

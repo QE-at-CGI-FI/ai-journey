@@ -1,0 +1,147 @@
+{
+  "id": "ind-1790280034360-138",
+  "name": "Maaret ",
+  "role": "",
+  "team": "",
+  "badges": [],
+  "roleFlags": {
+    "knowledgeWorker": true,
+    "developer": true
+  },
+  "subgroup": "test",
+  "tools": [
+    "Edge Copilot",
+    "Claude Code",
+    "GitHub Copilot",
+    "Rovo",
+    "UiPath"
+  ],
+  "highlightStory": "",
+  "clients": [
+    "Exampler",
+    "Another",
+    "Alsoer",
+    "Moreover",
+    "Finally"
+  ],
+  "attention": {},
+  "values": {
+    "external-imagination": {
+      "on": true,
+      "details": "Example: generating ideas on what to test."
+    },
+    "local-summarizing": {
+      "on": true,
+      "details": "Example: public bid summarizing."
+    },
+    "online-summarizing": {
+      "on": true,
+      "details": "Example: CGI AI Exchange metrics. Analyzing open source projects for testing purposes."
+    },
+    "integrated-ai-domain-tools": {
+      "on": true,
+      "details": "Example: Creating Rovo agents. Creating UI Path agents."
+    },
+    "ai-enabled-practices": {
+      "on": true,
+      "details": "Experimenting with AI note taking. Difficulties in multiple channels of communication AI can't see, and routine with tooling."
+    },
+    "task-expansion": {
+      "on": true,
+      "details": "Example: Fixing bugs."
+    },
+    "personal-applications": {
+      "on": true,
+      "details": "Example: CV experience visualizer."
+    },
+    "2nd-brain": {
+      "on": true,
+      "details": "20 years of public authoring as a source for own 2nd brain."
+    },
+    "token-awareness": {
+      "on": true,
+      "details": "Examples: Codeburn, token reporting on Pull requests, local use, organizational use."
+    },
+    "generating-artifacts": {
+      "on": true,
+      "details": "Example: Bid responses."
+    },
+    "pitch-to-project": {
+      "on": true,
+      "details": "Example: MH Java Upgrade."
+    },
+    "mentioned-in-cv": {
+      "on": true,
+      "details": ""
+    },
+    "code-autocomplete": {
+      "on": true,
+      "details": "Example: Github Copilot 2021=>"
+    },
+    "reactive-agentic": {
+      "on": true,
+      "details": "Example: summaries, personal applications, teaching testing"
+    },
+    "selecting-3rd-party-mcps": {
+      "on": true,
+      "details": "Example: Figma - Storybook - Playwright combo."
+    },
+    "integrating-3rd-party-components": {
+      "on": true,
+      "details": ""
+    },
+    "skills-git-first-templates": {
+      "on": true,
+      "details": "Example: Accessibility feedback slice. TIM."
+    },
+    "using-local-models": {
+      "on": true,
+      "details": "Using Gwen-coder and devstral in Github Copilot and Claude Code."
+    },
+    "proactive-agentic": {
+      "on": true,
+      "details": "Watching over others using this."
+    },
+    "dark-factory": {
+      "on": true,
+      "details": "Watching over others using this."
+    },
+    "spec-driven-development": {
+      "on": true,
+      "details": "Example: OpenSpec, BMAD, Speckit, self-chosen templates."
+    },
+    "team-product-context": {
+      "on": true,
+      "details": "Example: ORT, MH."
+    },
+    "team-product-context-basic": {
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    "building-own-mcps": {
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    "delivering-ai-native-project": {
+      "on": true,
+      "details": "ORT greenfield and MH brownfield."
+    },
+    "product-ai-feature-poc": {
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    "business-value-domain-ai-poc": {
+      "on": false,
+      "details": ""
+    },
+    "product-ai-feature-production": {
+      "on": false,
+      "details": "Only in some of the clients, not yet in any I am in."
+    },
+    "product-feature-ai-feedback": {
+      "on": true,
+      "details": "Example: ORT 2x25k bugs. Omni Raha agentic slices."
+    }
+  },
+  "customItems": {}
+}

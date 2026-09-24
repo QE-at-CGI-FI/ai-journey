@@ -1,0 +1,49 @@
+I work as a tester across several client engagements. Day to day I use Edge Copilot,
+Claude Code, GitHub Copilot, Rovo, and UiPath. I've tried ChatGPT and Claude 
+Cowork, Claude, and Codex, as well as Ollama with local models. 
+
+For generating ideas on what to test, I lean on AI to answer questions and
+give me perspectives I wouldn't have thought of myself. When there's a
+public bid to summarize I work through it locally, moving files and
+findings around myself; for things like CGI AI Exchange metrics, and
+analyzing open source projects for testing purposes, I do more systematic
+online research with AI. I build Rovo agents and UiPath agents directly
+inside the tools I already use for client work. I've also been
+experimenting with AI notetaking — it struggles across multiple channels of
+communication it can't see, and with the routine of the tooling itself.
+
+AI regularly expands what I take on beyond my usual scope — fixing bugs is
+a good example of something I now do that I used to leave to developers. I
+built a CV experience visualizer, a personal application I wouldn't have
+built even if I'd had the time otherwise. I treat twenty years of my own
+public authoring as source material for a kind of second brain. I keep an
+eye on token usage — Codeburn, token reporting on pull requests, both local
+and organizational use. I use AI to generate artifacts like bid responses,
+and I've pitched AI use cases into projects, the MH Java upgrade being one
+example.
+
+I've had code autocomplete since GitHub Copilot in 2021. I use reactive
+agentic work for summaries, personal applications, and teaching testing.
+I select and configure third-party MCPs myself — the Figma, Storybook and
+Playwright combination is one I've put together — and I integrate
+third-party AI system components into my setup as well. I use skills and
+AI-friendly, git-first templates, like the accessibility feedback slice and
+TIM.
+
+I watch over others doing proactive, automatically-starting agentic work,
+and others running unattended dark-factory style pipelines, even in places
+where I'm not the one running it. I use spec-driven development frameworks
+— OpenSpec, BMAD, Speckit, and a few self-chosen templates of my own.
+
+At the team and product level, both ORT and MH have real shared context set
+up that the whole team draws on. That's not true everywhere though — the
+more advanced version of team/product context, building my own MCPs, AI
+feature delivery for a proof of concept, and AI features actually running
+in production are things I've seen at some clients, just not yet in any of
+mine.
+
+I use AI for feedback on product features too — ORT's two 25k-bug efforts
+and the Omni Raha agentic slices are examples. I've delivered AI-native
+projects end to end: ORT as a greenfield build, MH as a brownfield one. I
+mention my AI use in my CV. And I run local models — Qwen-coder and
+Devstral — through both GitHub Copilot and Claude Code.
