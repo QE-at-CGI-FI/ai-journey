@@ -20,8 +20,10 @@ carefully. Two failure modes to avoid:
 
 - **Under-coverage**: skimming the text once and only catching the two or
   three most obvious matches. Go through the *catalog*, not just the text —
-  for every one of the ~29 items, ask "does anything in this story provide
-  real evidence for or against this?" A story that never mentions MCPs
+  for every item in the person's target set (see step 2 — all 29 for a
+  developer, only the 12 knowledge-worker items for a knowledge worker), ask
+  "does anything in this story provide real evidence for or against this?"
+  A story that never mentions MCPs
   doesn't mean "off, unknown" and "off, they explicitly said they haven't"
   are the same thing to the data, but noticing the difference is how you
   catch near-misses (e.g. "he assigns tickets to Copilot's coding agent
@@ -50,11 +52,24 @@ nearest catalog id or silently dropped.
    of group ids, item ids, labels, and explanations to map against.
 
 2. **Get the freeform text and basic identity.** If the user hasn't given a
-   name, or it's ambiguous whether this is a developer, a knowledge worker,
-   or both (drives `roleFlags`, which drives which half of the checklist
-   applies), ask — don't guess a role flag that changes what "full coverage"
-   means. Everything else (role, team, tools, clients, subgroup) is optional
-   and defaults empty/`"other"`; fill in what the text actually supports.
+   name, ask.
+
+   The person's **profile** (`roleFlags`) sets their *target set* — which
+   catalog items you're even trying to find evidence for — so if the user
+   hasn't already told you which one this person is, ask before you start
+   mapping:
+   - **Developer**: all 29 items across both groups are valid targets.
+     `roleFlags: { knowledgeWorker: true, developer: true }`.
+   - **Knowledge worker**: only the 12 `knowledge-worker` group items are
+     valid targets — don't sweep the 17 `developer` items looking for
+     evidence, they're out of scope for this profile.
+     `roleFlags: { knowledgeWorker: true, developer: false }`.
+
+   Don't infer the profile from the text and don't default to "both" —
+   guessing wrong changes what "full coverage" means for this person and
+   silently miscounts them in the coverage log. Everything else (role,
+   team, tools, clients, subgroup) is optional and defaults empty/`"other"`;
+   fill in what the text actually supports.
 
 3. **Draft the mapping** as JSON matching
    `experience-intake/examples/draft-example.json`:
@@ -98,12 +113,35 @@ nearest catalog id or silently dropped.
    person, every time — it's the running record of who's been analyzed and
    how complete their mapping is.
 
-6. **Show the user what got mapped** before writing anything else into the
-   repo: a short summary of which items landed on, which custom items you
-   added and why, the coverage line just logged, and anything you were
-   unsure about. This is the point to catch a bad mapping cheaply.
+6. **Write a recommendations file.** From the items in the person's target
+   set that are still `off`, pick **three** — not mechanically the first
+   three, use judgment about what's a natural next step from what they
+   already do (e.g. don't recommend `dark-factory` before anything
+   `reactive-agentic`-adjacent is on; prefer items adjacent to their
+   existing tools/habits over a random gap across the catalog). For each of
+   the three, write:
+   - the item's label and its catalog explanation (from
+     `experience-intake/catalog/individual-areas.json`), and
+   - a concrete example of what gaining that experience could look like
+     *for this person* — grounded in their actual tools, role, team, and
+     story from the freeform text, not a generic restatement of the
+     explanation. This is a forward-looking suggestion, so phrase it as a
+     possibility ("could look like...", "one way to try this..."), never as
+     something they've already done.
 
-7. **Merge or hand off**, per the user's intent:
+   Save it as `experience-intake/recommendations/<name-slug>.md` (kebab-case
+   the person's name, e.g. `jane-doe.md`), with one `##` section per
+   recommended item. This is a per-person deliverable, not an accumulating
+   log like `coverage-log.md` — regenerate it in place if you re-map the
+   same person later.
+
+7. **Show the user what got mapped** before writing anything else into the
+   repo: a short summary of which items landed on, which custom items you
+   added and why, the coverage line just logged, the three recommendations,
+   and anything you were unsure about. This is the point to catch a bad
+   mapping cheaply.
+
+8. **Merge or hand off**, per the user's intent:
    - If they want it added to one of the `ai-journey-tracker-*.json` export
      files at the repo root, confirm which file and whether an existing
      same-name person should be replaced, then:

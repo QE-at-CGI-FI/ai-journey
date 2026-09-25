@@ -1,0 +1,138 @@
+<mxfile host="app.diagrams.net" modified="2026-09-25T00:00:00.000Z" agent="Claude Code" version="24.0.0" type="device">
+  <diagram name="Experience Mapper Process" id="expmap1">
+    <mxGraphModel dx="1400" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="720" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Experience Mapper — From Freeform Story to Tracker Record" style="text;html=1;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="20" y="12" width="1240" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Turns one person's freeform description of how they use AI into a reviewed, ready-to-import growth-area record" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="20" y="48" width="1240" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Input -->
+        <mxCell id="input" value="🧑 Freeform story&#10;about how someone&#10;uses AI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="20" y="230" width="120" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 1: PREPARE -->
+        <mxCell id="s1bg" value="PREPARE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;verticalAlign=top;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#375C91;align=center;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="160" y="140" width="220" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="s1c1" value="1 · Refresh the catalog&#10;extract-catalog.mjs&#10;individualAreas.js → catalog JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="170" y="180" width="200" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="s1c2" value="2 · Set the target profile&#10;Developer → all 29 items&#10;Knowledge worker → 12 items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="170" y="290" width="200" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1c1s1c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#999999;endArrow=block;endFill=1;fontSize=8;" edge="1" parent="1" source="s1c1" target="s1c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 2: MAP (emphasized) -->
+        <mxCell id="s2bg" value="MAP — the core judgment call" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=3;verticalAlign=top;spacingTop=8;fontSize=14;fontStyle=1;fontColor=#9A6500;align=center;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="90" width="240" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="s2draft" value="3 · Draft the mapping&#10;Sweep every catalog item in scope.&#10;Mark on:true only with concrete&#10;evidence from the text." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="130" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="s2warn1" value="⚠ Under-coverage&#10;Catching only the 2–3&#10;obvious matches" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="250" width="105" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="s2warn2" value="⚠ Fabrication&#10;Marking on:true on a&#10;charitable reading" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="525" y="250" width="105" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="s2custom" value="Real but uncataloged experience&#10;→ becomes a Custom item&#10;(never stretched onto nearest id)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="345" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e_draftwarn1" style="html=1;endArrow=none;dashed=1;strokeColor=#B85450;" edge="1" parent="1" source="s2draft" target="s2warn1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_draftwarn2" style="html=1;endArrow=none;dashed=1;strokeColor=#B85450;" edge="1" parent="1" source="s2draft" target="s2warn2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_draftcustom" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#D79B00;endArrow=block;endFill=1;fontSize=8;" edge="1" parent="1" source="s2draft" target="s2custom">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 3: BUILD & VERIFY -->
+        <mxCell id="s3bg" value="BUILD &amp; VERIFY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;verticalAlign=top;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#3A6B35;align=center;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="660" y="140" width="220" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="s3c1" value="4 · Build the full record&#10;build-person.mjs validates every&#10;id against the catalog" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="670" y="180" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="s3c2" value="5 · Log coverage&#10;log-coverage.mjs appends&#10;a row for this person" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="670" y="280" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="s3note" value="→ coverage-log.md (running record)" style="text;html=1;align=center;verticalAlign=middle;fontSize=8;fontStyle=2;fontColor=#3A6B35;" vertex="1" parent="1">
+          <mxGeometry x="670" y="362" width="200" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s3c1s3c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#999999;endArrow=block;endFill=1;fontSize=8;" edge="1" parent="1" source="s3c1" target="s3c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 4: DELIVER -->
+        <mxCell id="s4bg" value="DELIVER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;verticalAlign=top;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#5E3A73;align=center;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="900" y="140" width="220" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="s4c1" value="6 · Pick 3 recommendations&#10;Natural next steps grounded in&#10;their own tools &amp; role" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="910" y="175" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="s4c2" value="✓ 7 · Review with the user&#10;Show the mapping before writing&#10;anything else — catch it cheaply" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=10;fontStyle=1;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="910" y="250" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="s4c3" value="8 · Merge or hand off&#10;merge-export.mjs into an export&#10;file, or hand over standalone" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="910" y="325" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4c1s4c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#999999;endArrow=block;endFill=1;fontSize=8;" edge="1" parent="1" source="s4c1" target="s4c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4c2s4c3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#999999;endArrow=block;endFill=1;fontSize=8;" edge="1" parent="1" source="s4c2" target="s4c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Output -->
+        <mxCell id="output" value="📄 Individual record&#10;ready to import into&#10;the AI Journey Tracker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="230" width="120" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Main spine -->
+        <mxCell id="e_inputs1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="input" target="s1bg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1s2" value="profile set" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=2;endArrow=block;endFill=1;fontSize=9;fontColor=#666666;" edge="1" parent="1" source="s1bg" target="s2bg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2s3" value="draft.json" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=2;endArrow=block;endFill=1;fontSize=9;fontColor=#666666;" edge="1" parent="1" source="s2bg" target="s3bg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s3s4" value="person.json&#10;coverage logged" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=2;endArrow=block;endFill=1;fontSize=9;fontColor=#666666;" edge="1" parent="1" source="s3bg" target="s4bg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4output" value="person.json" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=2;endArrow=block;endFill=1;fontSize=9;fontColor=#666666;" edge="1" parent="1" source="s4bg" target="output">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Feedback loop -->
+        <mxCell id="e_feedback" value="invented/typo id&#10;→ fix draft, rerun" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;dashed=1;endArrow=block;endFill=1;fontSize=8;fontColor=#B85450;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" edge="1" parent="1" source="s3c1" target="s2draft">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="60" />
+              <mxPoint x="520" y="60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Footnote -->
+        <mxCell id="footnote" value="Scope: maps individual growth-area items only (individualAreas.js) — org-enabler mapping is a separate, not-yet-built workflow." style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#888888;" vertex="1" parent="1">
+          <mxGeometry x="20" y="495" width="1240" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
