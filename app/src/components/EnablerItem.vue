@@ -86,7 +86,7 @@ watch(activeInfo, async (info) => {
       class="enabler-item__details"
       :value="value.details"
       :placeholder="item.explanation || 'Document details, context, owner, links…'"
-      rows="2"
+      rows="4"
       @input="emit('update:details', $event.target.value)"
     />
 
@@ -219,6 +219,7 @@ watch(activeInfo, async (info) => {
 
 .enabler-item__details {
   width: 100%;
+  min-height: 5.5rem;
   margin-top: 0.6rem;
   resize: vertical;
   border: 1px solid var(--color-border);

@@ -25,6 +25,7 @@ draft.json            — { name, roleFlags, items: [{id, on, details}], customI
      ▼
 person.json            — a complete individual record, ready for `individuals[]`
      │  node scripts/log-coverage.mjs ────────► coverage-log.md (one appended table row per person)
+     │  (Claude picks 3 missing items) ───────► recommendations/<name-slug>.md
      │  node scripts/merge-export.mjs (optional)
      ▼
 tracker-export.json    — importable via the app's Import button
@@ -32,6 +33,9 @@ tracker-export.json    — importable via the app's Import button
 
 ## Folder contents
 
+- `intake-prompt.md` — the ask to send a colleague to get their freeform
+  text in the first place: write about their AI use in a bragging,
+  back-to-school-essay style, any format, AI-assisted drafting allowed.
 - `catalog/` — generated JSON snapshots of the app's own checklists
   (`individual-areas.json`, `org-enablers.json`). Regenerate with
   `scripts/extract-catalog.mjs` whenever the source `.js` files change —
@@ -49,6 +53,11 @@ tracker-export.json    — importable via the app's Import button
   `build-person.mjs`. `coverage-log.md` accumulates across every intake
   session run from this checkout; `examples/coverage-log-example.md` shows
   the shape without touching the real log.
+- `recommendations/` — one Markdown file per mapped person
+  (`<name-slug>.md`), written by Claude (not a script — picking which three
+  missing items to suggest and what gaining them could look like is a
+  semantic judgment call). Not an accumulating log like `coverage-log.md`;
+  re-mapping a person overwrites their file in place.
 - `scripts/merge-export.mjs` — folds a person record into a tracker export
   file (one of the `ai-journey-tracker-*.json` files at the repo root), or
   starts a fresh one. Never overwrites the source export unless you pass
