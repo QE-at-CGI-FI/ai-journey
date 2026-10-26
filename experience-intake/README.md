@@ -71,7 +71,7 @@ tracker-export.json    — importable via the app's Import button
   - `maaret-freeform-example.txt` → `maaret-draft-example.json` →
     `maaret-person-example.json` — a fuller, high-coverage mapping built
     from Maaret Pyhäjärvi's own notes in
-    `ai-journey-tracker-bcs-2026-09-24.json` (24/29 items on, spanning both
+    `ai-journey-tracker-bcs-2026-09-24.json` (24/30 items on, spanning both
     groups, no custom items needed — everything she described already had a
     matching catalog item). Rebuilding it from the freeform text reproduces
     her real record exactly, which is what makes it a good regression check

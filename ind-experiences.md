@@ -19,6 +19,7 @@ If you work in developer role, have you been doing:
 ☐ Skills and AI-friendly git-first templates
 ☐ Using local models
 ☐ Proactive agentic (it starts automatically)
+☐ Sandboxing
 ☐ Dark factory (unattended)
 ☐ Spec-driven development
 ☐ Team/Product context (e.g. .md files)

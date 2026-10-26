@@ -112,6 +112,11 @@ export const individualAreaGroups = [
         explanation: '...when your agents start work without you asking for it in the moment. You find your agentic pipelines, and move some development work towards automation.',
       },
       {
+        id: 'sandboxing',
+        label: 'Sandboxing',
+        explanation: "...when you run your agents inside a sandbox (container, VM, devcontainer or the harness's own sandbox mode) so they can act with fewer permission prompts, while file system, network and credential access stays limited to what you chose. You know what your agent can reach, and what it can't.",
+      },
+      {
         id: 'dark-factory',
         label: 'Dark factory (unattended)',
         explanation: '...when your agents can work over night with guardrails of your choosing to do useful things while you are not around. An hour of away from keyboard is enough.',

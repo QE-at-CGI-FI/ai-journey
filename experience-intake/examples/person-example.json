@@ -96,6 +96,10 @@
       "on": false,
       "details": ""
     },
+    "sandboxing": {
+      "on": false,
+      "details": ""
+    },
     "dark-factory": {
       "on": false,
       "details": ""
