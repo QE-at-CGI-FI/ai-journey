@@ -102,6 +102,10 @@
       "on": true,
       "details": "Watching over others using this."
     },
+    "sandboxing": {
+      "on": false,
+      "details": ""
+    },
     "dark-factory": {
       "on": true,
       "details": "Watching over others using this."
