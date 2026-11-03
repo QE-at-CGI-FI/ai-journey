@@ -1,0 +1,118 @@
+<svg width="644" height="664" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
+<style>
+  text { font-family: 'Segoe UI', Segoe UI, sans-serif; fill: #141413; }
+  .subtitle, .body { fill: #3D3D3A; }
+  .num { font-family: 'Cambria Math', serif; fill: #3D3D3A; font-size: 12px; }
+  .section-label { fill: #3D3D3A; font-size: 12px; }
+  .card-title { font-size: 14px; fill: #141413; }
+  .card-body { font-size: 11.5px; fill: #3D3D3A; }
+  .check { font-family: 'Segoe UI Symbol', 'Segoe UI Symbol', sans-serif; font-size: 12px; fill: #3D3D3A; }
+  .item { font-size: 11.5px; fill: #3D3D3A; }
+  .caption { font-size: 11px; fill: #3D3D3A; }
+  .pill { font-size: 12px; fill: #FFFFFF; }
+</style>
+
+<text x="322" y="26" text-anchor="middle" font-size="16">Claude Code: two routes, two sets of terms</text>
+<text class="subtitle" x="322" y="44" text-anchor="middle" font-size="12">How you pay decides whose contract governs the client's code</text>
+
+<text class="num" x="37" y="68">&#9312;</text>
+<text class="section-label" x="51" y="68">The route decides the terms</text>
+<line x1="37" y1="76" x2="599" y2="76" stroke="#D9D9D9" stroke-width="1"/>
+
+<!-- API / Commercial card -->
+<rect x="37" y="90" width="274" height="150" rx="10" stroke="#5C2D91" stroke-width="1" fill="#EDE8F5"/>
+<text class="card-title" x="174" y="112" text-anchor="middle">API users</text>
+<text class="card-body" x="174" y="128" text-anchor="middle">API key via Claude Console · pay per token</text>
+<rect x="104" y="137" width="140" height="22" rx="11" fill="#5C2D91"/>
+<text class="pill" x="174" y="152" text-anchor="middle">Commercial Terms</text>
+<text class="check" x="49" y="180">&#10003;</text>
+<text class="item" x="63" y="180">No training on your inputs/outputs</text>
+<text class="check" x="49" y="197">&#10003;</text>
+<text class="item" x="63" y="197">DPA available for client data</text>
+<text class="check" x="49" y="214">&#10003;</text>
+<text class="item" x="63" y="214">Use on behalf of an organization</text>
+<text class="check" x="49" y="231">&#10003;</text>
+<text class="item" x="63" y="231">Org-owned keys, admin spend limits</text>
+
+<!-- Pro/Max / Consumer card -->
+<rect x="325" y="90" width="274" height="150" rx="10" stroke="#DA1A32" stroke-width="1" fill="#FCEAEC"/>
+<text class="card-title" x="462" y="112" text-anchor="middle">Pro / Max users</text>
+<text class="card-body" x="462" y="128" text-anchor="middle">Personal claude.ai login · subscription</text>
+<rect x="392" y="137" width="140" height="22" rx="11" fill="#DA1A32"/>
+<text class="pill" x="462" y="152" text-anchor="middle">Consumer Terms</text>
+<text class="check" x="337" y="180">&#10003;</text>
+<text class="item" x="351" y="180">Pre-paid, predictable price</text>
+<text class="check" x="337" y="197">!</text>
+<text class="item" x="351" y="197">Training on chats is a user setting</text>
+<text class="check" x="337" y="214">&#10007;</text>
+<text class="item" x="351" y="214">No DPA — terms bind the individual</text>
+<text class="check" x="337" y="231">&#10007;</text>
+<text class="item" x="351" y="231">Account tied to a person, not the org</text>
+
+<rect x="37" y="252" width="562" height="24" rx="6" fill="#F0EBF8"/>
+<text x="47" y="268" font-size="11" fill="#5C2D91">&#8594; Team &amp; Enterprise seats are also under Commercial Terms — a third route if per-seat pricing fits</text>
+
+<text class="num" x="37" y="310">&#9313;</text>
+<text class="section-label" x="51" y="310">Cost shape: metered vs pre-paid</text>
+<line x1="37" y1="318" x2="599" y2="318" stroke="#D9D9D9" stroke-width="1"/>
+
+<!-- API: metered, varies month to month -->
+<text x="175" y="358" text-anchor="end" font-size="12" fill="#141413">API</text>
+<rect x="185" y="352" width="14" height="18" rx="2" fill="#5C2D91"/>
+<rect x="203" y="342" width="14" height="28" rx="2" fill="#5C2D91"/>
+<rect x="221" y="358" width="14" height="12" rx="2" fill="#5C2D91"/>
+<rect x="239" y="336" width="14" height="34" rx="2" fill="#5C2D91"/>
+<rect x="257" y="348" width="14" height="22" rx="2" fill="#5C2D91"/>
+<rect x="275" y="362" width="14" height="8" rx="2" fill="#5C2D91"/>
+<rect x="293" y="344" width="14" height="26" rx="2" fill="#5C2D91"/>
+<rect x="311" y="354" width="14" height="16" rx="2" fill="#5C2D91"/>
+<rect x="329" y="338" width="14" height="32" rx="2" fill="#5C2D91"/>
+<rect x="347" y="350" width="14" height="20" rx="2" fill="#5C2D91"/>
+<rect x="365" y="346" width="14" height="24" rx="2" fill="#5C2D91"/>
+<rect x="383" y="356" width="14" height="14" rx="2" fill="#5C2D91"/>
+<text x="413" y="352" font-size="11.5" fill="#5C2D91">Metered per token</text>
+<text x="413" y="367" font-size="11.5" fill="#5C2D91">varies month to month</text>
+
+<!-- Max: pre-paid annual block -->
+<text x="175" y="403" text-anchor="end" font-size="12" fill="#141413">Max (annual)</text>
+<rect x="185" y="386" width="212" height="24" rx="4" fill="#DA1A32"/>
+<text class="pill" x="291" y="402" text-anchor="middle">e.g. $2,400 paid upfront</text>
+<text x="413" y="397" font-size="11.5" fill="#DA1A32">Fixed price for the year</text>
+<text x="413" y="412" font-size="11.5" fill="#DA1A32">usage caps per time window</text>
+
+<text class="caption" x="185" y="430">Jan</text>
+<text class="caption" x="397" y="430" text-anchor="end">Dec</text>
+
+<rect x="37" y="440" width="562" height="24" rx="6" fill="#F0EBF8"/>
+<text x="47" y="456" font-size="11" fill="#5C2D91">&#8594; Pre-paid is easier to budget — but the price does not change who the contract is with</text>
+
+<text class="num" x="37" y="498">&#9314;</text>
+<text class="section-label" x="51" y="498">Which clients can live with consumer terms?</text>
+<line x1="37" y1="506" x2="599" y2="506" stroke="#D9D9D9" stroke-width="1"/>
+
+<!-- Consumer terms can work -->
+<rect x="37" y="520" width="182" height="112" rx="10" stroke="#DA1A32" stroke-width="1" fill="#FCEAEC"/>
+<text class="card-title" x="128" y="541" text-anchor="middle" font-size="12.5">Consumer terms can work</text>
+<text class="item" x="49" y="564">· Internal &amp; own code</text>
+<text class="item" x="49" y="581">· Open-source / public work</text>
+<text class="item" x="49" y="598">· Learning, demos, PoCs</text>
+<text class="item" x="49" y="615">· Client allows AI, asks no DPA</text>
+
+<!-- Check the contract -->
+<rect x="227" y="520" width="182" height="112" rx="10" stroke="#AAAAAA" stroke-width="1" stroke-dasharray="4 3" fill="#F5F5F5"/>
+<text class="card-title" x="318" y="541" text-anchor="middle" font-size="12.5">Check the contract first</text>
+<text class="item" x="239" y="564">· Contract silent on AI</text>
+<text class="item" x="239" y="581">· Confidential, no personal data</text>
+<text class="item" x="239" y="598">· Client keeps a tool allowlist</text>
+<text class="item" x="239" y="615">· Unsure? ask the client lead</text>
+
+<!-- Commercial terms needed -->
+<rect x="417" y="520" width="182" height="112" rx="10" stroke="#5C2D91" stroke-width="1" fill="#EDE8F5"/>
+<text class="card-title" x="508" y="541" text-anchor="middle" font-size="12.5">Commercial Terms needed</text>
+<text class="item" x="429" y="564">· DPA or AI clauses in contract</text>
+<text class="item" x="429" y="581">· Personal data / PII in scope</text>
+<text class="item" x="429" y="598">· Public sector &amp; regulated</text>
+<text class="item" x="429" y="615">· Must guarantee no training</text>
+
+<text class="caption" x="322" y="654" text-anchor="middle">Simplified snapshot (Nov 2026) — check Anthropic's current Commercial and Consumer Terms before deciding</text>
+</svg>
