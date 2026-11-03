@@ -54,6 +54,12 @@ export const orgEnablerGroups = [
             image: 'costs-infographic.svg',
             alt: 'Framework, harness and LLM cost stack, and Claude Code vs GitHub Copilot cost/access comparison infographic',
           },
+          {
+            id: 'claude-terms-infographic',
+            label: 'Claude Code: Commercial vs Consumer Terms',
+            image: 'claude-terms-infographic.svg',
+            alt: 'Claude Code API users under Commercial Terms vs Pro/Max users under Consumer Terms, metered vs pre-paid cost, and which clients can live with consumer terms infographic',
+          },
         ],
       },
       { id: 'license-bound-governance', label: 'License-bound governance' },
