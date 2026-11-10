@@ -48,6 +48,10 @@
       "on": false,
       "details": ""
     },
+    "scheduled-agentic": {
+      "on": false,
+      "details": ""
+    },
     "2nd-brain": {
       "on": false,
       "details": ""

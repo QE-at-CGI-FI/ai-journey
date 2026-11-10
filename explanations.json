@@ -49,7 +49,7 @@
         },
         "ai-enabled-practices": {
           "on": false,
-          "details": "...when you can tell a story of changing how you do a thing so that bringing in AI isn't glued on top but the work is down designed so that AI benefits you. "
+          "details": "...when you can tell a story of changing how a team or organization does a thing, so that bringing in AI isn't glued on top but the shared process is redesigned so that AI benefits everyone in it. Changing only your own way of working isn't enough: other people work differently because of the change."
         },
         "task-expansion": {
           "on": false,
@@ -58,6 +58,10 @@
         "personal-applications": {
           "on": false,
           "details": "...when you build a thing you would not have built even if you theoretically had capability. Maybe this application makes your work simpler, even if it is a one user system. "
+        },
+        "scheduled-agentic": {
+          "on": false,
+          "details": "...when you set an agent to run a task on a schedule (cron, daily, weekly or at times you choose) using knowledge worker tooling such as ChatGPT scheduled tasks or Copilot agents, so that information, summaries or drafts arrive without you asking each time."
         },
         "2nd-brain": {
           "on": false,
@@ -109,7 +113,7 @@
         },
         "proactive-agentic": {
           "on": false,
-          "details": "...when your agents start work without you asking for it in the moment. You find your agentic pipelines, and move some development work towards automation. "
+          "details": "...when your agents start work from events in your development flow without you asking for it in the moment, such as a new issue, a pull request or a failing build. You find your agentic pipelines, and move some development work towards automation. A task that just runs on a timer is Scheduled agentic."
         },
         "sandboxing": {
           "on": false,

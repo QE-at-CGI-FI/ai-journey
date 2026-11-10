@@ -32,8 +32,8 @@ export const individualAreaGroups = [
       },
       {
         id: 'ai-enabled-practices',
-        label: 'AI-enabled practices (e.g. AI notetaking)',
-        explanation: "...when you can tell a story of changing how you do a thing so that bringing in AI isn't glued on top but the work is down designed so that AI benefits you.",
+        label: 'AI-enabled practices (e.g. team process redesigned around AI)',
+        explanation: "...when you can tell a story of changing how a team or organization does a thing, so that bringing in AI isn't glued on top but the shared process is redesigned so that AI benefits everyone in it. Changing only your own way of working isn't enough: other people work differently because of the change.",
       },
       {
         id: 'task-expansion',
@@ -44,6 +44,11 @@ export const individualAreaGroups = [
         id: 'personal-applications',
         label: 'Personal applications',
         explanation: '...when you build a thing you would not have built even if you theoretically had capability. Maybe this application makes your work simpler, even if it is a one user system.',
+      },
+      {
+        id: 'scheduled-agentic',
+        label: 'Scheduled agentic (it runs on a schedule)',
+        explanation: '...when you set an agent to run a task on a schedule (cron, daily, weekly or at times you choose) using knowledge worker tooling such as ChatGPT scheduled tasks or Copilot agents, so that information, summaries or drafts arrive without you asking each time.',
       },
       {
         id: '2nd-brain',
@@ -113,8 +118,8 @@ export const individualAreaGroups = [
       },
       {
         id: 'proactive-agentic',
-        label: 'Proactive agentic (it starts automatically)',
-        explanation: '...when your agents start work without you asking for it in the moment. You find your agentic pipelines, and move some development work towards automation.',
+        label: 'Proactive agentic (it starts from events)',
+        explanation: '...when your agents start work from events in your development flow without you asking for it in the moment, such as a new issue, a pull request or a failing build. You find your agentic pipelines, and move some development work towards automation. A task that just runs on a timer is Scheduled agentic.',
       },
       {
         id: 'sandboxing',

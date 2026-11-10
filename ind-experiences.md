@@ -3,9 +3,10 @@ If you work in knowledge worker role, have you been doing:
 ☐ Local summarizing
 ☐ Online summarizing
 ☐ Integrated AI features in domain tools (e.g. Rovo for Confluence & Jira)
-☐ AI-enabled practices (e.g. AI notetaking)
+☐ AI-enabled practices (e.g. team process redesigned around AI)
 ☐ Task expansion
 ☐ Personal applications
+☐ Scheduled agentic (it runs on a schedule)
 ☐ 2nd brain
 ☐ Token awareness
 ☐ Generating artifacts
@@ -19,7 +20,7 @@ If you work in developer role, have you been doing:
 ☐ Integrating 3rd party AI system components (memory, context compression)
 ☐ Skills and AI-friendly git-first templates
 ☐ Using local models
-☐ Proactive agentic (it starts automatically)
+☐ Proactive agentic (it starts from events)
 ☐ Sandboxing
 ☐ Dark factory (unattended)
 ☐ Spec-driven development

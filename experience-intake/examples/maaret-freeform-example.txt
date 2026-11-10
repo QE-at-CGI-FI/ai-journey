@@ -8,9 +8,9 @@ public bid to summarize I work through it locally, moving files and
 findings around myself; for things like CGI AI Exchange metrics, and
 analyzing open source projects for testing purposes, I do more systematic
 online research with AI. I build Rovo agents and UiPath agents directly
-inside the tools I already use for client work. I've also been
-experimenting with AI notetaking — it struggles across multiple channels of
-communication it can't see, and with the routine of the tooling itself.
+inside the tools I already use for client work. My notetaking is
+AI first: conversations are ingested into an LLM wiki that loops an annual
+cycle that the meetings facilitate.
 
 AI regularly expands what I take on beyond my usual scope — fixing bugs is
 a good example of something I now do that I used to leave to developers. I

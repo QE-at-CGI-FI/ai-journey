@@ -44,7 +44,7 @@
     },
     "ai-enabled-practices": {
       "on": true,
-      "details": "Experimenting with AI note taking. Difficulties in multiple channels of communication AI can't see, and routine with tooling."
+      "details": "AI first notetaking, where conversations are ingested into an LLM wiki that loops an annual cycle that the meetings facilitate."
     },
     "task-expansion": {
       "on": true,
@@ -53,6 +53,10 @@
     "personal-applications": {
       "on": true,
       "details": "Example: CV experience visualizer."
+    },
+    "scheduled-agentic": {
+      "on": false,
+      "details": ""
     },
     "2nd-brain": {
       "on": true,

@@ -20,8 +20,8 @@ carefully. Two failure modes to avoid:
 
 - **Under-coverage**: skimming the text once and only catching the two or
   three most obvious matches. Go through the *catalog*, not just the text —
-  for every item in the person's target set (see step 2 — all 31 for a
-  developer, only the 13 knowledge-worker items for a knowledge worker), ask
+  for every item in the person's target set (see step 2 — all 32 for a
+  developer, only the 14 knowledge-worker items for a knowledge worker), ask
   "does anything in this story provide real evidence for or against this?"
   A story that never mentions MCPs
   doesn't mean "off, unknown" and "off, they explicitly said they haven't"
@@ -58,9 +58,9 @@ nearest catalog id or silently dropped.
    catalog items you're even trying to find evidence for — so if the user
    hasn't already told you which one this person is, ask before you start
    mapping:
-   - **Developer**: all 31 items across both groups are valid targets.
+   - **Developer**: all 32 items across both groups are valid targets.
      `roleFlags: { knowledgeWorker: true, developer: true }`.
-   - **Knowledge worker**: only the 13 `knowledge-worker` group items are
+   - **Knowledge worker**: only the 14 `knowledge-worker` group items are
      valid targets — don't sweep the 18 `developer` items looking for
      evidence, they're out of scope for this profile.
      `roleFlags: { knowledgeWorker: true, developer: false }`.
@@ -99,7 +99,7 @@ nearest catalog id or silently dropped.
    This validates every id against the catalog (it will error on typos or
    invented ids — fix the draft and rerun) and expands it to the app's full
    individual shape. Check the stderr coverage line
-   (`N/31 catalog items on, M custom item(s)`) against your own sense of how
+   (`N/32 catalog items on, M custom item(s)`) against your own sense of how
    much the story actually covered.
 
 5. **Log coverage:**
