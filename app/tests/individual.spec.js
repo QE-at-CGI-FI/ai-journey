@@ -63,6 +63,9 @@ test.describe('Individual tab', () => {
   });
 
   test('dragging a roster row reorders the people list', async ({ page }) => {
+    // In the default 720px-high window the last row sits at the bottom edge,
+    // and the page scrolls mid-drag so the drop lands on the wrong row.
+    await page.setViewportSize({ width: 1280, height: 1200 });
     const rosterAdd = page.locator('.roster__add');
     for (const name of ['Alpha', 'Bravo', 'Charlie']) {
       await rosterAdd.getByPlaceholder('Add a person by name…').fill(name);
