@@ -1,6 +1,6 @@
 {
   "source": "app/src/data/individualAreas.js",
-  "generatedAt": "2026-10-26T19:04:32.590Z",
+  "generatedAt": "2026-11-10T08:44:37.827Z",
   "groups": [
     {
       "id": "knowledge-worker",
@@ -60,6 +60,11 @@
           "id": "pitch-to-project",
           "label": "Pitch to project for AI usecase",
           "explanation": "...when you tell someone about a thing they can do to AI so that they want to at least seriously consider doing that with you and your crew."
+        },
+        {
+          "id": "ai-governance",
+          "label": "AI governance",
+          "explanation": "...when you take part in deciding how AI is used responsibly in an organization: guidelines, steering groups or ambassador practices that cover things like data protection, copyright and regulation such as the EU AI Act, so that others can use AI safely and not just you."
         },
         {
           "id": "mentioned-in-cv",

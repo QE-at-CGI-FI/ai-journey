@@ -10,6 +10,7 @@ If you work in knowledge worker role, have you been doing:
 ☐ Token awareness
 ☐ Generating artifacts
 ☐ Pitch to project for AI usecase
+☐ AI governance
 
 If you work in developer role, have you been doing:
 ☐ Code autocomplete

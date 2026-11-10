@@ -64,6 +64,10 @@
       "on": false,
       "details": ""
     },
+    "ai-governance": {
+      "on": false,
+      "details": ""
+    },
     "mentioned-in-cv": {
       "on": true,
       "details": "Describes his AI use in his CV as \"actively leveraging AI tools in daily development work\"."

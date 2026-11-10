@@ -2,3 +2,4 @@ ai-journey-tracker*.json
 experience-intake/incoming/
 experience-intake/recommendations/*
 !experience-intake/recommendations/maaret-pyhajarvi.md
+experience-intake/partners/

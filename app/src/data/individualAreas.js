@@ -66,6 +66,11 @@ export const individualAreaGroups = [
         explanation: '...when you tell someone about a thing they can do to AI so that they want to at least seriously consider doing that with you and your crew.',
       },
       {
+        id: 'ai-governance',
+        label: 'AI governance',
+        explanation: "...when you take part in deciding how AI is used responsibly in an organization: guidelines, steering groups or ambassador practices that cover things like data protection, copyright and regulation such as the EU AI Act, so that others can use AI safely and not just you.",
+      },
+      {
         id: 'mentioned-in-cv',
         label: 'Mentioned in CV',
         explanation: '...when you have a natural way of expressing your use of AI in your CV, without it being minimal and forced.',

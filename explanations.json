@@ -75,6 +75,10 @@
           "on": false,
           "details": "...when you tell someone about a thing they can do to AI so that they want to at least seriously consider doing that with you and your crew. "
         },
+        "ai-governance": {
+          "on": false,
+          "details": "...when you take part in deciding how AI is used responsibly in an organization: guidelines, steering groups or ambassador practices that cover things like data protection, copyright and regulation such as the EU AI Act, so that others can use AI safely and not just you."
+        },
         "mentioned-in-cv": {
           "on": false,
           "details": "...when you have a natural way of expressing your use of AI in your CV, without it being minimal and forced. "

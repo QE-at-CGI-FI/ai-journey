@@ -70,6 +70,10 @@
       "on": true,
       "details": "Example: MH Java Upgrade."
     },
+    "ai-governance": {
+      "on": false,
+      "details": ""
+    },
     "mentioned-in-cv": {
       "on": true,
       "details": ""
