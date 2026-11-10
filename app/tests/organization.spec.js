@@ -1,7 +1,17 @@
 import { test, expect } from '@playwright/test';
+import { orgEnablerGroups } from '../src/data/orgEnablers.js';
+
+// Read from the data so adding a default enabler doesn't break the counts.
+const sandboxTotal = orgEnablerGroups.find((g) => g.id === 'sandbox-trust').items.length;
 
 test.describe('Organization tab', () => {
   test.beforeEach(async ({ page }) => {
+    // A fresh browser loads the demo organization; seed an empty save so
+    // these tests start blank. Only when nothing is saved yet, so a reload
+    // inside a test still keeps what that test changed.
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('cgi-ai-journey-tracker')) localStorage.setItem('cgi-ai-journey-tracker', '{}');
+    });
     await page.goto('/');
     await page.getByRole('tab', { name: 'Organization' }).click();
   });
@@ -11,13 +21,13 @@ test.describe('Organization tab', () => {
     const item = group.locator('.enabler-item', { hasText: 'Sandbox trust through skill' });
 
     await expect(item.getByText('Not yet')).toBeVisible();
-    await expect(group.locator('.progress')).toHaveText('0 / 3 enabled');
+    await expect(group.locator('.progress')).toHaveText(`0 / ${sandboxTotal} enabled`);
 
     await item.getByRole('switch').click();
 
     await expect(item.getByText('Enabled')).toBeVisible();
     await expect(item.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
-    await expect(group.locator('.progress')).toHaveText('1 / 3 enabled');
+    await expect(group.locator('.progress')).toHaveText(`1 / ${sandboxTotal} enabled`);
   });
 
   test('documenting details for an enabler is saved as typed', async ({ page }) => {
@@ -34,11 +44,11 @@ test.describe('Organization tab', () => {
 
     const customItem = group.locator('.enabler-item', { hasText: 'Custom enabler for this test' });
     await expect(customItem).toBeVisible();
-    await expect(group.locator('.progress')).toHaveText('0 / 4 enabled');
+    await expect(group.locator('.progress')).toHaveText(`0 / ${sandboxTotal + 1} enabled`);
 
     await customItem.getByRole('button', { name: 'Remove custom item' }).click();
     await expect(customItem).toHaveCount(0);
-    await expect(group.locator('.progress')).toHaveText('0 / 3 enabled');
+    await expect(group.locator('.progress')).toHaveText(`0 / ${sandboxTotal} enabled`);
   });
 
   test('enabler state persists across a page reload (local storage)', async ({ page }) => {

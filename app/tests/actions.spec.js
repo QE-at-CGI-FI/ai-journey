@@ -2,6 +2,12 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Actions tab', () => {
   test.beforeEach(async ({ page }) => {
+    // A fresh browser loads the demo organization; seed an empty save so
+    // these tests start blank. Only when nothing is saved yet, so a reload
+    // inside a test still keeps what that test changed.
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('cgi-ai-journey-tracker')) localStorage.setItem('cgi-ai-journey-tracker', '{}');
+    });
     await page.goto('/');
     await page.getByRole('tab', { name: 'Actions' }).click();
   });

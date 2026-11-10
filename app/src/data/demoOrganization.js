@@ -7,12 +7,12 @@
 // showcase. Shaped exactly like an export/import payload — see
 // useJourneyStore.js's mergeIntoState.
 //
-// "Other" subgroup people are deliberately NOT tracked on developer growth
-// areas by default (roleFlags.developer: false) — the tracker's convention
-// is that Dev-role items only make sense for people who write code day to
+// "Other" subgroup people are deliberately NOT tracked on builder growth
+// areas by default (roleFlags.builder: false) — the tracker's convention
+// is that Builder-role items only make sense for people who write code day to
 // day. Two of the five "Other" people (a UX designer prototyping with
 // AI-assisted code, a solutions architect reviewing agent/MCP designs) are
-// given roleFlags.developer: true as deliberate crossover samples, matching
+// given roleFlags.builder: true as deliberate crossover samples, matching
 // how it plays out in practice: most non-dev roles never touch that
 // checklist, but a few genuinely do.
 
@@ -172,7 +172,7 @@ export const demoOrganization = {
       role: 'Staff Engineer',
       team: 'Platform',
       badges: ['ai-ready', 'agent-enabled', 'ai-native'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'dev',
       tools: ['Claude Code', 'GitHub Copilot', 'Claude', 'ChatGPT'],
       highlightStory:
@@ -215,7 +215,7 @@ export const demoOrganization = {
       role: 'Senior Software Engineer',
       team: 'Platform',
       badges: ['ai-ready', 'agent-enabled'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'dev',
       tools: ['Claude Code', 'GitHub Copilot'],
       highlightStory: '',
@@ -249,7 +249,7 @@ export const demoOrganization = {
       role: 'Backend Developer',
       team: 'Payments',
       badges: ['ai-ready', 'agent-enabled'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'dev',
       tools: ['Claude Code', 'ChatGPT'],
       highlightStory: '',
@@ -280,7 +280,7 @@ export const demoOrganization = {
       role: 'Frontend Developer',
       team: 'Web',
       badges: ['ai-ready'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'dev',
       tools: ['GitHub Copilot', 'Claude'],
       highlightStory: '',
@@ -309,7 +309,7 @@ export const demoOrganization = {
       role: 'DevOps Engineer',
       team: 'Platform',
       badges: ['ai-ready', 'agent-enabled', 'ai-native'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'dev',
       tools: ['Claude Code', 'ChatGPT', 'GitHub Copilot'],
       highlightStory:
@@ -351,7 +351,7 @@ export const demoOrganization = {
       role: 'Junior Developer',
       team: 'Web',
       badges: [],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'dev',
       tools: ['GitHub Copilot'],
       highlightStory: '',
@@ -376,7 +376,7 @@ export const demoOrganization = {
       role: 'QA Automation Lead',
       team: 'Quality',
       badges: ['ai-ready', 'agent-enabled', 'ai-native'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'test',
       tools: ['Claude Code', 'ChatGPT', 'GitHub Copilot'],
       highlightStory:
@@ -415,7 +415,7 @@ export const demoOrganization = {
       role: 'Test Engineer',
       team: 'Quality',
       badges: ['ai-ready'],
-      roleFlags: { knowledgeWorker: true, developer: false },
+      roleFlags: { knowledgeWorker: true, builder: false },
       subgroup: 'test',
       tools: ['ChatGPT', 'Edge Copilot'],
       highlightStory: '',
@@ -437,7 +437,7 @@ export const demoOrganization = {
       role: 'SDET',
       team: 'Payments',
       badges: ['ai-ready', 'agent-enabled'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'test',
       tools: ['Claude Code', 'Claude'],
       highlightStory: '',
@@ -467,7 +467,7 @@ export const demoOrganization = {
       role: 'QA Engineer',
       team: 'Web',
       badges: ['ai-ready'],
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'test',
       tools: ['GitHub Copilot'],
       highlightStory: '',
@@ -486,14 +486,14 @@ export const demoOrganization = {
       customItems: {},
     },
 
-    // --- Other subgroup (not assessed on Dev experiences by default) ---
+    // --- Other subgroup (not assessed on Builder experiences by default) ---
     {
       id: 'demo-grace-lindqvist',
       name: 'Grace Lindqvist',
       role: 'Product Manager',
       team: 'Product',
       badges: ['ai-ready', 'agent-enabled'],
-      roleFlags: { knowledgeWorker: true, developer: false },
+      roleFlags: { knowledgeWorker: true, builder: false },
       subgroup: 'other',
       tools: ['ChatGPT', 'M365 Copilot', 'Claude'],
       highlightStory:
@@ -523,7 +523,7 @@ export const demoOrganization = {
       role: 'Business Analyst',
       team: 'Product',
       badges: ['ai-ready'],
-      roleFlags: { knowledgeWorker: true, developer: false },
+      roleFlags: { knowledgeWorker: true, builder: false },
       subgroup: 'other',
       tools: ['M365 Copilot', 'ChatGPT'],
       highlightStory: '',
@@ -546,7 +546,7 @@ export const demoOrganization = {
       role: 'Delivery Lead',
       team: 'Delivery',
       badges: ['ai-ready', 'agent-enabled'],
-      roleFlags: { knowledgeWorker: true, developer: false },
+      roleFlags: { knowledgeWorker: true, builder: false },
       subgroup: 'other',
       tools: ['M365 Copilot', 'Claude'],
       highlightStory: '',
@@ -572,7 +572,7 @@ export const demoOrganization = {
       team: 'Product',
       badges: ['ai-ready', 'agent-enabled'],
       // Crossover sample: a designer whose prototyping work strays into code.
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'other',
       tools: ['Claude', 'Gemini Code Assist'],
       highlightStory:
@@ -603,7 +603,7 @@ export const demoOrganization = {
       team: 'Platform',
       badges: ['ai-ready', 'agent-enabled', 'ai-native'],
       // Crossover sample: an architect who still reviews and writes code.
-      roleFlags: { knowledgeWorker: true, developer: true },
+      roleFlags: { knowledgeWorker: true, builder: true },
       subgroup: 'other',
       tools: ['Claude Code', 'ChatGPT'],
       highlightStory:

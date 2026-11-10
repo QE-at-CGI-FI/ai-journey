@@ -3,7 +3,7 @@
   "role": "",
   "team": "",
   "subgroup": "dev",
-  "roleFlags": { "knowledgeWorker": true, "developer": true },
+  "roleFlags": { "knowledgeWorker": true, "builder": true },
   "tools": ["GitHub Copilot", "Claude", "Junie"],
   "clients": ["Matkahuolto"],
   "highlightStory": "",

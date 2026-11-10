@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Appends one row per analyzed person to a Markdown coverage table,
 // recording how much of the individualAreas catalog their mapped record
-// covers — split by knowledge-worker / developer group, plus the combined
+// covers — split by knowledge-worker / builder group, plus the combined
 // total, each shown as on/total and a percentage. Meant to run right after
 // build-person.mjs, once per person, so the table accumulates across an
 // intake session (or across many sessions — it only appends rows).
@@ -25,7 +25,7 @@ const defaultLogPath = path.join(root, 'experience-intake', 'coverage-log.md')
 const SKELETON =
   '# Experience coverage log\n\n' +
   'One row per person mapped by the `experience-mapper` skill — coverage against the fixed `individualAreas.js` catalog (custom items excluded from the denominator).\n\n' +
-  '| Date | Name | Knowledge worker | Developer | Total |\n' +
+  '| Date | Name | Knowledge worker | Builder | Total |\n' +
   '| --- | --- | --- | --- | --- |\n'
 
 function parseArgs(argv) {
@@ -80,19 +80,19 @@ async function main() {
   }
 
   const kw = counts['knowledge-worker'] || { on: 0, total: 0 }
-  const dev = counts['developer'] || { on: 0, total: 0 }
+  const builder = counts['builder'] || { on: 0, total: 0 }
   const kwPct = pct(kw.on, kw.total)
-  const devPct = pct(dev.on, dev.total)
+  const builderPct = pct(builder.on, builder.total)
   const totalPct = pct(totalOn, totalAll)
 
   const logPath = args.log || defaultLogPath
   if (!(await fileExists(logPath))) await writeFile(logPath, SKELETON, 'utf8')
 
-  const row = `| ${mdCell(new Date().toISOString().slice(0, 10))} | ${mdCell(person.name || '(unnamed)')} | ${kw.on}/${kw.total} (${kwPct}%) | ${dev.on}/${dev.total} (${devPct}%) | ${totalOn}/${totalAll} (${totalPct}%) |\n`
+  const row = `| ${mdCell(new Date().toISOString().slice(0, 10))} | ${mdCell(person.name || '(unnamed)')} | ${kw.on}/${kw.total} (${kwPct}%) | ${builder.on}/${builder.total} (${builderPct}%) | ${totalOn}/${totalAll} (${totalPct}%) |\n`
 
   await appendFile(logPath, row, 'utf8')
   console.error(
-    `log-coverage: ${person.name || '(unnamed)'} — knowledge-worker ${kw.on}/${kw.total} (${kwPct}%), developer ${dev.on}/${dev.total} (${devPct}%), total ${totalOn}/${totalAll} (${totalPct}%). Appended to ${logPath}`,
+    `log-coverage: ${person.name || '(unnamed)'} — knowledge-worker ${kw.on}/${kw.total} (${kwPct}%), builder ${builder.on}/${builder.total} (${builderPct}%), total ${totalOn}/${totalAll} (${totalPct}%). Appended to ${logPath}`,
   )
 }
 

@@ -9,6 +9,17 @@ test.describe('App shell and navigation', () => {
     await expect(page.getByRole('tab', { name: 'Journey' })).toHaveAttribute('aria-selected', 'true');
   });
 
+  test('a fresh browser with nothing saved shows the demo organization', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByRole('tab', { name: 'Individual' }).click();
+    await expect(page.getByText('No one tracked yet')).toHaveCount(0);
+    await expect(page.locator('.roster__name').first()).toHaveText('Person 1');
+
+    await page.getByRole('tab', { name: 'Actions' }).click();
+    await expect(page.getByText('No actions planned yet')).toHaveCount(0);
+  });
+
   test('switches panels when a tab is clicked', async ({ page }) => {
     await page.goto('/');
 

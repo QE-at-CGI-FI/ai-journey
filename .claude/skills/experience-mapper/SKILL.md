@@ -20,8 +20,8 @@ carefully. Two failure modes to avoid:
 
 - **Under-coverage**: skimming the text once and only catching the two or
   three most obvious matches. Go through the *catalog*, not just the text —
-  for every item in the person's target set (see step 2 — all 32 for a
-  developer, only the 14 knowledge-worker items for a knowledge worker), ask
+  for every item in the person's target set (see step 2 — all 33 for a
+  builder, only the 15 knowledge-worker items for a knowledge worker), ask
   "does anything in this story provide real evidence for or against this?"
   A story that never mentions MCPs
   doesn't mean "off, unknown" and "off, they explicitly said they haven't"
@@ -58,12 +58,12 @@ nearest catalog id or silently dropped.
    catalog items you're even trying to find evidence for — so if the user
    hasn't already told you which one this person is, ask before you start
    mapping:
-   - **Developer**: all 32 items across both groups are valid targets.
-     `roleFlags: { knowledgeWorker: true, developer: true }`.
-   - **Knowledge worker**: only the 14 `knowledge-worker` group items are
-     valid targets — don't sweep the 18 `developer` items looking for
+   - **Builder**: all 33 items across both groups are valid targets.
+     `roleFlags: { knowledgeWorker: true, builder: true }`.
+   - **Knowledge worker**: only the 15 `knowledge-worker` group items are
+     valid targets — don't sweep the 18 `builder` items looking for
      evidence, they're out of scope for this profile.
-     `roleFlags: { knowledgeWorker: true, developer: false }`.
+     `roleFlags: { knowledgeWorker: true, builder: false }`.
 
    Don't infer the profile from the text and don't default to "both" —
    guessing wrong changes what "full coverage" means for this person and
@@ -76,13 +76,13 @@ nearest catalog id or silently dropped.
    ```json
    {
      "name": "...", "role": "", "team": "", "subgroup": "dev",
-     "roleFlags": { "knowledgeWorker": true, "developer": true },
+     "roleFlags": { "knowledgeWorker": true, "builder": true },
      "tools": [], "clients": [], "highlightStory": "",
      "items": [
        { "id": "code-autocomplete", "on": true, "details": "grounded in the text, first person about them, not a quote of the checklist label" }
      ],
      "customItems": [
-       { "group": "developer", "label": "...", "on": true, "details": "..." }
+       { "group": "builder", "label": "...", "on": true, "details": "..." }
      ]
    }
    ```
@@ -99,7 +99,7 @@ nearest catalog id or silently dropped.
    This validates every id against the catalog (it will error on typos or
    invented ids — fix the draft and rerun) and expands it to the app's full
    individual shape. Check the stderr coverage line
-   (`N/32 catalog items on, M custom item(s)`) against your own sense of how
+   (`N/33 catalog items on, M custom item(s)`) against your own sense of how
    much the story actually covered.
 
 5. **Log coverage:**
@@ -107,7 +107,7 @@ nearest catalog id or silently dropped.
    node experience-intake/scripts/log-coverage.mjs --person <person.json>
    ```
    Appends one row to the Markdown table in `experience-intake/coverage-log.md`
-   recording this person's knowledge-worker, developer, and combined
+   recording this person's knowledge-worker, builder, and combined
    coverage, each as `on/total` and a percentage against the fixed catalog
    (custom items don't count toward the denominator). Run this once per
    person, every time — it's the running record of who's been analyzed and

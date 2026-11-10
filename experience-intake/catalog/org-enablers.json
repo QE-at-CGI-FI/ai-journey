@@ -1,6 +1,6 @@
 {
   "source": "app/src/data/orgEnablers.js",
-  "generatedAt": "2026-11-10T08:54:05.130Z",
+  "generatedAt": "2026-11-10T09:47:37.141Z",
   "groups": [
     {
       "id": "data-classification",
@@ -34,7 +34,7 @@
         },
         {
           "id": "sandbox-split-knowledge-developers",
-          "label": "Sandboxing that splits knowledge workers and developers",
+          "label": "Sandboxing that splits knowledge workers and builders",
           "explanation": null
         }
       ]

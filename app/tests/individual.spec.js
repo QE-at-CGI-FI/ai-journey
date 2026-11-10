@@ -1,7 +1,23 @@
 import { test, expect } from '@playwright/test';
 
+// With names shown, each roster name is an editable text box, which text
+// matching can't see — so check the boxes' values, in roster order.
+async function expectRosterNames(page, names) {
+  const inputs = page.getByTitle('Edit name');
+  await expect(inputs).toHaveCount(names.length);
+  for (const [i, name] of names.entries()) {
+    await expect(inputs.nth(i)).toHaveValue(name);
+  }
+}
+
 test.describe('Individual tab', () => {
   test.beforeEach(async ({ page }) => {
+    // A fresh browser loads the demo organization; seed an empty save so
+    // these tests start blank. Only when nothing is saved yet, so a reload
+    // inside a test still keeps what that test changed.
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('cgi-ai-journey-tracker')) localStorage.setItem('cgi-ai-journey-tracker', '{}');
+    });
     await page.goto('/');
     // Names are anonymized ("Person 1", ...) by default — show real names so
     // the roster can be asserted against by the names these tests enter.
@@ -15,9 +31,8 @@ test.describe('Individual tab', () => {
     await page.getByPlaceholder('Add a person by name…').fill('Ada Lovelace');
     await page.getByRole('button', { name: '+ Add' }).click();
 
-    const rosterItem = page.locator('.roster__item', { hasText: 'Ada Lovelace' });
-    await expect(rosterItem).toBeVisible();
-    await expect(rosterItem).toHaveClass(/roster__item--active/);
+    await expectRosterNames(page, ['Ada Lovelace']);
+    await expect(page.locator('.roster__item').first()).toHaveClass(/roster__item--active/);
     await expect(page.getByText(/areas growing for Ada Lovelace/)).toBeVisible();
   });
 
@@ -25,7 +40,8 @@ test.describe('Individual tab', () => {
     await page.getByPlaceholder('Add a person by name…').fill('Grace Hopper');
     await page.getByRole('button', { name: '+ Add' }).click();
 
-    const rosterItem = page.locator('.roster__item', { hasText: 'Grace Hopper' });
+    await expectRosterNames(page, ['Grace Hopper']);
+    const rosterItem = page.locator('.roster__item').first();
     await expect(rosterItem.locator('.roster__badge')).toHaveText(/^0 \//);
 
     const detail = page.locator('.individual-detail');
@@ -38,11 +54,11 @@ test.describe('Individual tab', () => {
     await page.getByPlaceholder('Add a person by name…').fill('Temp Person');
     await page.getByRole('button', { name: '+ Add' }).click();
 
-    const rosterItem = page.locator('.roster__item', { hasText: 'Temp Person' });
+    await expectRosterNames(page, ['Temp Person']);
     page.once('dialog', (dialog) => dialog.accept());
-    await rosterItem.getByRole('button', { name: 'Remove person' }).click();
+    await page.locator('.roster__item').first().getByRole('button', { name: 'Remove person' }).click();
 
-    await expect(rosterItem).toHaveCount(0);
+    await expect(page.locator('.roster__item')).toHaveCount(0);
     await expect(page.getByText('No one tracked yet')).toBeVisible();
   });
 
@@ -53,12 +69,13 @@ test.describe('Individual tab', () => {
       await rosterAdd.getByRole('button', { name: '+ Add' }).click();
     }
 
-    const names = page.locator('.roster__name');
-    await expect(names).toHaveText(['Alpha', 'Bravo', 'Charlie']);
+    await expectRosterNames(page, ['Alpha', 'Bravo', 'Charlie']);
 
     const items = page.locator('.roster__item');
-    await items.nth(0).dragTo(items.nth(2));
+    // Drag by the handle: the middle of a row is the name text box, where a
+    // drag selects text instead of moving the row.
+    await items.nth(0).locator('.roster__handle').dragTo(items.nth(2).locator('.roster__handle'));
 
-    await expect(names).toHaveText(['Bravo', 'Charlie', 'Alpha']);
+    await expectRosterNames(page, ['Bravo', 'Charlie', 'Alpha']);
   });
 });

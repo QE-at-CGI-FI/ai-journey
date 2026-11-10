@@ -23,7 +23,7 @@
       "badges": [],
       "roleFlags": {
         "knowledgeWorker": true,
-        "developer": true
+        "builder": true
       },
       "subgroup": "other",
       "tools": [],
@@ -82,6 +82,10 @@
         "ai-governance": {
           "on": false,
           "details": "...when you take part in deciding how AI is used responsibly in an organization: guidelines, steering groups or ambassador practices that cover things like data protection, copyright and regulation such as the EU AI Act, so that others can use AI safely and not just you."
+        },
+        "learning-from-failure": {
+          "on": false,
+          "details": "...when you can tell a story of an AI use that did not work out (a confident wrong answer you caught, an experiment whose result was the opposite of your hypothesis, an approach you dropped) and what you changed because of it, so your judgement of where AI helps and where it does not comes from your own experience."
         },
         "mentioned-in-cv": {
           "on": false,

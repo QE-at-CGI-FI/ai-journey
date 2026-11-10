@@ -5,7 +5,7 @@
   "subgroup": "test",
   "roleFlags": {
     "knowledgeWorker": true,
-    "developer": true
+    "builder": true
   },
   "tools": [
     "Edge Copilot",

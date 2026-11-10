@@ -1,6 +1,6 @@
 {
   "source": "app/src/data/individualAreas.js",
-  "generatedAt": "2026-11-10T08:54:05.126Z",
+  "generatedAt": "2026-11-10T09:47:37.118Z",
   "groups": [
     {
       "id": "knowledge-worker",
@@ -72,6 +72,11 @@
           "explanation": "...when you take part in deciding how AI is used responsibly in an organization: guidelines, steering groups or ambassador practices that cover things like data protection, copyright and regulation such as the EU AI Act, so that others can use AI safely and not just you."
         },
         {
+          "id": "learning-from-failure",
+          "label": "Failure you learned from",
+          "explanation": "...when you can tell a story of an AI use that did not work out (a confident wrong answer you caught, an experiment whose result was the opposite of your hypothesis, an approach you dropped) and what you changed because of it, so your judgement of where AI helps and where it does not comes from your own experience."
+        },
+        {
           "id": "mentioned-in-cv",
           "label": "Mentioned in CV",
           "explanation": "...when you have a natural way of expressing your use of AI in your CV, without it being minimal and forced."
@@ -79,8 +84,8 @@
       ]
     },
     {
-      "id": "developer",
-      "title": "Developer role",
+      "id": "builder",
+      "title": "Builder role",
       "items": [
         {
           "id": "code-autocomplete",

@@ -201,7 +201,7 @@ function pctOf(progress) {
 
 // Only people tracked against a group (ticked for its role, or untargeted —
 // see groupsForIndividual) count toward that group's coverage denominator,
-// so an e.g. developer-only roster doesn't dilute the knowledge-worker numbers.
+// so an e.g. builder-only roster doesn't dilute the knowledge-worker numbers.
 function individualsForGroup(groupId) {
   return state.individuals.filter((ind) => groupsForIndividual(ind).some((g) => g.id === groupId))
 }
@@ -237,7 +237,7 @@ const groupCoverages = computed(() =>
 
 // Same someone/everyone calculation as allCoverage, but scoped to the
 // people in one subgroup (test/dev/other) — an orthogonal classification
-// to the knowledge-worker/developer role flags used above.
+// to the knowledge-worker/builder role flags used above.
 function subgroupCoveragePct(subgroupId) {
   let totalItems = 0
   let someoneCount = 0
@@ -438,11 +438,11 @@ const allCoverage = computed(() => {
             <button
               type="button"
               class="role-chip"
-              :class="{ 'role-chip--active': ind.roleFlags.developer }"
-              title="Track developer growth areas"
-              @click="toggleRole(ind, 'developer')"
+              :class="{ 'role-chip--active': ind.roleFlags.builder }"
+              title="Track builder growth areas"
+              @click="toggleRole(ind, 'builder')"
             >
-              Dev
+              Builder
             </button>
           </div>
           <select
@@ -519,8 +519,8 @@ const allCoverage = computed(() => {
         </button>
       </div>
 
-      <p v-if="!selected.roleFlags.knowledgeWorker && !selected.roleFlags.developer" class="role-hint">
-        No role ticked yet — showing every growth area. Tick Knowledge worker and/or Developer in
+      <p v-if="!selected.roleFlags.knowledgeWorker && !selected.roleFlags.builder" class="role-hint">
+        No role ticked yet — showing every growth area. Tick Knowledge worker and/or Builder in
         the list above to narrow the checklist and target to their role(s).
       </p>
 

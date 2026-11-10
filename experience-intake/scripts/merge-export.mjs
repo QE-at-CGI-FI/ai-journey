@@ -16,7 +16,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
-const STORAGE_VERSION = 5
+const STORAGE_VERSION = 6
 
 function parseArgs(argv) {
   const args = {}

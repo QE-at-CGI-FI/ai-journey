@@ -89,4 +89,30 @@ test.describe('Data controls', () => {
 
     await expect(page.locator('.action-card', { hasText: 'Round-trip action' })).toBeVisible();
   });
+
+  test('import maps a pre-v6 developer role and its custom items to builder', async ({ page }) => {
+    await page.goto('/');
+    const legacy = {
+      version: 5,
+      individuals: [
+        {
+          id: 'ind-legacy',
+          name: 'Legacy Person',
+          roleFlags: { knowledgeWorker: false, developer: true },
+          values: { 'legacy-custom': { on: true, details: '' } },
+          customItems: { developer: [{ id: 'legacy-custom', label: 'Legacy builder item' }] },
+        },
+      ],
+    };
+    await page.setInputFiles('input[type="file"]', {
+      name: 'ai-journey-tracker-legacy.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(legacy)),
+    });
+
+    await page.getByRole('tab', { name: 'Individual' }).click();
+    await expect(page.getByRole('button', { name: 'Builder', exact: true })).toHaveClass(/role-chip--active/);
+    await expect(page.getByRole('heading', { name: 'Builder role' })).toBeVisible();
+    await expect(page.getByText('Legacy builder item')).toBeVisible();
+  });
 });

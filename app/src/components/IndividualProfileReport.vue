@@ -29,9 +29,9 @@ const generatedOn = new Date().toLocaleDateString(undefined, {
 
 const roleLabel = computed(() => {
   const flags = props.individual.roleFlags || {}
-  if (flags.knowledgeWorker && flags.developer) return 'Knowledge worker + Developer'
+  if (flags.knowledgeWorker && flags.builder) return 'Knowledge worker + Builder'
   if (flags.knowledgeWorker) return 'Knowledge worker'
-  if (flags.developer) return 'Developer'
+  if (flags.builder) return 'Builder'
   return 'Untargeted'
 })
 

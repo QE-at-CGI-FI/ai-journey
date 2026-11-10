@@ -12,8 +12,9 @@ If you work in knowledge worker role, have you been doing:
 ☐ Generating artifacts
 ☐ Pitch to project for AI usecase
 ☐ AI governance
+☐ Failure you learned from
 
-If you work in developer role, have you been doing:
+If you work in builder role, have you been doing:
 ☐ Code autocomplete
 ☐ Reactive agentic (you start it)
 ☐ Selecting and configuring 3rd party MCPs

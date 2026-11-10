@@ -1,10 +1,10 @@
 # Recommendations for Maaret Pyhäjärvi
 
 Based on the mapping logged 2026-09-25 (see `coverage-log.md`): 24/29 items
-on — full 12/12 on the knowledge-worker side, 12/17 on the developer side.
+on — full 12/12 on the knowledge-worker side, 12/17 on the builder side.
 The five items still off (`team-product-context-basic`, `building-own-mcps`,
 `product-ai-feature-poc`, `product-ai-feature-production`,
-`business-value-domain-ai-poc`) all sit at the advanced end of the developer
+`business-value-domain-ai-poc`) all sit at the advanced end of the builder
 group; the three below are the ones that build most directly on what she's
 already doing.
 

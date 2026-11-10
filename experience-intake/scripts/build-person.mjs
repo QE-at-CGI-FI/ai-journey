@@ -13,10 +13,10 @@
 // {
 //   "name": "Jane Doe",
 //   "role": "", "team": "", "subgroup": "dev",
-//   "roleFlags": { "knowledgeWorker": true, "developer": true },
+//   "roleFlags": { "knowledgeWorker": true, "builder": true },
 //   "tools": [], "clients": [], "highlightStory": "",
 //   "items": [ { "id": "code-autocomplete", "on": true, "details": "..." } ],
-//   "customItems": [ { "group": "developer", "label": "...", "on": true, "details": "..." } ]
+//   "customItems": [ { "group": "builder", "label": "...", "on": true, "details": "..." } ]
 // }
 
 import { readFile, writeFile } from 'node:fs/promises'
@@ -136,7 +136,7 @@ async function main() {
     badges: [],
     roleFlags: {
       knowledgeWorker: !!draft.roleFlags?.knowledgeWorker,
-      developer: !!draft.roleFlags?.developer,
+      builder: !!draft.roleFlags?.builder,
     },
     subgroup: draft.subgroup && SUBGROUP_IDS.includes(draft.subgroup) ? draft.subgroup : 'other',
     tools: Array.isArray(draft.tools) ? draft.tools : [],

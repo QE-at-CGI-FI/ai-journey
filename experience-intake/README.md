@@ -46,7 +46,7 @@ tracker-export.json    — importable via the app's Import button
   catalog and expands it into a full individual record (all canonical items
   present, custom items assigned stable ids).
 - `scripts/log-coverage.mjs` — appends one row per analyzed person to the
-  Markdown table in `coverage-log.md`: knowledge-worker coverage, developer
+  Markdown table in `coverage-log.md`: knowledge-worker coverage, builder
   coverage, and the combined total, each shown as `on/total` and a
   percentage, out of the fixed catalog (custom items aren't counted; they're
   not part of the denominator). Run once per person, right after
@@ -71,7 +71,7 @@ tracker-export.json    — importable via the app's Import button
   - `maaret-freeform-example.txt` → `maaret-draft-example.json` →
     `maaret-person-example.json` — a fuller, high-coverage mapping built
     from Maaret Pyhäjärvi's own notes in
-    `ai-journey-tracker-bcs-2026-09-24.json` (24/32 items on, spanning both
+    `ai-journey-tracker-bcs-2026-09-24.json` (24/33 items on, spanning both
     groups, no custom items needed — everything she described already had a
     matching catalog item). Rebuilding it from the freeform text reproduces
     her real record exactly, which is what makes it a good regression check

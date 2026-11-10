@@ -25,7 +25,7 @@
         <mxCell id="s1c1" value="1 · Refresh the catalog&#10;extract-catalog.mjs&#10;individualAreas.js → catalog JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
           <mxGeometry x="170" y="180" width="200" height="95" as="geometry" />
         </mxCell>
-        <mxCell id="s1c2" value="2 · Set the target profile&#10;Developer → all 29 items&#10;Knowledge worker → 12 items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
+        <mxCell id="s1c2" value="2 · Set the target profile&#10;Builder → all 33 items&#10;Knowledge worker → 15 items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;align=center;arcSize=10;" vertex="1" parent="1">
           <mxGeometry x="170" y="290" width="200" height="95" as="geometry" />
         </mxCell>
         <mxCell id="e_s1c1s1c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#999999;endArrow=block;endFill=1;fontSize=8;" edge="1" parent="1" source="s1c1" target="s1c2">

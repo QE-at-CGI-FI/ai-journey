@@ -5,7 +5,7 @@
 Sandbox trust through skill
 Sandbox trust through control
 Sandboxed YOLO-mode
-Sandboxing that splits knowledge workers and developers
+Sandboxing that splits knowledge workers and builders
 
 - Licenses with contractual limitations
   License-bound governance

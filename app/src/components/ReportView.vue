@@ -47,9 +47,9 @@ const overallPct = computed(() => {
 
 function roleLabel(ind) {
   const flags = ind.roleFlags || {}
-  if (flags.knowledgeWorker && flags.developer) return 'Knowledge worker + Developer'
+  if (flags.knowledgeWorker && flags.builder) return 'Knowledge worker + Builder'
   if (flags.knowledgeWorker) return 'Knowledge worker'
-  if (flags.developer) return 'Developer'
+  if (flags.builder) return 'Builder'
   return 'Untargeted'
 }
 
@@ -71,12 +71,12 @@ const people = computed(() =>
 )
 
 const roleCounts = computed(() => {
-  const counts = { both: 0, knowledgeWorker: 0, developer: 0, untargeted: 0 }
+  const counts = { both: 0, knowledgeWorker: 0, builder: 0, untargeted: 0 }
   state.individuals.forEach((ind) => {
     const flags = ind.roleFlags || {}
-    if (flags.knowledgeWorker && flags.developer) counts.both += 1
+    if (flags.knowledgeWorker && flags.builder) counts.both += 1
     else if (flags.knowledgeWorker) counts.knowledgeWorker += 1
-    else if (flags.developer) counts.developer += 1
+    else if (flags.builder) counts.builder += 1
     else counts.untargeted += 1
   })
   return counts
@@ -125,7 +125,7 @@ function handlePrint() {
       <section class="report__section">
         <h2>People ({{ state.individuals.length }})</h2>
         <p class="report__subtle">
-          {{ roleCounts.knowledgeWorker }} knowledge worker · {{ roleCounts.developer }} developer ·
+          {{ roleCounts.knowledgeWorker }} knowledge worker · {{ roleCounts.builder }} builder ·
           {{ roleCounts.both }} both · {{ roleCounts.untargeted }} untargeted
         </p>
         <table v-if="people.length" class="report__table">

@@ -9,7 +9,9 @@ import { subgroups } from '../data/subgroups.js'
 import { demoOrganization } from '../data/demoOrganization.js'
 
 const STORAGE_KEY = 'cgi-ai-journey-tracker'
-const STORAGE_VERSION = 5
+// v6 renamed the 'developer' role flag and growth-area group to 'builder';
+// mergeIntoState still reads the old key so earlier saves and exports load.
+const STORAGE_VERSION = 6
 
 function blankValue() {
   return { on: false, details: '' }
@@ -32,7 +34,7 @@ function emptyIndividual() {
     // Which growth-area groups (data/individualAreas.js) apply to this
     // person — drives which items they're tracked against and the coverage
     // denominator used for their progress.
-    roleFlags: { knowledgeWorker: false, developer: false },
+    roleFlags: { knowledgeWorker: false, builder: false },
     // Discipline classification — one of data/subgroups.js's ids. Defaults
     // to 'other' so everyone starts in a subgroup rather than unclassified.
     subgroup: 'other',
@@ -80,6 +82,13 @@ function load() {
   }
 }
 
+// Custom growth areas saved before v6 sit under the old 'developer' group id.
+function renameLegacyGroup(customItems) {
+  if (!customItems?.developer) return customItems
+  const { developer, ...rest } = customItems
+  return { ...rest, builder: [...(rest.builder || []), ...developer] }
+}
+
 function mergeBucket(base, incoming) {
   if (!incoming) return base
   base.values = { ...base.values, ...(incoming.values || {}) }
@@ -111,7 +120,7 @@ function mergeIntoState(base, incoming) {
       fresh.badges = Array.isArray(ind.badges) ? [...ind.badges] : []
       fresh.roleFlags = {
         knowledgeWorker: !!ind.roleFlags?.knowledgeWorker,
-        developer: !!ind.roleFlags?.developer,
+        builder: !!(ind.roleFlags?.builder ?? ind.roleFlags?.developer),
       }
       fresh.subgroup = subgroups.some((sg) => sg.id === ind.subgroup) ? ind.subgroup : 'other'
       fresh.tools = Array.isArray(ind.tools) ? [...ind.tools] : []
@@ -119,6 +128,7 @@ function mergeIntoState(base, incoming) {
       fresh.clients = Array.isArray(ind.clients) ? [...ind.clients] : []
       fresh.attention = ind.attention && typeof ind.attention === 'object' ? { ...ind.attention } : {}
       mergeBucket(fresh, ind)
+      fresh.customItems = renameLegacyGroup(fresh.customItems)
       return fresh
     })
   } else if (incoming.individual && (incoming.individual.profile?.name || Object.keys(incoming.individual.values || {}).length)) {
@@ -230,11 +240,11 @@ export function useJourneyStore() {
   // still gets a full checklist instead of a 0/0 target.
   function groupsForIndividual(individual) {
     const flags = individual?.roleFlags || {}
-    if (!flags.knowledgeWorker && !flags.developer) return individualAreaGroups
+    if (!flags.knowledgeWorker && !flags.builder) return individualAreaGroups
     return individualAreaGroups.filter(
       (g) =>
         (g.id === 'knowledge-worker' && flags.knowledgeWorker) ||
-        (g.id === 'developer' && flags.developer),
+        (g.id === 'builder' && flags.builder),
     )
   }
 

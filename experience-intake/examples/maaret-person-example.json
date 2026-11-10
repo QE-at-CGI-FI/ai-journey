@@ -6,7 +6,7 @@
   "badges": [],
   "roleFlags": {
     "knowledgeWorker": true,
-    "developer": true
+    "builder": true
   },
   "subgroup": "test",
   "tools": [
@@ -75,6 +75,10 @@
       "details": "Example: MH Java Upgrade."
     },
     "ai-governance": {
+      "on": false,
+      "details": ""
+    },
+    "learning-from-failure": {
       "on": false,
       "details": ""
     },
