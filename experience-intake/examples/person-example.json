@@ -19,6 +19,7 @@
     "Matkahuolto"
   ],
   "attention": {},
+  "intakeAssessed": true,
   "values": {
     "external-imagination": {
       "on": false,

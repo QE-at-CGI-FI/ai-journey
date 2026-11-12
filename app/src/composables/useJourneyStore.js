@@ -47,6 +47,9 @@ function emptyIndividual() {
     clients: [],
     // itemId (data/attentionItems.js) -> boolean — "needs action" flags.
     attention: {},
+    // True once this person's record came out of the experience-intake
+    // pipeline (../experience-intake) — shown as a star next to their name.
+    intakeAssessed: false,
     ...emptyBucket(),
   }
 }
@@ -127,6 +130,7 @@ function mergeIntoState(base, incoming) {
       fresh.highlightStory = ind.highlightStory || ''
       fresh.clients = Array.isArray(ind.clients) ? [...ind.clients] : []
       fresh.attention = ind.attention && typeof ind.attention === 'object' ? { ...ind.attention } : {}
+      fresh.intakeAssessed = !!ind.intakeAssessed
       mergeBucket(fresh, ind)
       fresh.customItems = renameLegacyGroup(fresh.customItems)
       return fresh

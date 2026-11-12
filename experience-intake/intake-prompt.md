@@ -23,3 +23,12 @@ ChatGPT, whatever, if that's easier than staring at a blank page.
 Send it back to me whenever it's ready.
 
 ---
+
+Essee-tehtävä
+Kuinka käytät tekoälyä, ja kuulisin mielelläni sinun kokemuksistasi. Ajattele tätä kuin kouluesseenä, jossa tehtävänä on kehua: mitä olet saanut tekoälyn avulla aikaan sellaista, mistä olet ylpeä? Ihan mikä tahansa sinun oma tapasi käyttää tekoälyä on kehumisen arvoinen, joten kaivele rohkeasti muistiasi.
+ 
+Kirjoita vapaamuotoisesti, omalla tavallasi. Yksi kappale tai useampi, miten vain. Kerro siitä, mikä pitää sinun kohdallasi paikkansa: arkisesta käytöstä (automaattisesta täydennyksestä, kysymysten esittämisestä, tiivistelmien tekemisestä), rakentamistasi jutuista, tavoista, joilla olet muuttanut työskentelyäsi, kokeiluista, jotka eivät oikein toimineet, tai muualla näkemistäsi jutuista, joita haluaisit itsekin päästä tekemään.
+ 
+Konkreettinen on parempi kuin epämääräinen — nimeä työkalu, projektin aihe, asiakkaan toimiala tai se, mitä oikeasti teit, sen sijaan että kirjoittaisit ”käytän tekoälyä paljon kokousmuistioiden tekemiseen”.
+ 
+Tekoälyä saa ilman muuta käyttää myös tämän kirjoittamiseen — luonnostele teksti Clauden, ChatGPT tai minkä tahansa muun avulla.

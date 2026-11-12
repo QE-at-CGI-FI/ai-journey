@@ -60,7 +60,16 @@ function handlePrint() {
 
     <div class="profile-report__page">
       <header class="profile-report__header">
-        <h1>{{ displayIndividualName(individual) }}</h1>
+        <h1>
+          {{ displayIndividualName(individual) }}
+          <span
+            v-if="individual.intakeAssessed"
+            class="intake-star"
+            title="Experience-intake assessment done"
+            aria-label="Experience-intake assessment done"
+            >★</span
+          >
+        </h1>
         <p class="profile-report__subtitle">{{ roleLabel }} · {{ subgroupLabel(individual) }}</p>
         <p class="profile-report__meta">Generated {{ generatedOn }}</p>
       </header>
@@ -162,6 +171,10 @@ function handlePrint() {
 .profile-report__header h1 {
   margin: 0 0 0.3rem;
   font-size: 1.4rem;
+}
+
+.intake-star {
+  color: #d4a017;
 }
 
 .profile-report__subtitle {

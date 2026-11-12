@@ -143,6 +143,9 @@ async function main() {
     highlightStory: draft.highlightStory || '',
     clients: Array.isArray(draft.clients) ? draft.clients : [],
     attention: {},
+    // Marks the record as coming from this intake pipeline — the app shows
+    // a star next to the person's name.
+    intakeAssessed: true,
     values,
     customItems: customItemsByGroup,
   }

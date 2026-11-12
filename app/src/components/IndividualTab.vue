@@ -423,6 +423,13 @@ const allCoverage = computed(() => {
               @input="ind.name = $event.target.value"
             />
             <span v-else class="roster__name">{{ displayIndividualName(ind) }}</span>
+            <span
+              v-if="ind.intakeAssessed"
+              class="intake-star"
+              title="Experience-intake assessment done"
+              aria-label="Experience-intake assessment done"
+              >★</span
+            >
             <span class="roster__meta">{{ [ind.role, ind.team].filter(Boolean).join(' · ') }}</span>
           </div>
           <div class="role-chips">
@@ -914,6 +921,12 @@ const allCoverage = computed(() => {
   outline: none;
   border-color: var(--cgi-purple);
   background: var(--color-surface);
+}
+
+.intake-star {
+  flex-shrink: 0;
+  margin-left: -0.5rem;
+  color: #d4a017;
 }
 
 .roster__meta {

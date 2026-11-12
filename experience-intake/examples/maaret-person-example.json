@@ -25,6 +25,7 @@
     "Finally"
   ],
   "attention": {},
+  "intakeAssessed": true,
   "values": {
     "external-imagination": {
       "on": true,

@@ -63,6 +63,12 @@ tracker-export.json    — importable via the app's Import button
   starts a fresh one. Never overwrites the source export unless you pass
   `--out` pointing at it explicitly, and refuses to replace an
   already-present person unless you pass `--update`.
+- `scripts/combine-exports.mjs` — folds the people from several export
+  files into one (e.g. `ai-journey-tracker-combined.json`). Same name in
+  more than one file: the later file wins. Anyone listed in
+  `coverage-log.md` is marked `intakeAssessed`, which the app shows as a ★
+  next to their name (`build-person.mjs` sets the flag itself for new
+  records).
 - `examples/` — worked examples to check the pipeline against, or to show
   the shape expected at each stage:
   - `freeform-example.txt` → `draft-example.json` → `person-example.json` —
@@ -96,6 +102,12 @@ node experience-intake/scripts/merge-export.mjs \
   # writes ai-journey-tracker-bcs-developers-2026-08-27.json.merged.json
   # add --out <path> to control where it lands, --update to replace
   # an existing person with the same name
+
+node experience-intake/scripts/combine-exports.mjs \
+  --out ai-journey-tracker-combined.json \
+  ai-journey-tracker-bcs-2026-09-24.json \
+  ai-journey-tracker-aleksandra-loytainen-2026-10-05.json \
+  experience-intake/partners/ai-journey-tracker-partners-2026-11-10.json
 ```
 
 In normal use you won't run these by hand — ask Claude (via the

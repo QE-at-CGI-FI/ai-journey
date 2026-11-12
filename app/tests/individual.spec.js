@@ -36,6 +36,27 @@ test.describe('Individual tab', () => {
     await expect(page.getByText(/areas growing for Ada Lovelace/)).toBeVisible();
   });
 
+  test('shows a star next to people who have done the experience-intake assessment', async ({ page }) => {
+    await page.evaluate(() => {
+      localStorage.setItem(
+        'cgi-ai-journey-tracker',
+        JSON.stringify({
+          individuals: [
+            { id: 'ind-a', name: 'Assessed', intakeAssessed: true },
+            { id: 'ind-b', name: 'Not assessed' },
+          ],
+        }),
+      );
+    });
+    await page.reload();
+    await page.getByRole('button', { name: 'Anonymized' }).click();
+    await page.getByRole('tab', { name: 'Individual' }).click();
+
+    const items = page.locator('.roster__item');
+    await expect(items.nth(0).getByLabel('Experience-intake assessment done')).toBeVisible();
+    await expect(items.nth(1).getByLabel('Experience-intake assessment done')).toHaveCount(0);
+  });
+
   test('toggling a growth-area item updates that person\'s roster coverage badge', async ({ page }) => {
     await page.getByPlaceholder('Add a person by name…').fill('Grace Hopper');
     await page.getByRole('button', { name: '+ Add' }).click();
